@@ -1,0 +1,1892 @@
+<div class="reservations-admin-page">
+
+  <!-- =====================================================
+       NOTIFICACIÓN FLOTANTE
+  ====================================================== -->
+
+  <aside
+    *ngIf="toastVisible"
+    class="reservations-toast"
+    [class.toast-success]="toastType === 'success'"
+    [class.toast-error]="toastType === 'error'"
+    [class.toast-info]="toastType === 'info'"
+    role="status"
+    aria-live="polite"
+  >
+
+    <span
+      class="material-symbols-outlined toast-icon"
+      aria-hidden="true"
+    >
+      {{
+        toastType === 'success'
+          ? 'check_circle'
+          : toastType === 'error'
+            ? 'error'
+            : 'info'
+      }}
+    </span>
+
+    <span class="toast-message">
+      {{ toastMessage }}
+    </span>
+
+    <button
+      type="button"
+      class="toast-close-button"
+      aria-label="Cerrar notificación"
+      (click)="closeToast()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        close
+      </span>
+    </button>
+
+  </aside>
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="reservations-heading">
+
+    <div class="reservations-heading-content">
+
+      <span class="reservations-eyebrow">
+        Gestión de reservas
+      </span>
+
+      <h1>
+        Reservas
+      </h1>
+
+      <p>
+        Consulta, confirma, edita y administra todas las
+        reservas registradas en Sabor Andino.
+      </p>
+
+    </div>
+
+  </header>
+
+  <!-- =====================================================
+       TARJETAS DE RESUMEN
+  ====================================================== -->
+
+  <section
+    class="reservations-summary-grid"
+    aria-label="Resumen de reservas"
+  >
+
+    <!-- TOTAL -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          calendar_month
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Total de reservas
+        </small>
+
+        <strong>
+          {{ totalReservations }}
+        </strong>
+
+        <span>
+          Reservas registradas
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- CONFIRMADAS -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          event_available
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Confirmadas
+        </small>
+
+        <strong>
+          {{ confirmedReservations }}
+        </strong>
+
+        <span>
+          Reservas aceptadas
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- PENDIENTES -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          pending_actions
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Pendientes
+        </small>
+
+        <strong>
+          {{ pendingReservations }}
+        </strong>
+
+        <span>
+          Requieren confirmación
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- CANCELADAS -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-red">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          event_busy
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Canceladas
+        </small>
+
+        <strong>
+          {{ cancelledReservations }}
+        </strong>
+
+        <span>
+          Reservas anuladas
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       FILTROS
+  ====================================================== -->
+
+  <section class="reservations-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+
+        <h2>
+          Filtros de búsqueda
+        </h2>
+
+        <p>
+          Encuentra rápidamente una reserva registrada.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          filter_alt_off
+        </span>
+
+        <span>
+          Limpiar filtros
+        </span>
+
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <!-- BUSCAR -->
+
+      <div class="filter-field search-field">
+
+        <label for="searchReservation">
+          Buscar reserva
+        </label>
+
+        <div class="input-wrapper">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            search
+          </span>
+
+          <input
+            id="searchReservation"
+            type="search"
+            placeholder="Código, cliente, teléfono o sucursal"
+            autocomplete="off"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+      <!-- ESTADO -->
+
+      <div class="filter-field">
+
+        <label for="reservationStatus">
+          Estado
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="reservationStatus"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onFiltersChange()"
+          >
+
+            <option value="">
+              Todos los estados
+            </option>
+
+            <option
+              *ngFor="let status of statusOptions"
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <!-- SUCURSAL -->
+
+      <div class="filter-field">
+
+        <label for="reservationBranch">
+          Sucursal
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="reservationBranch"
+            [(ngModel)]="selectedBranch"
+            (ngModelChange)="onFiltersChange()"
+          >
+
+            <option value="">
+              Todas las sucursales
+            </option>
+
+            <option
+              *ngFor="let branch of branchOptions"
+              [value]="branch"
+            >
+              {{ branch }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <!-- FECHA -->
+
+      <div class="filter-field">
+
+        <label for="reservationDate">
+          Fecha de reserva
+        </label>
+
+        <div class="date-wrapper">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            calendar_today
+          </span>
+
+          <input
+            id="reservationDate"
+            type="date"
+            [(ngModel)]="selectedDate"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       TABLA
+  ====================================================== -->
+
+  <section class="reservations-table-card">
+
+    <header class="table-card-header">
+
+      <div>
+
+        <h2>
+          Lista de reservas
+        </h2>
+
+        <p>
+          Se encontraron
+          <strong>
+            {{ filteredReservations.length }}
+          </strong>
+          reservas.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="export-button"
+        (click)="exportReservations()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          download
+        </span>
+
+        <span>
+          Exportar
+        </span>
+
+      </button>
+
+    </header>
+
+    <div class="reservations-table-wrapper">
+
+      <table class="reservations-table">
+
+        <thead>
+
+          <tr>
+            <th>Reserva</th>
+            <th>Cliente</th>
+            <th>Sucursal</th>
+            <th>Fecha y hora</th>
+            <th>Personas</th>
+            <th>Motivo</th>
+            <th>Mesa</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let reservation of paginatedReservations"
+            [class.reservation-row-attended]="
+              reservation.status === 'Atendida'
+            "
+            [class.reservation-row-cancelled]="
+              reservation.status === 'Cancelada'
+            "
+          >
+
+            <!-- RESERVA -->
+
+            <td>
+
+              <button
+                type="button"
+                class="reservation-code-cell reservation-code-button"
+                [attr.aria-label]="
+                  'Ver detalle de la reserva ' +
+                  reservation.code
+                "
+                (click)="viewReservation(reservation)"
+              >
+
+                <span class="reservation-code-icon">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    event_note
+                  </span>
+
+                </span>
+
+                <span class="reservation-code-information">
+
+                  <strong>
+                    {{ reservation.code }}
+                  </strong>
+
+                  <small>
+                    Ver detalle
+                  </small>
+
+                </span>
+
+              </button>
+
+            </td>
+
+            <!-- CLIENTE -->
+
+            <td>
+
+              <div class="customer-cell">
+
+                <span
+                  class="customer-avatar"
+                  aria-hidden="true"
+                >
+                  {{ reservation.customerInitial }}
+                </span>
+
+                <div class="customer-information">
+
+                  <strong>
+                    {{ reservation.customerName }}
+                  </strong>
+
+                  <span>
+                    {{ reservation.customerPhone }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+            <!-- SUCURSAL -->
+
+            <td>
+
+              <span class="branch-cell">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  storefront
+                </span>
+
+                <span>
+                  {{ reservation.branch }}
+                </span>
+
+              </span>
+
+            </td>
+
+            <!-- FECHA Y HORA -->
+
+            <td>
+
+              <div class="date-time-cell">
+
+                <strong>
+                  {{ reservation.dateLabel }}
+                </strong>
+
+                <span>
+                  {{ reservation.time }}
+                </span>
+
+              </div>
+
+            </td>
+
+            <!-- PERSONAS -->
+
+            <td>
+
+              <span class="guests-badge">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  group
+                </span>
+
+                {{ reservation.guests }}
+
+              </span>
+
+            </td>
+
+            <!-- MOTIVO -->
+
+            <td>
+
+              <span class="occasion-cell">
+                {{ reservation.occasion }}
+              </span>
+
+            </td>
+
+            <!-- MESA -->
+
+            <td>
+
+              <span class="table-badge">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  table_restaurant
+                </span>
+
+                {{ reservation.table }}
+
+              </span>
+
+            </td>
+
+            <!-- ESTADO -->
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="
+                  getStatusClass(
+                    reservation.status
+                  )
+                "
+              >
+
+                <span
+                  class="status-dot"
+                  aria-hidden="true"
+                ></span>
+
+                {{ reservation.status }}
+
+              </span>
+
+            </td>
+
+            <!-- ACCIONES -->
+
+            <td class="reservation-actions-cell">
+
+              <div class="reservation-actions-row">
+
+                <!-- CONFIRMAR -->
+
+                <button
+                  type="button"
+                  class="reservation-action-button action-confirm"
+                  [disabled]="
+                    !canConfirmReservation(reservation)
+                  "
+                  [title]="
+                    canConfirmReservation(reservation)
+                      ? 'Confirmar reserva'
+                      : 'La reserva no puede confirmarse'
+                  "
+                  [attr.aria-label]="
+                    'Confirmar reserva ' +
+                    reservation.code
+                  "
+                  (click)="confirmReservation(reservation)"
+                >
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    check_circle
+                  </span>
+
+                  <span>
+                    Confirmar
+                  </span>
+
+                </button>
+
+                <!-- VER -->
+
+                <button
+                  type="button"
+                  class="reservation-action-button action-view"
+                  title="Ver reserva"
+                  [attr.aria-label]="
+                    'Ver detalle de la reserva ' +
+                    reservation.code
+                  "
+                  (click)="viewReservation(reservation)"
+                >
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    visibility
+                  </span>
+
+                  <span>
+                    Ver
+                  </span>
+
+                </button>
+
+                <!-- EDITAR -->
+
+                <button
+                  type="button"
+                  class="reservation-action-button action-edit"
+                  title="Editar reserva"
+                  [attr.aria-label]="
+                    'Editar reserva ' +
+                    reservation.code
+                  "
+                  (click)="editReservation(reservation)"
+                >
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    edit
+                  </span>
+
+                  <span>
+                    Editar
+                  </span>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+          <!-- SIN RESULTADOS -->
+
+          <tr
+            *ngIf="paginatedReservations.length === 0"
+          >
+
+            <td
+              colspan="9"
+              class="empty-state-cell"
+            >
+
+              <span
+                class="empty-state-icon material-symbols-outlined"
+                aria-hidden="true"
+              >
+                event_busy
+              </span>
+
+              <strong>
+                No se encontraron reservas
+              </strong>
+
+              <p>
+                Modifica o limpia los filtros de búsqueda.
+              </p>
+
+              <button
+                type="button"
+                class="empty-clear-button"
+                (click)="clearFilters()"
+              >
+                Limpiar filtros
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- ===================================================
+         PAGINACIÓN
+    ==================================================== -->
+
+    <footer class="table-card-footer">
+
+      <span>
+
+        Mostrando
+
+        <strong>
+          {{ showingFrom }}
+        </strong>
+
+        -
+
+        <strong>
+          {{ showingTo }}
+        </strong>
+
+        de
+
+        <strong>
+          {{ filteredReservations.length }}
+        </strong>
+
+        reservas
+
+      </span>
+
+      <div
+        class="pagination"
+        aria-label="Paginación de reservas"
+      >
+
+        <button
+          type="button"
+          aria-label="Página anterior"
+          [disabled]="currentPage === 1"
+          (click)="previousPage()"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_left
+          </span>
+
+        </button>
+
+        <button
+          *ngFor="let page of pageNumbers"
+          type="button"
+          [class.active-page]="currentPage === page"
+          [attr.aria-label]="'Ir a la página ' + page"
+          [attr.aria-current]="
+            currentPage === page
+              ? 'page'
+              : null
+          "
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          type="button"
+          aria-label="Página siguiente"
+          [disabled]="currentPage === totalPages"
+          (click)="nextPage()"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_right
+          </span>
+
+        </button>
+
+      </div>
+
+    </footer>
+
+  </section>
+
+</div>
+
+<!-- =======================================================
+     MODAL: DETALLE DE LA RESERVA
+======================================================== -->
+
+<div
+  *ngIf="
+    detailsModalOpen &&
+    selectedReservation as reservation
+  "
+  class="reservations-modal-backdrop"
+  role="presentation"
+  (click)="closeReservationDetails()"
+>
+
+  <section
+    class="reservations-modal reservation-details-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="reservationDetailsTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <header class="reservations-modal-header">
+
+      <div class="modal-heading-group">
+
+        <span class="modal-heading-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            event_note
+          </span>
+
+        </span>
+
+        <div>
+
+          <span>
+            Detalle de la reserva
+          </span>
+
+          <h2 id="reservationDetailsTitle">
+            {{ reservation.code }}
+          </h2>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        aria-label="Cerrar detalle"
+        (click)="closeReservationDetails()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          close
+        </span>
+
+      </button>
+
+    </header>
+
+    <!-- ESTADO Y ACCIONES -->
+
+    <div class="reservation-detail-status-banner">
+
+      <div>
+
+        <span>
+          Estado actual
+        </span>
+
+        <strong
+          class="detail-status-badge"
+          [ngClass]="
+            getStatusClass(
+              reservation.status
+            )
+          "
+        >
+
+          <span
+            class="status-dot"
+            aria-hidden="true"
+          ></span>
+
+          {{ reservation.status }}
+
+        </strong>
+
+      </div>
+
+      <div class="detail-status-actions">
+
+        <!-- CONFIRMAR -->
+
+        <button
+          *ngIf="canConfirmReservation(reservation)"
+          type="button"
+          class="detail-confirm-button"
+          (click)="confirmReservation(reservation)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            check_circle
+          </span>
+
+          Confirmar
+
+        </button>
+
+        <!-- EDITAR -->
+
+        <button
+          type="button"
+          class="detail-edit-button"
+          (click)="editReservation(reservation)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            edit
+          </span>
+
+          Editar
+
+        </button>
+
+        <!-- CANCELAR -->
+
+        <button
+          *ngIf="canCancelReservation(reservation)"
+          type="button"
+          class="detail-cancel-button"
+          (click)="openCancellationModal(reservation)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            event_busy
+          </span>
+
+          Cancelar reserva
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="reservations-modal-content">
+
+      <!-- CLIENTE -->
+
+      <section class="reservation-detail-section">
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            person
+          </span>
+
+          <h3>
+            Información del cliente
+          </h3>
+
+        </header>
+
+        <div class="reservation-detail-grid">
+
+          <div class="detail-data-item">
+
+            <span>
+              Cliente
+            </span>
+
+            <strong>
+              {{ reservation.customerName }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Teléfono
+            </span>
+
+            <strong>
+              {{ reservation.customerPhone }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- INFORMACIÓN DE LA RESERVA -->
+
+      <section class="reservation-detail-section">
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            calendar_month
+          </span>
+
+          <h3>
+            Información de la reserva
+          </h3>
+
+        </header>
+
+        <div class="reservation-detail-grid">
+
+          <div class="detail-data-item detail-data-full">
+
+            <span>
+              Sucursal
+            </span>
+
+            <strong>
+              {{ reservation.branch }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Fecha
+            </span>
+
+            <strong>
+              {{ reservation.dateLabel }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Hora
+            </span>
+
+            <strong>
+              {{ reservation.time }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Número de personas
+            </span>
+
+            <strong>
+              {{ reservation.guests }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Mesa
+            </span>
+
+            <strong>
+              {{ reservation.table }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item detail-data-full">
+
+            <span>
+              Motivo de la visita
+            </span>
+
+            <strong>
+              {{ reservation.occasion }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item detail-data-full">
+
+            <span>
+              Estado
+            </span>
+
+            <strong>
+              {{ reservation.status }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- NOTAS -->
+
+      <section
+        *ngIf="reservation.notes"
+        class="reservation-detail-section"
+      >
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            notes
+          </span>
+
+          <h3>
+            Notas o indicaciones
+          </h3>
+
+        </header>
+
+        <p class="reservation-detail-notes">
+          {{ reservation.notes }}
+        </p>
+
+      </section>
+
+      <!-- MOTIVO DE CANCELACIÓN -->
+
+      <section
+        *ngIf="
+          reservation.status === 'Cancelada' &&
+          reservation.cancellationReason
+        "
+        class="
+          reservation-detail-section
+          cancellation-detail-section
+        "
+      >
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            event_busy
+          </span>
+
+          <h3>
+            Motivo de cancelación
+          </h3>
+
+        </header>
+
+        <p class="reservation-detail-notes">
+          {{ reservation.cancellationReason }}
+        </p>
+
+      </section>
+
+    </div>
+
+    <footer class="reservations-modal-footer">
+
+      <button
+        type="button"
+        class="modal-secondary-button"
+        (click)="closeReservationDetails()"
+      >
+        Cerrar
+      </button>
+
+    </footer>
+
+  </section>
+
+</div>
+
+<!-- =======================================================
+     MODAL: EDITAR RESERVA
+======================================================== -->
+
+<div
+  *ngIf="
+    editReservationModalOpen &&
+    editingReservation as reservation
+  "
+  class="reservations-modal-backdrop"
+  role="presentation"
+  (click)="closeEditReservationModal()"
+>
+
+  <section
+    class="reservations-modal edit-reservation-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editReservationTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <header class="reservations-modal-header">
+
+      <div class="modal-heading-group">
+
+        <span class="modal-heading-icon modal-edit-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            edit
+          </span>
+
+        </span>
+
+        <div>
+
+          <span>
+            Modificar información
+          </span>
+
+          <h2 id="editReservationTitle">
+            Editar {{ reservation.code }}
+          </h2>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        aria-label="Cerrar edición"
+        [disabled]="isUpdatingReservation"
+        (click)="closeEditReservationModal()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          close
+        </span>
+
+      </button>
+
+    </header>
+
+    <div class="reservations-modal-content">
+
+      <div
+        *ngIf="editReservationError"
+        class="modal-form-error"
+        role="alert"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          error
+        </span>
+
+        {{ editReservationError }}
+
+      </div>
+
+      <div class="reservation-form-grid">
+
+        <!-- CLIENTE -->
+
+        <div class="modal-form-field">
+
+          <label for="editReservationCustomer">
+            Nombre del cliente
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              person
+            </span>
+
+            <input
+              id="editReservationCustomer"
+              type="text"
+              maxlength="100"
+              [(ngModel)]="reservation.customerName"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- TELÉFONO -->
+
+        <div class="modal-form-field">
+
+          <label for="editReservationPhone">
+            Teléfono
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              call
+            </span>
+
+            <input
+              id="editReservationPhone"
+              type="tel"
+              maxlength="20"
+              inputmode="tel"
+              [(ngModel)]="reservation.customerPhone"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- SUCURSAL -->
+
+        <div class="modal-form-field modal-form-field-full">
+
+          <label for="editReservationBranch">
+            Sucursal
+          </label>
+
+          <div class="modal-select-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              storefront
+            </span>
+
+            <select
+              id="editReservationBranch"
+              [(ngModel)]="reservation.branch"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            >
+
+              <option
+                *ngFor="let branch of branchOptions"
+                [ngValue]="branch"
+              >
+                {{ branch }}
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <!-- FECHA -->
+
+        <div class="modal-form-field">
+
+          <label for="editReservationDate">
+            Fecha
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              calendar_today
+            </span>
+
+            <input
+              id="editReservationDate"
+              type="date"
+              [(ngModel)]="reservation.date"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- HORA -->
+
+        <div class="modal-form-field">
+
+          <label for="editReservationTime">
+            Hora
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              schedule
+            </span>
+
+            <input
+              id="editReservationTime"
+              type="time"
+              [(ngModel)]="reservation.time"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- PERSONAS -->
+
+        <div class="modal-form-field">
+
+          <label for="editReservationGuests">
+            Número de personas
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              group
+            </span>
+
+            <input
+              id="editReservationGuests"
+              type="number"
+              min="1"
+              max="30"
+              [(ngModel)]="reservation.guests"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- MESA -->
+
+        <div class="modal-form-field">
+
+          <label for="editReservationTable">
+            Mesa
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              table_restaurant
+            </span>
+
+            <input
+              id="editReservationTable"
+              type="text"
+              maxlength="40"
+              [(ngModel)]="reservation.table"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- MOTIVO -->
+
+        <div class="modal-form-field modal-form-field-full">
+
+          <label for="editReservationOccasion">
+            Motivo de la visita
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              celebration
+            </span>
+
+            <input
+              id="editReservationOccasion"
+              type="text"
+              maxlength="100"
+              [(ngModel)]="reservation.occasion"
+              [disabled]="isUpdatingReservation"
+              (ngModelChange)="editReservationError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- NOTAS -->
+
+        <div class="modal-form-field modal-form-field-full">
+
+          <label for="editReservationNotes">
+            Notas o indicaciones
+          </label>
+
+          <textarea
+            id="editReservationNotes"
+            rows="4"
+            maxlength="250"
+            [(ngModel)]="reservation.notes"
+            [disabled]="isUpdatingReservation"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <footer class="reservations-modal-footer">
+
+      <button
+        type="button"
+        class="modal-secondary-button"
+        [disabled]="isUpdatingReservation"
+        (click)="closeEditReservationModal()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="modal-primary-button"
+        [disabled]="isUpdatingReservation"
+        (click)="saveEditedReservation()"
+      >
+
+        <ng-container *ngIf="!isUpdatingReservation">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            save
+          </span>
+
+          Guardar cambios
+
+        </ng-container>
+
+        <ng-container *ngIf="isUpdatingReservation">
+
+          <span
+            class="modal-loading-spinner"
+            aria-hidden="true"
+          ></span>
+
+          Guardando...
+
+        </ng-container>
+
+      </button>
+
+    </footer>
+
+  </section>
+
+</div>
+
+<!-- =======================================================
+     MODAL: CANCELAR RESERVA
+======================================================== -->
+
+<div
+  *ngIf="
+    cancellationModalOpen &&
+    reservationPendingCancellation as reservation
+  "
+  class="reservations-modal-backdrop"
+  role="presentation"
+  (click)="closeCancellationModal()"
+>
+
+  <section
+    class="reservations-modal cancellation-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cancelReservationTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <header class="reservations-modal-header">
+
+      <div class="modal-heading-group">
+
+        <span class="modal-heading-icon modal-cancel-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            event_busy
+          </span>
+
+        </span>
+
+        <div>
+
+          <span>
+            Cancelar reserva
+          </span>
+
+          <h2 id="cancelReservationTitle">
+            {{ reservation.code }}
+          </h2>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        aria-label="Cerrar cancelación"
+        [disabled]="isCancellingReservation"
+        (click)="closeCancellationModal()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          close
+        </span>
+
+      </button>
+
+    </header>
+
+    <div class="reservations-modal-content">
+
+      <div class="cancellation-warning">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          warning
+        </span>
+
+        <p>
+          La reserva de
+          <strong>
+            {{ reservation.customerName }}
+          </strong>
+          quedará marcada como cancelada.
+        </p>
+
+      </div>
+
+      <div class="modal-form-field">
+
+        <label for="cancellationReason">
+          Motivo de cancelación
+        </label>
+
+        <textarea
+          id="cancellationReason"
+          rows="5"
+          maxlength="250"
+          placeholder="Escribe el motivo de la cancelación"
+          [(ngModel)]="cancellationReason"
+          [disabled]="isCancellingReservation"
+          (ngModelChange)="cancellationError = ''"
+        ></textarea>
+
+        <small>
+          {{ cancellationReason.length }}/250
+        </small>
+
+      </div>
+
+      <div
+        *ngIf="cancellationError"
+        class="modal-form-error"
+        role="alert"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          error
+        </span>
+
+        {{ cancellationError }}
+
+      </div>
+
+    </div>
+
+    <footer class="reservations-modal-footer">
+
+      <button
+        type="button"
+        class="modal-secondary-button"
+        [disabled]="isCancellingReservation"
+        (click)="closeCancellationModal()"
+      >
+        Volver
+      </button>
+
+      <button
+        type="button"
+        class="modal-danger-button"
+        [disabled]="isCancellingReservation"
+        (click)="confirmCancellation()"
+      >
+
+        <ng-container *ngIf="!isCancellingReservation">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            event_busy
+          </span>
+
+          Cancelar reserva
+
+        </ng-container>
+
+        <ng-container *ngIf="isCancellingReservation">
+
+          <span
+            class="modal-loading-spinner"
+            aria-hidden="true"
+          ></span>
+
+          Cancelando...
+
+        </ng-container>
+
+      </button>
+
+    </footer>
+
+  </section>
+
+</div>

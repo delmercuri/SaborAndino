@@ -1,0 +1,21 @@
+<div class="home-page">
+
+  <app-hero></app-hero>
+
+  <app-categories
+    (categorySelected)="selectCategory($event)"
+  ></app-categories>
+
+  <app-featured-products
+    [selectedCategory]="selectedCategory"
+  ></app-featured-products>
+
+  <app-advantages></app-advantages>
+
+  <app-promotion></app-promotion>
+
+  <app-experience></app-experience>
+
+  <app-branches-preview></app-branches-preview>
+
+</div>

@@ -1,0 +1,582 @@
+/* =========================================================
+   COMPONENTE: VENTAJAS
+========================================================= */
+
+:host {
+  display: block;
+
+  --advantages-white: #ffffff;
+
+  --advantages-gold: #c89a3a;
+  --advantages-gold-dark: #ad7b21;
+  --advantages-gold-light: #f1ce74;
+
+  --advantages-background: #1b100d;
+  --advantages-background-light: #30201a;
+}
+
+/* =========================================================
+   SECCIÓN GENERAL
+========================================================= */
+
+.advantages-section {
+  width: 100%;
+  padding: 82px 0 88px;
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  background:
+    radial-gradient(
+      circle at 6% 5%,
+      rgba(200, 154, 58, 0.18),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 94% 92%,
+      rgba(200, 154, 58, 0.08),
+      transparent 25%
+    ),
+    linear-gradient(
+      135deg,
+      #291b16 0%,
+      #1b110e 48%,
+      #120b09 100%
+    );
+
+  color: var(--advantages-white);
+}
+
+/* =========================================================
+   DECORACIONES DEL FONDO
+========================================================= */
+
+.advantages-decoration {
+  position: absolute;
+  z-index: 0;
+
+  border: 1px solid rgba(236, 208, 129, 0.11);
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.advantages-decoration-left {
+  width: 360px;
+  height: 360px;
+
+  top: -220px;
+  left: -145px;
+}
+
+.advantages-decoration-right {
+  width: 400px;
+  height: 400px;
+
+  right: -175px;
+  bottom: -250px;
+}
+
+.advantages-container {
+  width: min(
+    calc(100% - 64px),
+    1450px
+  );
+  margin: 0 auto;
+
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.advantages-heading {
+  max-width: 820px;
+  margin: 0 auto 43px;
+
+  text-align: center;
+}
+
+.advantages-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+
+  color: var(--advantages-gold-dark);
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.45px;
+  text-transform: uppercase;
+}
+
+.advantages-heading h2 {
+  margin: 0;
+
+  color: var(--advantages-white);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: clamp(
+    38px,
+    3vw,
+    50px
+  );
+
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -1px;
+
+  text-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.22);
+}
+
+.advantages-heading p {
+  max-width: 760px;
+  margin: 15px auto 0;
+
+  color: rgba(255, 255, 255, 0.66);
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   CUADRÍCULA
+========================================================= */
+
+.advantages-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.advantage-card {
+  min-width: 0;
+  min-height: 250px;
+  padding: 24px 21px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 16px 34px rgba(0, 0, 0, 0.12);
+
+  text-align: center;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.advantage-card:hover {
+  border-color: rgba(236, 208, 129, 0.38);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.055)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 25px 48px rgba(0, 0, 0, 0.22);
+
+  transform: translateY(-6px);
+}
+
+/* =========================================================
+   DECORACIÓN DE TARJETA
+========================================================= */
+
+.advantage-card-decoration {
+  width: 112px;
+  height: 112px;
+
+  position: absolute;
+  top: -56px;
+  right: -44px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+
+  opacity: 0.07;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   ICONO
+========================================================= */
+
+.advantage-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 19px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(236, 208, 129, 0.48);
+  border-radius: 19px;
+
+  background:
+    radial-gradient(
+      circle at 25% 20%,
+      rgba(255, 235, 174, 0.25),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(178, 134, 50, 0.38),
+      rgba(87, 56, 24, 0.3)
+    );
+
+  color: var(--advantages-gold-light);
+
+  box-shadow:
+    0 13px 26px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.advantage-icon::before {
+  content: "";
+
+  width: 34px;
+  height: 34px;
+
+  position: absolute;
+  top: -9px;
+  right: -7px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 226, 145, 0.12);
+}
+
+.advantage-icon .material-symbols-outlined {
+  position: relative;
+  z-index: 2;
+
+  color: var(--advantages-gold-light);
+
+  font-size: 34px;
+  line-height: 1;
+
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 48;
+
+  filter:
+    drop-shadow(
+      0 5px 10px rgba(226, 184, 83, 0.2)
+    );
+}
+
+.advantage-card:hover .advantage-icon {
+  border-color: rgba(244, 210, 126, 0.8);
+
+  box-shadow:
+    0 18px 35px rgba(0, 0, 0, 0.28),
+    0 0 24px rgba(222, 176, 71, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+  transform:
+    translateY(-4px)
+    rotate(-2deg);
+}
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.advantage-card h3 {
+  margin: 0;
+
+  color: var(--advantages-white);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.17;
+}
+
+.advantage-card p {
+  max-width: 270px;
+  margin: 10px auto 0;
+
+  color: rgba(255, 255, 255, 0.63);
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   COLORES POR TARJETA
+========================================================= */
+
+.advantage-card.ingredients {
+  color: #7aa55f;
+}
+
+.advantage-card.preparation {
+  color: #c29345;
+}
+
+.advantage-card.delivery {
+  color: #5d89a3;
+}
+
+.advantage-card.payments {
+  color: #926ba1;
+}
+
+/* =========================================================
+   RESPONSIVE: PANTALLAS MEDIANAS
+========================================================= */
+
+@media (max-width: 1280px) {
+
+  .advantages-section {
+    padding: 72px 0 76px;
+  }
+
+  .advantages-container {
+    width: min(
+      calc(100% - 48px),
+      1180px
+    );
+  }
+
+  .advantages-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+
+  .advantage-card {
+    min-height: 225px;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+  .advantages-section {
+    padding: 62px 0 66px;
+  }
+
+  .advantages-container {
+    width: min(
+      calc(100% - 40px),
+      820px
+    );
+  }
+
+  .advantages-heading {
+    margin-bottom: 34px;
+  }
+
+  .advantages-heading h2 {
+    font-size: 39px;
+  }
+
+  .advantages-grid {
+    gap: 16px;
+  }
+
+  .advantage-card {
+    min-height: 210px;
+    padding: 22px 19px;
+  }
+
+  .advantage-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+
+    border-radius: 17px;
+  }
+
+  .advantage-icon .material-symbols-outlined {
+    font-size: 31px;
+  }
+
+  .advantage-card h3 {
+    font-size: 19px;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: CELULAR
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .advantages-section {
+    padding: 52px 0 56px;
+  }
+
+  .advantages-container {
+    width: min(
+      calc(100% - 30px),
+      620px
+    );
+  }
+
+  .advantages-heading {
+    margin-bottom: 30px;
+  }
+
+  .advantages-eyebrow {
+    font-size: 10px;
+  }
+
+  .advantages-heading h2 {
+    font-size: 34px;
+  }
+
+  .advantages-heading p {
+    margin-top: 12px;
+
+    font-size: 13px;
+  }
+
+  .advantages-grid {
+    grid-template-columns: 1fr;
+
+    gap: 13px;
+  }
+
+  .advantage-card {
+    min-height: 180px;
+    padding: 20px 17px;
+  }
+
+  .advantage-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 13px;
+
+    border-radius: 15px;
+  }
+
+  .advantage-icon .material-symbols-outlined {
+    font-size: 28px;
+  }
+
+  .advantage-card h3 {
+    font-size: 18px;
+  }
+
+  .advantage-card p {
+    max-width: 300px;
+    margin-top: 7px;
+
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: CELULAR PEQUEÑO
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .advantages-section {
+    padding: 46px 0 50px;
+  }
+
+  .advantages-container {
+    width: min(
+      calc(100% - 22px),
+      620px
+    );
+  }
+
+  .advantages-heading {
+    margin-bottom: 26px;
+  }
+
+  .advantages-heading h2 {
+    font-size: 30px;
+  }
+
+  .advantages-heading p {
+    font-size: 12px;
+  }
+
+  .advantage-card {
+    min-height: 170px;
+  }
+
+}
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .advantage-card,
+  .advantage-icon {
+    transition: none;
+  }
+
+}

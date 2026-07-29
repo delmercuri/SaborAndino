@@ -1,0 +1,690 @@
+/* =========================================================
+   COMPONENTE: PROMOCIÓN
+========================================================= */
+
+:host {
+  display: block;
+
+  --promotion-wine: #8b1021;
+  --promotion-wine-dark: #4b050d;
+  --promotion-wine-light: #b32639;
+
+  --promotion-gold: #c89a3a;
+  --promotion-gold-light: #ecd081;
+
+  --promotion-cream: #f8f4ed;
+  --promotion-white: #ffffff;
+}
+
+/* =========================================================
+   SECCIÓN GENERAL
+========================================================= */
+
+.promotion-section {
+  width: 100%;
+  padding: 92px 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fcfaf7
+    );
+
+  font-family:
+    "Poppins",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+.promotion-container {
+  width: min(
+    calc(100% - 64px),
+    1380px
+  );
+  margin: 0 auto;
+}
+
+/* =========================================================
+   TARJETA PRINCIPAL
+========================================================= */
+
+.promotion-card {
+  width: 100%;
+  min-height: 520px;
+  padding: 52px 62px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns:
+    minmax(390px, 0.9fr)
+    minmax(0, 1.1fr);
+  align-items: center;
+  gap: 72px;
+
+  border-radius: 28px;
+
+  background:
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(229, 201, 120, 0.16),
+      transparent 27%
+    ),
+    linear-gradient(
+      135deg,
+      #47060d,
+      #7d1220
+    );
+
+  box-shadow:
+    0 25px 58px rgba(79, 8, 15, 0.22);
+}
+
+/* =========================================================
+   DECORACIONES
+========================================================= */
+
+.promotion-decoration {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.promotion-decoration-one {
+  width: 330px;
+  height: 330px;
+
+  top: -170px;
+  right: -140px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+}
+
+.promotion-decoration-two {
+  width: 220px;
+  height: 220px;
+
+  left: -95px;
+  bottom: -110px;
+
+  background:
+    rgba(229, 201, 120, 0.055);
+}
+
+/* =========================================================
+   IMAGEN
+========================================================= */
+
+.promotion-visual {
+  width: 100%;
+  min-height: 420px;
+
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+}
+
+.promotion-image-wrapper {
+  width: min(100%, 450px);
+  height: 430px;
+
+  position: relative;
+  overflow: hidden;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+
+  background: #efe5da;
+
+  box-shadow:
+    0 28px 50px rgba(24, 3, 6, 0.34);
+}
+
+.promotion-image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  transition:
+    transform 0.45s ease,
+    filter 0.45s ease;
+}
+
+.promotion-card:hover
+.promotion-image {
+  transform: scale(1.035);
+
+  filter:
+    saturate(1.05)
+    contrast(1.03);
+}
+
+/* =========================================================
+   DESCUENTO
+========================================================= */
+
+.promotion-discount {
+  min-height: 42px;
+  padding: 0 22px;
+
+  position: absolute;
+  top: 7px;
+  left: 4px;
+  z-index: 6;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid rgba(255, 235, 171, 0.55);
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eccd76,
+      #d0a43f
+    );
+
+  color: #3d2807;
+
+  box-shadow:
+    0 10px 21px rgba(29, 11, 4, 0.24);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   INFORMACIÓN
+========================================================= */
+
+.promotion-information {
+  min-width: 0;
+
+  position: relative;
+  z-index: 3;
+}
+
+.promotion-eyebrow {
+  display: block;
+  margin-bottom: 11px;
+
+  color: var(--promotion-gold-light);
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.promotion-information h2 {
+  margin: 0;
+
+  color: var(--promotion-white);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: clamp(
+    38px,
+    3vw,
+    50px
+  );
+
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.8px;
+}
+
+.promotion-information > p {
+  max-width: 630px;
+  margin: 17px 0 22px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   LISTA DE ELEMENTOS
+========================================================= */
+
+.promotion-information ul {
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px 22px;
+
+  list-style: none;
+}
+
+.promotion-information li {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: rgba(255, 255, 255, 0.84);
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.promotion-information li
+.material-symbols-outlined {
+  flex-shrink: 0;
+
+  color: var(--promotion-gold-light);
+
+  font-size: 18px;
+
+  font-variation-settings:
+    "FILL" 1;
+}
+
+/* =========================================================
+   PRECIO
+========================================================= */
+
+.promotion-price {
+  margin-top: 28px;
+
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.promotion-previous-price {
+  color: rgba(255, 255, 255, 0.52);
+
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+.promotion-price strong {
+  color: var(--promotion-gold-light);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 40px;
+  line-height: 1;
+}
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.promotion-actions {
+  margin-top: 24px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 11px;
+}
+
+.promotion-primary-button,
+.promotion-whatsapp-button {
+  min-height: 49px;
+  padding: 0 19px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 11px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.promotion-primary-button {
+  border:
+    1px solid var(--promotion-gold-light);
+
+  background:
+    linear-gradient(
+      135deg,
+      #e7c569,
+      #c99732
+    );
+
+  color: #3e2906;
+
+  box-shadow:
+    0 9px 21px rgba(26, 7, 4, 0.16);
+}
+
+.promotion-whatsapp-button {
+  border:
+    1px solid rgba(255, 255, 255, 0.28);
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  color: var(--promotion-white);
+}
+
+.promotion-primary-button:hover,
+.promotion-whatsapp-button:hover {
+  transform: translateY(-2px);
+}
+
+.promotion-primary-button:hover {
+  box-shadow:
+    0 13px 27px rgba(26, 7, 4, 0.24);
+}
+
+.promotion-whatsapp-button:hover {
+  border-color:
+    rgba(255, 255, 255, 0.42);
+
+  background:
+    rgba(255, 255, 255, 0.14);
+}
+
+.promotion-primary-button
+.material-symbols-outlined,
+.promotion-whatsapp-button
+.material-symbols-outlined {
+  font-size: 19px;
+}
+
+/* =========================================================
+   RESPONSIVE: PANTALLAS MEDIANAS
+========================================================= */
+
+@media (max-width: 1250px) {
+
+  .promotion-card {
+    padding: 46px 48px;
+
+    grid-template-columns:
+      minmax(350px, 0.9fr)
+      minmax(0, 1.1fr);
+
+    gap: 48px;
+  }
+
+  .promotion-image-wrapper {
+    height: 400px;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+  .promotion-section {
+    padding: 82px 0;
+  }
+
+  .promotion-container {
+    width: min(
+      calc(100% - 48px),
+      980px
+    );
+  }
+
+  .promotion-card {
+    padding: 42px;
+
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .promotion-visual {
+    min-height: 390px;
+  }
+
+  .promotion-image-wrapper {
+    width: min(100%, 560px);
+    height: 390px;
+  }
+
+  .promotion-discount {
+    left:
+      calc(50% - min(50%, 280px) - 10px);
+  }
+
+  .promotion-information {
+    text-align: center;
+  }
+
+  .promotion-information > p {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .promotion-information ul {
+    max-width: 680px;
+    margin-right: auto;
+    margin-left: auto;
+
+    text-align: left;
+  }
+
+  .promotion-price,
+  .promotion-actions {
+    justify-content: center;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: TABLET PEQUEÑA
+========================================================= */
+
+@media (max-width: 820px) {
+
+  .promotion-container {
+    width: min(
+      calc(100% - 40px),
+      760px
+    );
+  }
+
+  .promotion-card {
+    padding: 36px 30px;
+
+    border-radius: 24px;
+  }
+
+  .promotion-image-wrapper {
+    height: 360px;
+  }
+
+  .promotion-information h2 {
+    font-size: 40px;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: CELULAR
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .promotion-section {
+    padding: 68px 0;
+  }
+
+  .promotion-container {
+    width: min(
+      calc(100% - 30px),
+      620px
+    );
+  }
+
+  .promotion-card {
+    padding: 30px 20px;
+
+    gap: 27px;
+
+    border-radius: 21px;
+  }
+
+  .promotion-visual {
+    min-height: 330px;
+  }
+
+  .promotion-image-wrapper {
+    width: 100%;
+    height: 330px;
+
+    border-radius: 19px;
+  }
+
+  .promotion-discount {
+    min-height: 38px;
+    padding: 0 16px;
+
+    top: 4px;
+    left: -6px;
+
+    font-size: 11px;
+  }
+
+  .promotion-eyebrow {
+    font-size: 10px;
+  }
+
+  .promotion-information h2 {
+    font-size: 35px;
+  }
+
+  .promotion-information > p {
+    font-size: 13px;
+  }
+
+  .promotion-information ul {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .promotion-price {
+    margin-top: 24px;
+  }
+
+  .promotion-price strong {
+    font-size: 36px;
+  }
+
+  .promotion-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .promotion-primary-button,
+  .promotion-whatsapp-button {
+    width: 100%;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: CELULAR PEQUEÑO
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .promotion-section {
+    padding: 55px 0;
+  }
+
+  .promotion-container {
+    width: min(
+      calc(100% - 22px),
+      430px
+    );
+  }
+
+  .promotion-card {
+    padding:
+      25px 16px 27px;
+  }
+
+  .promotion-visual {
+    min-height: 290px;
+  }
+
+  .promotion-image-wrapper {
+    height: 290px;
+  }
+
+  .promotion-information h2 {
+    font-size: 31px;
+  }
+
+  .promotion-information > p {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .promotion-information li {
+    font-size: 11px;
+  }
+
+  .promotion-price {
+    align-items: center;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+}
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .promotion-image,
+  .promotion-primary-button,
+  .promotion-whatsapp-button {
+    transition: none;
+  }
+
+}

@@ -1,0 +1,174 @@
+<section class="admin-login-page">
+
+
+  <!-- TARJETA CENTRADA -->
+  <div class="admin-login-card">
+
+    <span class="login-card-accent"></span>
+
+    <div class="admin-login-logo">
+      <img
+        src="/images/logo/logo-sabor-andino.png"
+        alt="Logo Sabor Andino"
+      />
+    </div>
+
+    <div class="admin-login-heading">
+
+      <span class="admin-login-eyebrow">
+        Acceso administrativo
+      </span>
+
+      <h1>
+        Iniciar sesión
+      </h1>
+
+      <p>
+        Ingresa tus credenciales para acceder al panel de administración.
+      </p>
+
+    </div>
+
+    <form
+      class="admin-login-form"
+      (ngSubmit)="login()"
+    >
+
+      <!-- CORREO -->
+      <div class="admin-login-field">
+        <label for="adminEmail">
+          Correo electrónico
+        </label>
+
+        <div class="admin-login-input">
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            mail
+          </span>
+
+          <input
+            id="adminEmail"
+            name="adminEmail"
+            type="email"
+            placeholder="Ingresa tu correo"
+            [(ngModel)]="email"
+            autocomplete="email"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- CONTRASEÑA -->
+      <div class="admin-login-field">
+        <label for="adminPassword">
+          Contraseña
+        </label>
+
+        <div class="admin-login-input">
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            lock
+          </span>
+
+          <input
+            id="adminPassword"
+            name="adminPassword"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Ingresa tu contraseña"
+            [(ngModel)]="password"
+            autocomplete="current-password"
+            required
+          />
+
+          <button
+            type="button"
+            class="password-toggle-button"
+            aria-label="Mostrar u ocultar contraseña"
+            (click)="togglePasswordVisibility()"
+          >
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- OPCIONES -->
+      <div class="admin-login-options">
+
+        <label class="remember-session">
+          <input
+            type="checkbox"
+            name="rememberMe"
+            [(ngModel)]="rememberMe"
+          />
+          <span>Recordar mi sesión</span>
+        </label>
+
+        <span class="session-time">
+          Sesión válida por 8 horas
+        </span>
+
+      </div>
+
+      <!-- ERROR -->
+      <div
+        *ngIf="errorMessage"
+        class="admin-login-message admin-login-message-error"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          error
+        </span>
+
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- BOTÓN LOGIN -->
+      <button
+        type="submit"
+        class="admin-login-submit"
+        [disabled]="isLoading"
+      >
+        <ng-container *ngIf="!isLoading">
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            login
+          </span>
+          Ingresar al panel
+        </ng-container>
+
+        <ng-container *ngIf="isLoading">
+          <span class="login-spinner"></span>
+          Ingresando...
+        </ng-container>
+      </button>
+
+      <!-- TEXTO FINAL -->
+      <div class="admin-login-footer-note">
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          lock
+        </span>
+
+        Acceso exclusivo para personal autorizado
+      </div>
+
+    </form>
+
+  </div>
+
+</section>

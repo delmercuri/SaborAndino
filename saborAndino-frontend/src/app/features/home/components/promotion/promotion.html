@@ -1,0 +1,135 @@
+<section
+  *ngIf="promotion as activePromotion"
+  class="promotion-section"
+  aria-labelledby="promotion-title"
+>
+  <div class="promotion-container">
+
+    <article class="promotion-card">
+
+      <!-- DECORACIONES -->
+      <div
+        class="promotion-decoration promotion-decoration-one"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="promotion-decoration promotion-decoration-two"
+        aria-hidden="true"
+      ></div>
+
+      <!-- IMAGEN -->
+      <div class="promotion-visual">
+
+        <span class="promotion-discount">
+          {{ activePromotion.discount }}
+        </span>
+
+        <div class="promotion-image-wrapper">
+
+          <img
+            class="promotion-image"
+            [src]="activePromotion.image"
+            [alt]="activePromotion.title"
+            loading="lazy"
+          />
+
+        </div>
+
+      </div>
+
+      <!-- INFORMACIÓN -->
+      <div class="promotion-information">
+
+        <span class="promotion-eyebrow">
+          Promoción por tiempo limitado
+        </span>
+
+        <h2 id="promotion-title">
+          {{ activePromotion.title }}
+        </h2>
+
+        <p>
+          {{ activePromotion.description }}
+        </p>
+
+        <!-- INCLUYE -->
+        <ul>
+
+          <li
+            *ngFor="let item of activePromotion.includes"
+          >
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              check_circle
+            </span>
+
+            {{ item }}
+
+          </li>
+
+        </ul>
+
+        <!-- PRECIO -->
+        <div class="promotion-price">
+
+          <span *ngIf="activePromotion.previousPrice" class="promotion-previous-price">
+            S/
+            {{ activePromotion.previousPrice | number:'1.2-2' }}
+          </span>
+
+          <strong>
+            S/ {{ activePromotion.price | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="promotion-actions">
+
+          <button
+            type="button"
+            class="promotion-primary-button"
+            (click)="orderPromotion()"
+          >
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              add_shopping_cart
+            </span>
+
+            Pedir promoción
+
+          </button>
+
+          <button
+            *ngIf="whatsapp"
+            type="button"
+            class="promotion-whatsapp-button"
+            (click)="openWhatsApp()"
+          >
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              chat
+            </span>
+
+            Consultar por WhatsApp
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </div>
+</section>

@@ -1,0 +1,471 @@
+<section
+  id="branches-list"
+  class="branches-list-section"
+  aria-labelledby="branchesListTitle"
+>
+  <div class="branches-list-container">
+
+    <!-- =========================
+         ENCABEZADO
+    ========================== -->
+    <header class="branches-list-heading">
+
+      <div>
+
+        <span class="branches-list-eyebrow">
+          Nuestros locales
+        </span>
+
+        <h2 id="branchesListTitle">
+          Sucursales disponibles
+        </h2>
+
+        <p>
+          Encontramos
+          <strong>{{ filteredBranches.length }}</strong>
+          {{ filteredBranches.length === 1 ? 'sucursal' : 'sucursales' }}
+          según tu búsqueda.
+        </p>
+
+      </div>
+
+      <div class="branches-open-summary">
+
+        <span aria-hidden="true"></span>
+
+        <div>
+          <strong>{{ openFilteredBranches }}</strong>
+          <small>
+            {{ openFilteredBranches === 1 ? 'abierta' : 'abiertas' }}
+            en este momento
+          </small>
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- =========================
+         CARGANDO / ERROR
+    ========================== -->
+    <div
+      *ngIf="isLoading"
+      class="branches-empty-state"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
+      <h3>Cargando sucursales...</h3>
+      <p>Estamos consultando la información registrada en la base de datos.</p>
+    </div>
+
+    <div
+      *ngIf="!isLoading && loadError"
+      class="branches-empty-state"
+      role="alert"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">cloud_off</span>
+      <h3>No se pudo cargar las sucursales</h3>
+      <p>{{ loadError }}</p>
+      <button type="button" (click)="retryLoadBranches()">Reintentar conexión</button>
+    </div>
+
+    <!-- =========================
+         CARRUSEL
+    ========================== -->
+    <div
+      *ngIf="!isLoading && !loadError && filteredBranches.length > 0"
+      class="branches-carousel"
+    >
+
+      <!-- FLECHA IZQUIERDA -->
+      <button
+        type="button"
+        class="branches-carousel-arrow branches-carousel-arrow-left"
+        aria-label="Ver sucursales anteriores"
+        title="Ver sucursales anteriores"
+        (click)="moveCarousel('left')"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          chevron_left
+        </span>
+      </button>
+
+      <!-- CONTENEDOR -->
+      <div
+        #branchesCarousel
+        class="branches-carousel-track"
+      >
+
+        <article
+          *ngFor="
+            let branch of filteredBranches;
+            trackBy: trackByBranchId
+          "
+          class="branch-card"
+        >
+
+          <!-- =========================
+               IMAGEN
+          ========================== -->
+          <div class="branch-card-visual">
+
+            <img
+              class="branch-card-image"
+              [src]="branch.image"
+              [alt]="branch.name"
+              loading="lazy"
+            />
+
+            <div
+              class="branch-card-overlay"
+              aria-hidden="true"
+            ></div>
+
+            <!-- ESTADO -->
+            <span
+              class="branch-status-badge"
+              [class.closed]="!branch.isOpen"
+            >
+              <span aria-hidden="true"></span>
+
+              {{ branch.isOpen ? 'Abierto ahora' : 'Cerrado' }}
+            </span>
+
+            <!-- DESTACADA -->
+            <span
+              *ngIf="branch.isFeatured"
+              class="branch-featured-badge"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                workspace_premium
+              </span>
+
+              Destacada
+            </span>
+
+            <!-- UBICACIÓN SOBRE LA IMAGEN -->
+            <button
+              type="button"
+              class="branch-image-location-button"
+              (click)="openBranchLocation(branch)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                location_on
+              </span>
+
+              Ver ubicación
+            </button>
+
+          </div>
+
+          <!-- =========================
+               CUERPO
+          ========================== -->
+          <div class="branch-card-body">
+
+            <div class="branch-card-title-row">
+
+              <div>
+
+                <span class="branch-district">
+                  {{ branch.district }}
+                </span>
+
+                <h3>
+                  {{ branch.name }}
+                </h3>
+
+              </div>
+
+              <div class="branch-rating">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  star
+                </span>
+
+                <strong>{{ branch.rating | number:'1.1-1' }}</strong>
+
+                <small>
+                  ({{ branch.reviews }})
+                </small>
+
+              </div>
+
+            </div>
+
+            <p class="branch-description">
+              {{ branch.description }}
+            </p>
+
+            <!-- =========================
+                 INFORMACIÓN PRINCIPAL
+            ========================== -->
+            <div class="branch-contact-information">
+
+              <div>
+
+                <span class="branch-information-icon">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    location_on
+                  </span>
+
+                </span>
+
+                <div>
+                  <strong>{{ branch.address }}</strong>
+                  <span>{{ branch.reference }}</span>
+                </div>
+
+              </div>
+
+              <div>
+
+                <span class="branch-information-icon">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    call
+                  </span>
+
+                </span>
+
+                <div>
+                  <strong>{{ branch.phone }}</strong>
+                  <span>Atención telefónica</span>
+                </div>
+
+              </div>
+
+              <div>
+
+                <span class="branch-information-icon">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    delivery_dining
+                  </span>
+
+                </span>
+
+                <div>
+                  <strong>{{ branch.deliveryTime }}</strong>
+                  <span>Tiempo estimado de delivery</span>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- =========================
+                 SERVICIOS
+            ========================== -->
+            <div class="branch-services">
+
+              <span
+                *ngFor="
+                  let service of branch.services.slice(0, 4)
+                "
+              >
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  {{ getServiceIcon(service) }}
+                </span>
+
+                {{ service }}
+              </span>
+
+              <span
+                *ngIf="branch.services.length > 4"
+                class="branch-more-services"
+              >
+                +{{ branch.services.length - 4 }}
+              </span>
+
+            </div>
+
+            <!-- =========================
+                 ESTADÍSTICAS
+            ========================== -->
+            <div class="branch-statistics">
+
+              <div>
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  groups
+                </span>
+
+                <strong>{{ branch.capacity }}</strong>
+
+                <small>personas</small>
+
+              </div>
+
+              <div>
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  table_restaurant
+                </span>
+
+                <strong>{{ branch.tables }}</strong>
+
+                <small>mesas</small>
+
+              </div>
+
+              <div>
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  schedule
+                </span>
+
+                <strong>{{ branch.openingTime }}</strong>
+
+                <small>apertura</small>
+
+              </div>
+
+            </div>
+
+            <!-- =========================
+                 ACCIONES
+            ========================== -->
+            <div class="branch-card-actions">
+
+              <button
+                type="button"
+                class="branch-details-button"
+                (click)="openBranchDetails(branch)"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  info
+                </span>
+
+                Ver detalles
+              </button>
+
+              <button
+                type="button"
+                class="branch-map-button"
+                (click)="openBranchLocation(branch)"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  map
+                </span>
+
+                Ubicación
+              </button>
+
+              <button
+                type="button"
+                class="branch-whatsapp-button"
+                aria-label="Consultar por WhatsApp"
+                title="Consultar por WhatsApp"
+                (click)="openWhatsApp(branch)"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  chat
+                </span>
+              </button>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- FLECHA DERECHA -->
+      <button
+        type="button"
+        class="branches-carousel-arrow branches-carousel-arrow-right"
+        aria-label="Ver sucursales siguientes"
+        title="Ver sucursales siguientes"
+        (click)="moveCarousel('right')"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          chevron_right
+        </span>
+      </button>
+
+    </div>
+
+    <!-- =========================
+         SIN RESULTADOS
+    ========================== -->
+    <div
+      *ngIf="!isLoading && !loadError && filteredBranches.length === 0"
+      class="branches-empty-state"
+    >
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        location_off
+      </span>
+
+      <h3>
+        No encontramos sucursales
+      </h3>
+
+      <p>
+        Cambia los filtros o limpia la búsqueda para mostrar nuevamente
+        nuestros locales.
+      </p>
+
+      <button
+        type="button"
+        (click)="requestClearFilters()"
+      >
+        Limpiar filtros
+      </button>
+
+    </div>
+
+  </div>
+</section>

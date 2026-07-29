@@ -1,0 +1,101 @@
+<section class="reservations-chart-card">
+
+  <!-- ENCABEZADO -->
+  <header class="chart-card-header">
+
+    <div class="chart-title-group">
+
+      <span class="chart-header-icon">
+
+        <span class="material-symbols-outlined">
+          pie_chart
+        </span>
+
+      </span>
+
+      <div>
+
+        <h2>
+          Reservas por estado
+        </h2>
+
+        <p>
+          Comparación de reservas registradas
+        </p>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="chart-options-button"
+      aria-label="Mostrar opciones"
+    >
+      <span class="material-symbols-outlined">
+        more_horiz
+      </span>
+    </button>
+
+  </header>
+
+  <!-- CONTENIDO -->
+  <div class="chart-card-content">
+
+    <!-- GRÁFICO -->
+    <div class="reservation-donut-wrapper">
+
+      <div class="reservation-donut">
+
+        <div class="reservation-donut-center">
+
+          <strong>
+            {{ totalReservations }}
+          </strong>
+
+          <span>
+            Reservas
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- LEYENDA -->
+    <div class="reservation-status-list">
+
+      <article
+        *ngFor="let status of reservationStatuses"
+        class="reservation-status-item"
+      >
+
+        <span
+          class="status-color"
+          [ngClass]="status.cssClass"
+        ></span>
+
+        <div class="status-information">
+
+          <span>
+            {{ status.name }}
+          </span>
+
+          <strong>
+            {{ status.amount }}
+          </strong>
+
+        </div>
+
+        <span class="status-percentage">
+          {{ status.percentage | number:'1.1-1' }}%
+        </span>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>

@@ -1,0 +1,309 @@
+<aside
+  class="admin-sidebar"
+  [class.collapsed]="collapsed"
+>
+
+  <!-- =====================================================
+       LOGOTIPO
+  ====================================================== -->
+
+  <header class="sidebar-brand">
+
+    <a
+      routerLink="/"
+      class="sidebar-brand-link"
+      aria-label="Ir al inicio de Sabor Andino"
+      title="Ir al sitio principal"
+    >
+      <img
+        src="/images/logo/logo-sabor-andino.png"
+        alt="Sabor Andino"
+        class="sidebar-logo-image"
+      />
+    </a>
+
+    <span
+      *ngIf="!collapsed"
+      class="sidebar-admin-label"
+    >
+      Panel administrativo
+    </span>
+
+  </header>
+
+  <!-- =====================================================
+       NAVEGACIÓN ADMINISTRATIVA
+  ====================================================== -->
+
+  <nav
+    class="sidebar-navigation"
+    aria-label="Navegación administrativa"
+  >
+
+    <ng-container
+      *ngFor="let item of menuItems"
+    >
+
+      <!-- ===============================================
+           OPCIONES NORMALES
+      ================================================ -->
+
+      <a
+        *ngIf="!isBranchesMenuItem(item)"
+        class="sidebar-menu-link"
+        [routerLink]="
+          item.route ??
+          '/admin/dashboard'
+        "
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: item.exact ?? false
+        }"
+        [attr.title]="
+          collapsed
+            ? item.label
+            : null
+        "
+      >
+
+        <span class="sidebar-menu-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            {{ item.icon }}
+          </span>
+
+        </span>
+
+        <span
+          *ngIf="!collapsed"
+          class="sidebar-menu-label"
+        >
+          {{ item.label }}
+        </span>
+
+      </a>
+
+      <!-- ===============================================
+           GRUPO DE SUCURSALES
+      ================================================ -->
+
+      <section
+        *ngIf="isBranchesMenuItem(item)"
+        class="sidebar-menu-group"
+        [class.sidebar-menu-group-open]="
+          branchesMenuOpen
+        "
+        [class.sidebar-menu-group-active]="
+          isBranchesRouteActive()
+        "
+      >
+
+        <!-- BOTÓN PRINCIPAL -->
+
+        <button
+          type="button"
+          class="sidebar-menu-link sidebar-submenu-toggle"
+          [class.active]="
+            isBranchesRouteActive()
+          "
+          [attr.title]="
+            collapsed
+              ? 'Sucursales'
+              : null
+          "
+          [attr.aria-expanded]="
+            branchesMenuOpen
+          "
+          aria-controls="branchesSubmenu"
+          (click)="toggleBranchesMenu($event)"
+        >
+
+          <span class="sidebar-menu-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              {{ item.icon }}
+            </span>
+
+          </span>
+
+          <span
+            *ngIf="!collapsed"
+            class="sidebar-menu-label"
+          >
+            {{ item.label }}
+          </span>
+
+          <span
+            *ngIf="!collapsed"
+            class="material-symbols-outlined sidebar-submenu-arrow"
+            [class.sidebar-submenu-arrow-open]="
+              branchesMenuOpen
+            "
+            aria-hidden="true"
+          >
+            keyboard_arrow_down
+          </span>
+
+        </button>
+
+        <!-- =============================================
+             SUBMENÚ DE SUCURSALES
+        ============================================== -->
+
+        <div
+          *ngIf="
+            !collapsed &&
+            branchesMenuOpen
+          "
+          id="branchesSubmenu"
+          class="sidebar-submenu"
+        >
+
+          <a
+            *ngFor="
+              let subItem of
+              item.submenu ?? []
+            "
+            class="sidebar-submenu-link"
+            [class.active]="
+              isSubmenuItemActive(
+                subItem
+              )
+            "
+            [class.sidebar-submenu-action]="
+              subItem.action
+            "
+            [routerLink]="subItem.route"
+            [queryParams]="
+              subItem.queryParams
+            "
+            [attr.aria-current]="
+              isSubmenuItemActive(
+                subItem
+              )
+                ? 'page'
+                : null
+            "
+            (click)="closeBranchesSubmenu()"
+          >
+
+            <!-- LÍNEA DEL SUBMENÚ -->
+
+            <span
+              class="sidebar-submenu-line"
+              aria-hidden="true"
+            ></span>
+
+            <!-- ÍCONO -->
+
+            <span class="sidebar-submenu-icon">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                {{ subItem.icon }}
+              </span>
+
+            </span>
+
+            <!-- TEXTO -->
+
+            <span class="sidebar-submenu-label">
+              {{ subItem.label }}
+            </span>
+
+            <!-- INDICADOR DE OPCIÓN ACTIVA -->
+
+            <span
+              *ngIf="
+                isSubmenuItemActive(
+                  subItem
+                ) &&
+                !subItem.action
+              "
+              class="material-symbols-outlined sidebar-submenu-selected"
+              aria-hidden="true"
+            >
+              check_circle
+            </span>
+
+            <!-- INDICADOR PARA AGREGAR -->
+
+            <span
+              *ngIf="subItem.action"
+              class="material-symbols-outlined sidebar-submenu-action-arrow"
+              aria-hidden="true"
+            >
+              arrow_forward
+            </span>
+
+          </a>
+
+        </div>
+
+      </section>
+
+    </ng-container>
+
+  </nav>
+
+  <!-- =====================================================
+       SOPORTE
+  ====================================================== -->
+
+  <footer class="sidebar-footer">
+
+    <article class="sidebar-help-card">
+
+      <span class="sidebar-help-icon">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          support_agent
+        </span>
+
+      </span>
+
+      <div
+        *ngIf="!collapsed"
+        class="sidebar-help-content"
+      >
+
+        <strong>
+          ¿Necesitas ayuda?
+        </strong>
+
+        <p>
+          Estamos para apoyarte
+        </p>
+
+        <button
+          type="button"
+          class="sidebar-help-button"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            headset_mic
+          </span>
+
+          Soporte técnico
+        </button>
+
+      </div>
+
+    </article>
+
+  </footer>
+
+</aside>

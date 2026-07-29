@@ -1,0 +1,121 @@
+<div *ngIf="itemCount > 0" class="public-cart-floating" aria-live="polite">
+  <span class="public-cart-floating-icon">
+    <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+    <strong>{{ itemCount }}</strong>
+  </span>
+  <div>
+    <strong>{{ itemCount }} producto{{ itemCount === 1 ? '' : 's' }}</strong>
+    <span>Total: S/ {{ total | number:'1.2-2' }}</span>
+  </div>
+  <button type="button" (click)="open()">
+    Ver carrito
+    <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+  </button>
+</div>
+
+<div *ngIf="isOpen" class="public-cart-backdrop" (click)="close()">
+  <section class="public-cart-dialog" role="dialog" aria-modal="true" aria-labelledby="cartTitle" (click)="$event.stopPropagation()">
+    <header>
+      <div>
+        <span>Pedido en línea</span>
+        <h2 id="cartTitle">{{ confirmation ? 'Pedido confirmado' : 'Tu carrito' }}</h2>
+      </div>
+      <button type="button" aria-label="Cerrar carrito" (click)="close()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </header>
+
+    <ng-container *ngIf="!confirmation; else orderConfirmed">
+      <div class="public-cart-content">
+        <section class="public-cart-products">
+          <article *ngFor="let item of items; trackBy: trackByItem">
+            <img [src]="item.image || '/images/productos/lomo.jpg'" [alt]="item.name" />
+            <div>
+              <strong>{{ item.name }}</strong>
+              <span>S/ {{ item.price | number:'1.2-2' }}</span>
+              <div class="public-cart-quantity">
+                <button type="button" (click)="changeQuantity(item, -1)">−</button>
+                <b>{{ item.quantity }}</b>
+                <button type="button" (click)="changeQuantity(item, 1)">+</button>
+                <button type="button" class="remove" (click)="remove(item)">Eliminar</button>
+              </div>
+            </div>
+            <strong>S/ {{ item.price * item.quantity | number:'1.2-2' }}</strong>
+          </article>
+
+          <div *ngIf="items.length === 0" class="public-cart-empty">
+            <span class="material-symbols-outlined">shopping_cart_off</span>
+            <p>Tu carrito está vacío.</p>
+          </div>
+        </section>
+
+        <form class="public-cart-form" (ngSubmit)="submitOrder()">
+          <h3>Datos del cliente</h3>
+          <div class="public-cart-grid two">
+            <label>Nombre<input name="firstName" [(ngModel)]="firstName" required /></label>
+            <label>Apellidos<input name="lastName" [(ngModel)]="lastName" required /></label>
+            <label>Tipo de documento
+              <select name="documentType" [(ngModel)]="documentType" (ngModelChange)="documentNumber = ''">
+                <option>DNI</option><option>Carné de extranjería</option><option>Pasaporte</option>
+              </select>
+            </label>
+            <label>Número de documento<input name="documentNumber" [(ngModel)]="documentNumber" [maxlength]="documentType === 'DNI' ? 8 : 12" (input)="sanitizeDocument()" required /></label>
+            <label>Celular<input name="phone" [(ngModel)]="phone" maxlength="9" inputmode="numeric" (input)="sanitizePhone()" required /></label>
+            <label>Correo<input name="email" type="email" [(ngModel)]="email" /></label>
+          </div>
+
+          <h3>Entrega y pago</h3>
+          <label>Sucursal
+            <select name="branchId" [(ngModel)]="branchId" required>
+              <option value="" disabled>Selecciona una sucursal</option>
+              <option *ngFor="let branch of branches" [value]="branch.id">{{ branch.name }}</option>
+            </select>
+          </label>
+
+          <div class="public-cart-options">
+            <label><input type="radio" name="orderType" value="Recojo" [(ngModel)]="orderType" /> Recojo en tienda</label>
+            <label><input type="radio" name="orderType" value="Delivery" [(ngModel)]="orderType" /> Delivery</label>
+          </div>
+
+          <ng-container *ngIf="orderType === 'Delivery'">
+            <label>Dirección de entrega<input name="address" [(ngModel)]="address" required /></label>
+            <label>Referencia<input name="reference" [(ngModel)]="reference" /></label>
+          </ng-container>
+
+          <label>Método de pago
+            <select name="paymentMethod" [(ngModel)]="paymentMethod">
+              <option>Efectivo</option><option>Yape</option><option>Tarjeta BCP</option>
+            </select>
+          </label>
+          <label *ngIf="paymentMethod === 'Yape'">Número de operación<input name="paymentReference" [(ngModel)]="paymentReference" /></label>
+          <label>Indicaciones<textarea name="notes" [(ngModel)]="notes" rows="2"></textarea></label>
+
+          <p *ngIf="errorMessage" class="public-cart-error" role="alert">{{ errorMessage }}</p>
+
+          <div class="public-cart-total">
+            <span>Subtotal <b>S/ {{ subtotal | number:'1.2-2' }}</b></span>
+            <span>Delivery <b>S/ {{ deliveryCost | number:'1.2-2' }}</b></span>
+            <strong>Total <b>S/ {{ total | number:'1.2-2' }}</b></strong>
+          </div>
+
+          <button class="public-cart-submit" type="submit" [disabled]="!canSubmit || isSubmitting">
+            <span class="material-symbols-outlined">{{ isSubmitting ? 'progress_activity' : 'check_circle' }}</span>
+            {{ isSubmitting ? 'Registrando pedido...' : 'Confirmar pedido' }}
+          </button>
+        </form>
+      </div>
+    </ng-container>
+
+    <ng-template #orderConfirmed>
+      <div class="public-cart-confirmed">
+        <span class="material-symbols-outlined">check_circle</span>
+        <h3>¡Tu pedido fue registrado!</h3>
+        <p>Código de seguimiento</p>
+        <strong>{{ confirmation?.code }}</strong>
+        <p>Total: S/ {{ confirmation?.total | number:'1.2-2' }}</p>
+        <p>Tiempo estimado: {{ confirmation?.estimatedMinutes }} minutos</p>
+        <a routerLink="/seguimiento" (click)="close()">Seguir mi pedido</a>
+      </div>
+    </ng-template>
+  </section>
+</div>

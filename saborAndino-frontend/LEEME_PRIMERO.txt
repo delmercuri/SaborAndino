@@ -1,0 +1,16 @@
+SABOR ANDINO - FRONTEND COMPLETO CON MEJORAS RESPONSIVE
+
+Este paquete contiene únicamente el frontend Angular completo.
+No contiene ni modifica el backend, la base de datos, endpoints ni APIs.
+
+INSTALACIÓN:
+1. Haz una copia de seguridad de tu carpeta saborAndino-frontend actual.
+2. Reemplaza esa carpeta por esta carpeta completa.
+3. Abre una terminal dentro de la carpeta.
+4. Ejecuta: npm install
+5. Ejecuta: npm start
+   Alternativa: npx ng serve --open
+6. Para comprobar compilación: npm run build
+
+No se incluye node_modules porque se genera automáticamente con npm install.
+Consulta CAMBIOS_RESPONSIVE.md para ver los archivos de diseño modificados.

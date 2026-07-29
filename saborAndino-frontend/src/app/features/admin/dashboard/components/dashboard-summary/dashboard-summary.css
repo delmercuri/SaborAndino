@@ -1,0 +1,334 @@
+/* =========================================================
+   RESUMEN DEL DASHBOARD
+========================================================= */
+
+:host {
+  display: block;
+
+  --summary-wine: #8b1021;
+  --summary-gold: #d5a539;
+  --summary-green: #638b43;
+  --summary-red: #b4162d;
+  --summary-blue: #37708b;
+  --summary-black: #202020;
+
+  --summary-white: #ffffff;
+  --summary-text: #302823;
+  --summary-muted: #8c8078;
+  --summary-border: #e9dfd6;
+}
+
+:host,
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.dashboard-summary {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.summary-card {
+  min-width: 0;
+  min-height: 126px;
+  padding: 17px 18px 11px;
+
+  position: relative;
+  overflow: hidden;
+
+  border:
+    1px solid var(--summary-border);
+
+  border-radius: 15px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(200, 154, 58, 0.045),
+      transparent 33%
+    ),
+    var(--summary-white);
+
+  box-shadow:
+    0 9px 24px rgba(60, 39, 28, 0.055);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.summary-card:hover {
+  border-color:
+    rgba(200, 154, 58, 0.28);
+
+  box-shadow:
+    0 15px 32px rgba(60, 39, 28, 0.09);
+
+  transform: translateY(-3px);
+}
+
+/* =========================================================
+   CONTENIDO PRINCIPAL
+========================================================= */
+
+.summary-card-main {
+  display: grid;
+  grid-template-columns:
+    48px minmax(0, 1fr) auto;
+
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================================================
+   ICONO
+========================================================= */
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 18px rgba(37, 19, 18, 0.14);
+}
+
+.summary-icon
+.material-symbols-outlined {
+  font-size: 24px;
+
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+.summary-card.wine .summary-icon {
+  background:
+    linear-gradient(145deg, #a31529, #740b18);
+}
+
+.summary-card.gold .summary-icon {
+  background:
+    linear-gradient(145deg, #e0b442, #b57c15);
+}
+
+.summary-card.green .summary-icon {
+  background:
+    linear-gradient(145deg, #769d50, #4e762f);
+}
+
+.summary-card.red .summary-icon,
+.summary-card.cancelled .summary-icon {
+  background:
+    linear-gradient(145deg, #c71c36, #910d21);
+}
+
+.summary-card.olive .summary-icon {
+  background:
+    linear-gradient(145deg, #769c4d, #527330);
+}
+
+.summary-card.amber .summary-icon {
+  background:
+    linear-gradient(145deg, #e1ae36, #ba7f13);
+}
+
+.summary-card.black .summary-icon {
+  background:
+    linear-gradient(145deg, #333333, #171717);
+}
+
+/* =========================================================
+   INFORMACIÓN
+========================================================= */
+
+.summary-information {
+  min-width: 0;
+}
+
+.summary-title {
+  display: block;
+  overflow: hidden;
+
+  color: #554b45;
+
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary-information strong {
+  display: block;
+  margin-top: 7px;
+
+  color: var(--summary-text);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* =========================================================
+   TENDENCIA
+========================================================= */
+
+.summary-trend-wrapper {
+  align-self: start;
+
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.summary-trend {
+  min-width: 55px;
+  height: 24px;
+  padding: 0 7px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  border-radius: 8px;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.summary-trend
+.material-symbols-outlined {
+  font-size: 12px;
+}
+
+.summary-trend.positive {
+  background: #edf6ea;
+  color: #4f8749;
+}
+
+.summary-trend.negative {
+  background: #fbeaec;
+  color: #b02c3e;
+}
+
+.summary-trend.negative
+.material-symbols-outlined {
+  transform: rotate(180deg);
+}
+
+.summary-trend.neutral {
+  background: #f5f1ed;
+  color: #81766f;
+}
+
+.summary-trend-wrapper small {
+  margin-top: 5px;
+
+  color: #9d938c;
+
+  font-size: 7px;
+}
+
+/* =========================================================
+   MINI GRÁFICO
+========================================================= */
+
+.summary-sparkline {
+  height: 28px;
+  margin-top: 9px;
+  margin-left: 58px;
+
+  color: var(--summary-wine);
+}
+
+.summary-sparkline svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+.summary-card.gold .summary-sparkline,
+.summary-card.amber .summary-sparkline {
+  color: #d39c27;
+}
+
+.summary-card.green .summary-sparkline,
+.summary-card.olive .summary-sparkline {
+  color: #6b9149;
+}
+
+.summary-card.red .summary-sparkline,
+.summary-card.cancelled .summary-sparkline {
+  color: #c22038;
+}
+
+.summary-card.black .summary-sparkline {
+  color: #494949;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1250px) {
+
+  .dashboard-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    min-height: 120px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .summary-card {
+    transition: none;
+  }
+
+}

@@ -1,0 +1,104 @@
+<div class="dashboard-page">
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="dashboard-heading">
+
+    <div class="dashboard-heading-information">
+
+      <span class="dashboard-welcome">
+        ¡Bienvenido de vuelta, Administrador!
+      </span>
+
+      <h1>
+        Dashboard
+      </h1>
+
+      <p>
+        Resumen general de pedidos, reservas, productos y sucursales.
+      </p>
+
+    </div>
+
+    <article class="dashboard-date-card">
+
+      <span class="dashboard-date-icon">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          calendar_month
+        </span>
+
+      </span>
+
+      <div class="dashboard-date-information">
+
+        <small>
+          Fecha actual
+        </small>
+
+        <strong>
+          {{ currentDateLabel }}
+        </strong>
+
+        <span>
+          {{ currentDayLabel }}
+        </span>
+
+      </div>
+
+      <span
+        class="dashboard-date-decoration material-symbols-outlined"
+        aria-hidden="true"
+      >
+        calendar_month
+      </span>
+
+    </article>
+
+  </header>
+
+  <!-- =====================================================
+       RESUMEN
+  ====================================================== -->
+
+  <section class="dashboard-summary-section">
+
+    <app-dashboard-summary>
+    </app-dashboard-summary>
+
+  </section>
+
+  <!-- =====================================================
+       GRÁFICOS
+  ====================================================== -->
+
+  <section class="dashboard-charts">
+
+    <app-orders-status-chart>
+    </app-orders-status-chart>
+
+    <app-reservations-status-chart>
+    </app-reservations-status-chart>
+
+    <app-branch-orders-chart>
+    </app-branch-orders-chart>
+
+  </section>
+
+  <!-- =====================================================
+       PRODUCTOS MÁS SOLICITADOS
+  ====================================================== -->
+
+  <section class="dashboard-products">
+
+    <app-popular-products>
+    </app-popular-products>
+
+  </section>
+
+</div>

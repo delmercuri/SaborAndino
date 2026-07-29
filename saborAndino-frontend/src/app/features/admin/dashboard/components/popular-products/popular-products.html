@@ -1,0 +1,58 @@
+<section class="popular-products-card">
+
+  <header class="popular-products-header">
+
+    <div>
+
+      <h2>
+        Productos más solicitados
+      </h2>
+
+      <p>
+        Top 6 productos con mayor número de pedidos
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      aria-label="Mostrar opciones"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        more_horiz
+      </span>
+    </button>
+
+  </header>
+
+  <div class="popular-products-list">
+
+    <article
+      *ngFor="let product of products"
+      class="popular-product-item"
+    >
+
+      <span class="product-name">
+        {{ product.name }}
+      </span>
+
+      <div class="product-progress">
+
+        <span
+          [style.width.%]="product.percentage"
+        ></span>
+
+      </div>
+
+      <strong>
+        {{ product.orders }}
+      </strong>
+
+    </article>
+
+  </div>
+
+</section>

@@ -1,0 +1,148 @@
+<section
+  id="categories-section"
+  class="categories-section"
+>
+
+  <div class="categories-container">
+
+    <!-- ENCABEZADO -->
+    <header class="categories-heading">
+
+      <span class="categories-eyebrow">
+        Explora nuestros sabores
+      </span>
+
+      <h2>
+        Una opción para cada antojo
+      </h2>
+
+      <p>
+        Descubre platos típicos, mariscos, extras, porciones y bebidas
+        preparados especialmente para ti.
+      </p>
+
+      <span
+        class="categories-heading-decoration"
+        aria-hidden="true"
+      >
+
+        <span></span>
+
+        <span class="material-symbols-outlined">
+          restaurant
+        </span>
+
+        <span></span>
+
+      </span>
+
+    </header>
+
+    <!-- LISTADO DE CATEGORÍAS -->
+    <div class="categories-grid">
+
+      <article
+        *ngFor="
+          let category of categories;
+          trackBy: trackByCategoryId
+        "
+        class="category-card"
+        [ngClass]="category.className"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="
+          'Ver productos de la categoría ' + category.name
+        "
+        (click)="selectCategory(category.name)"
+        (keydown.enter)="selectCategory(category.name)"
+        (keydown.space)="
+          selectCategory(category.name);
+          $event.preventDefault()
+        "
+      >
+
+        <!-- DECORACIÓN -->
+        <div
+          class="category-card-decoration"
+          aria-hidden="true"
+        ></div>
+
+        <!-- IMAGEN -->
+        <div class="category-image-container">
+
+          <img
+            class="category-image"
+            [src]="category.image"
+            [alt]="category.name"
+            loading="lazy"
+          />
+
+          <div
+            class="category-image-overlay"
+            aria-hidden="true"
+          ></div>
+
+        </div>
+
+        <!-- INFORMACIÓN -->
+        <div class="category-information">
+
+          <span class="category-count">
+            {{ category.products }}
+            {{ category.products === 1 ? 'opción' : 'opciones' }}
+          </span>
+
+          <h3>
+            {{ category.name }}
+          </h3>
+
+          <p>
+            {{ category.description }}
+          </p>
+
+          <button
+            type="button"
+            (click)="
+              selectCategory(category.name);
+              $event.stopPropagation()
+            "
+          >
+
+            Ver productos
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              arrow_forward
+            </span>
+
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- ENLACE AL MENÚ -->
+    <div class="categories-footer">
+
+      <a routerLink="/menu">
+
+        Ver todas las categorías
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          arrow_forward
+        </span>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>

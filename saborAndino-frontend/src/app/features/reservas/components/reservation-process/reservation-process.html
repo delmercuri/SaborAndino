@@ -1,0 +1,1568 @@
+<section
+  id="reservation-form-process"
+  class="reservation-process-section"
+>
+
+  <div class="reservation-process-container">
+
+    <div class="reservation-process-layout">
+
+      <!-- =================================================
+           CONTENIDO PRINCIPAL
+      ================================================== -->
+      <article class="reservation-form-card">
+
+        <!-- ===============================================
+             PASO 1
+        ================================================ -->
+        <ng-container
+          *ngIf="
+            currentStep === 1 &&
+            !isReservationConfirmed
+          "
+        >
+
+          <header class="reservation-form-header">
+
+            <span class="reservation-header-icon">
+
+              <span class="material-symbols-outlined">
+                restaurant
+              </span>
+
+            </span>
+
+            <div>
+
+              <span class="reservation-eyebrow">
+                Paso 1 de 3
+              </span>
+
+              <h2>
+                Configura tu reserva
+              </h2>
+
+              <p>
+                Selecciona la sucursal, fecha, cantidad de personas,
+                horario y motivo de tu visita.
+              </p>
+
+            </div>
+
+          </header>
+
+          <div class="reservation-form-content">
+
+            <!-- DATOS DE RESERVA -->
+            <fieldset class="reservation-fieldset">
+
+              <legend>
+
+                <span class="material-symbols-outlined">
+                  event_note
+                </span>
+
+                Datos de la reserva
+
+              </legend>
+
+              <div class="fields-grid step-one-main-grid">
+
+                <!-- SUCURSAL -->
+                <div class="form-field branch-field">
+
+                  <label for="reservationBranch">
+                    Sucursal
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      storefront
+                    </span>
+
+                    <select
+                      id="reservationBranch"
+                      [(ngModel)]="reservation.branchId"
+                      (ngModelChange)="emitState()"
+                    >
+
+                      <option value="">
+                        Selecciona una sucursal
+                      </option>
+
+                      <option
+                        *ngFor="let branch of branches"
+                        [value]="branch.id"
+                      >
+                        {{ branch.name }} — {{ branch.location }}
+                      </option>
+
+                    </select>
+
+                    <span class="material-symbols-outlined select-arrow">
+                      keyboard_arrow_down
+                    </span>
+
+                  </div>
+
+                  <small>
+                    Elige el local donde deseas reservar.
+                  </small>
+
+                </div>
+
+                <!-- FECHA -->
+                <div class="form-field">
+
+                  <label for="reservationDate">
+                    Fecha
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      calendar_month
+                    </span>
+
+                    <input
+                      id="reservationDate"
+                      type="date"
+                      [min]="minimumDate"
+                      [(ngModel)]="reservation.date"
+                      (ngModelChange)="updateReservationDate()"
+                    />
+
+                  </div>
+
+                  <small>
+                    Selecciona el día de la visita.
+                  </small>
+
+                </div>
+
+                <!-- PERSONAS -->
+                <div class="form-field">
+
+                  <label>
+                    Número de personas
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="people-control">
+
+                    <button
+                      type="button"
+                      aria-label="Reducir número de personas"
+                      [disabled]="reservation.people <= 1"
+                      (click)="changePeople(-1)"
+                    >
+
+                      <span class="material-symbols-outlined">
+                        remove
+                      </span>
+
+                    </button>
+
+                    <div>
+
+                      <span class="material-symbols-outlined">
+                        groups
+                      </span>
+
+                      <strong>
+                        {{ reservation.people }}
+                      </strong>
+
+                      <span>
+                        {{
+                          reservation.people === 1
+                            ? 'persona'
+                            : 'personas'
+                        }}
+                      </span>
+
+                    </div>
+
+                    <button
+                      type="button"
+                      aria-label="Aumentar número de personas"
+                      [disabled]="reservation.people >= 20"
+                      (click)="changePeople(1)"
+                    >
+
+                      <span class="material-symbols-outlined">
+                        add
+                      </span>
+
+                    </button>
+
+                  </div>
+
+                  <small>
+                    Máximo 20 personas por reserva.
+                  </small>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- HORARIO Y MOTIVO -->
+            <fieldset class="reservation-fieldset">
+
+              <legend>
+
+                <span class="material-symbols-outlined">
+                  schedule
+                </span>
+
+                Horario y motivo de la visita
+
+              </legend>
+
+              <div class="fields-grid two-columns">
+
+                <!-- HORARIO -->
+                <div class="form-field">
+
+                  <label for="reservationTime">
+                    Horario
+                    <strong>*</strong>
+                  </label>
+
+                  <div
+                    class="form-control"
+                    [class.disabled-control]="!reservation.date"
+                  >
+
+                    <span class="material-symbols-outlined control-icon">
+                      schedule
+                    </span>
+
+                    <select
+                      id="reservationTime"
+                      [disabled]="!reservation.date"
+                      [(ngModel)]="reservation.time"
+                      (ngModelChange)="emitState()"
+                    >
+
+                      <option value="">
+                        {{
+                          reservation.date
+                            ? 'Selecciona un horario'
+                            : 'Primero selecciona una fecha'
+                        }}
+                      </option>
+
+                      <option
+                        *ngFor="let time of availableTimes"
+                        [value]="time.value"
+                      >
+                        {{ time.label }}
+                      </option>
+
+                    </select>
+
+                    <span class="material-symbols-outlined select-arrow">
+                      keyboard_arrow_down
+                    </span>
+
+                  </div>
+
+                  <small>
+                    Los horarios agotados estarán deshabilitados.
+                  </small>
+
+                </div>
+
+                <!-- MOTIVO -->
+                <div class="form-field">
+
+                  <label for="reservationOccasion">
+                    Motivo de la visita
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      celebration
+                    </span>
+
+                    <select
+                      id="reservationOccasion"
+                      [(ngModel)]="reservation.occasion"
+                    >
+
+                      <option value="">
+                        Selecciona un motivo
+                      </option>
+
+                      <option
+                        *ngFor="let occasion of occasions"
+                        [value]="occasion.value"
+                      >
+                        {{ occasion.label }}
+                      </option>
+
+                    </select>
+
+                    <span class="material-symbols-outlined select-arrow">
+                      keyboard_arrow_down
+                    </span>
+
+                  </div>
+
+                  <small>
+                    Esto nos ayuda a preparar tu experiencia.
+                  </small>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- SOLICITUD ESPECIAL -->
+            <fieldset class="reservation-fieldset">
+
+              <legend>
+
+                <span class="material-symbols-outlined">
+                  edit_note
+                </span>
+
+                Solicitud especial
+
+                <small>
+                  Opcional
+                </small>
+
+              </legend>
+
+              <div class="textarea-wrapper">
+
+                <span class="material-symbols-outlined">
+                  edit_note
+                </span>
+
+                <textarea
+                  rows="3"
+                  maxlength="300"
+                  placeholder="Ejemplo: mesa cerca de la ventana, silla para bebé o decoración sencilla..."
+                  [(ngModel)]="reservation.notes"
+                ></textarea>
+
+                <small>
+                  {{ notesLength }}/300
+                </small>
+
+              </div>
+
+            </fieldset>
+
+          </div>
+
+          <footer class="reservation-form-footer">
+
+            <span>
+
+              <span class="material-symbols-outlined">
+                lock
+              </span>
+
+              Proceso seguro y protegido
+
+            </span>
+
+            <button
+              type="button"
+              [disabled]="!isStepOneValid"
+              (click)="continueToStepTwo()"
+            >
+
+              Continuar al paso 2
+
+              <span class="material-symbols-outlined">
+                arrow_forward
+              </span>
+
+            </button>
+
+          </footer>
+
+        </ng-container>
+
+        <!-- ===============================================
+             PASO 2
+        ================================================ -->
+        <ng-container
+          *ngIf="
+            currentStep === 2 &&
+            !isReservationConfirmed
+          "
+        >
+
+          <header class="reservation-form-header">
+
+            <span class="reservation-header-icon">
+
+              <span class="material-symbols-outlined">
+                person_edit
+              </span>
+
+            </span>
+
+            <div>
+
+              <span class="reservation-eyebrow">
+                Paso 2 de 3
+              </span>
+
+              <h2>
+                Completa tus datos
+              </h2>
+
+              <p>
+                Ingresa la información necesaria para enviarte
+                la confirmación de tu reserva.
+              </p>
+
+            </div>
+
+          </header>
+
+          <div class="reservation-form-content">
+
+            <!-- INFORMACIÓN PERSONAL -->
+            <fieldset class="reservation-fieldset">
+
+              <legend>
+
+                <span class="material-symbols-outlined">
+                  badge
+                </span>
+
+                Información personal
+
+              </legend>
+
+              <div class="fields-grid two-columns">
+
+                <!-- NOMBRES -->
+                <div class="form-field">
+
+                  <label for="firstName">
+                    Nombres
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      person
+                    </span>
+
+                    <input
+                      id="firstName"
+                      type="text"
+                      placeholder="Ingresa tus nombres"
+                      autocomplete="given-name"
+                      [(ngModel)]="reservation.firstName"
+                    />
+
+                  </div>
+
+                </div>
+
+                <!-- APELLIDOS -->
+                <div class="form-field">
+
+                  <label for="lastName">
+                    Apellidos
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      person
+                    </span>
+
+                    <input
+                      id="lastName"
+                      type="text"
+                      placeholder="Ingresa tus apellidos"
+                      autocomplete="family-name"
+                      [(ngModel)]="reservation.lastName"
+                    />
+
+                  </div>
+
+                </div>
+
+                <!-- TIPO DE DOCUMENTO -->
+                <div class="form-field">
+
+                  <label for="documentType">
+                    Tipo de documento
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      id_card
+                    </span>
+
+                    <select
+                      id="documentType"
+                      [(ngModel)]="reservation.documentType"
+                    >
+
+                      <option
+                        *ngFor="let type of documentTypes"
+                        [value]="type"
+                      >
+                        {{ type }}
+                      </option>
+
+                    </select>
+
+                    <span class="material-symbols-outlined select-arrow">
+                      keyboard_arrow_down
+                    </span>
+
+                  </div>
+
+                </div>
+
+                <!-- NÚMERO DE DOCUMENTO -->
+                <div class="form-field">
+
+                  <label for="documentNumber">
+                    Número de documento
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      numbers
+                    </span>
+
+                    <input
+                      id="documentNumber"
+                      type="text"
+                      maxlength="12"
+                      placeholder="Número de documento"
+                      autocomplete="off"
+                      [(ngModel)]="reservation.documentNumber"
+                    />
+
+                  </div>
+
+                  <small>
+                    Ingresa al menos 8 caracteres.
+                  </small>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- DATOS DE CONTACTO -->
+            <fieldset class="reservation-fieldset">
+
+              <legend>
+
+                <span class="material-symbols-outlined">
+                  contact_phone
+                </span>
+
+                Datos de contacto
+
+              </legend>
+
+              <div class="fields-grid two-columns">
+
+                <!-- TELÉFONO -->
+                <div class="form-field">
+
+                  <label for="reservationPhone">
+                    Teléfono
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      call
+                    </span>
+
+                    <input
+                      id="reservationPhone"
+                      type="tel"
+                      inputmode="numeric"
+                      maxlength="9"
+                      placeholder="987654321"
+                      autocomplete="tel"
+                      [(ngModel)]="reservation.phone"
+                    />
+
+                  </div>
+
+                  <small>
+                    Ingresa nueve números.
+                  </small>
+
+                </div>
+
+                <!-- CORREO -->
+                <div class="form-field">
+
+                  <label for="reservationEmail">
+                    Correo electrónico
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      mail
+                    </span>
+
+                    <input
+                      id="reservationEmail"
+                      type="email"
+                      placeholder="correo@ejemplo.com"
+                      autocomplete="email"
+                      [(ngModel)]="reservation.email"
+                    />
+
+                  </div>
+
+                </div>
+
+                <!-- MEDIO DE CONTACTO -->
+                <div class="form-field full-column">
+
+                  <label for="contactPreference">
+                    Medio de contacto preferido
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      forum
+                    </span>
+
+                    <select
+                      id="contactPreference"
+                      [(ngModel)]="reservation.contactPreference"
+                    >
+
+                      <option
+                        *ngFor="let option of contactPreferences"
+                        [value]="option"
+                      >
+                        {{ option }}
+                      </option>
+
+                    </select>
+
+                    <span class="material-symbols-outlined select-arrow">
+                      keyboard_arrow_down
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- PRIVACIDAD -->
+            <label class="acceptance-control">
+
+              <input
+                type="checkbox"
+                [(ngModel)]="reservation.acceptPrivacy"
+              />
+
+              <span>
+
+                <strong>
+                  Autorizo el tratamiento de mis datos personales
+                </strong>
+
+                <small>
+                  La información será utilizada únicamente para
+                  gestionar y confirmar la reserva.
+                </small>
+
+              </span>
+
+            </label>
+
+          </div>
+
+          <footer class="reservation-form-footer">
+
+            <button
+              type="button"
+              class="secondary-footer-button"
+              (click)="previousStep()"
+            >
+
+              <span class="material-symbols-outlined">
+                arrow_back
+              </span>
+
+              Volver
+
+            </button>
+
+            <button
+              type="button"
+              [disabled]="!isStepTwoValid"
+              (click)="continueToStepThree()"
+            >
+
+              Continuar al paso 3
+
+              <span class="material-symbols-outlined">
+                arrow_forward
+              </span>
+
+            </button>
+
+          </footer>
+
+        </ng-container>
+
+        <!-- ===============================================
+             PASO 3
+        ================================================ -->
+        <ng-container
+          *ngIf="
+            currentStep === 3 &&
+            !isReservationConfirmed
+          "
+        >
+
+          <header class="reservation-form-header">
+
+            <span class="reservation-header-icon">
+
+              <span class="material-symbols-outlined">
+                verified
+              </span>
+
+            </span>
+
+            <div>
+
+              <span class="reservation-eyebrow">
+                Paso 3 de 3
+              </span>
+
+              <h2>
+                Revisa y confirma
+              </h2>
+
+              <p>
+                Verifica los datos de tu visita y selecciona
+                cómo realizarás el adelanto.
+              </p>
+
+            </div>
+
+          </header>
+
+          <div class="reservation-form-content">
+
+            <!-- RESUMEN PRINCIPAL -->
+            <div class="review-grid">
+
+              <article class="review-card">
+
+                <span class="material-symbols-outlined">
+                  storefront
+                </span>
+
+                <div>
+
+                  <small>
+                    Sucursal
+                  </small>
+
+                  <strong>
+                    {{ selectedBranch?.name }}
+                  </strong>
+
+                  <span>
+                    {{ selectedBranch?.address }}
+                  </span>
+
+                </div>
+
+              </article>
+
+              <article class="review-card">
+
+                <span class="material-symbols-outlined">
+                  calendar_month
+                </span>
+
+                <div>
+
+                  <small>
+                    Fecha y horario
+                  </small>
+
+                  <strong>
+                    {{ formattedDate }}
+                  </strong>
+
+                  <span>
+                    {{ selectedTimeLabel }}
+                  </span>
+
+                </div>
+
+              </article>
+
+              <article class="review-card">
+
+                <span class="material-symbols-outlined">
+                  groups
+                </span>
+
+                <div>
+
+                  <small>
+                    Asistentes
+                  </small>
+
+                  <strong>
+                    {{ reservation.people }}
+                    {{
+                      reservation.people === 1
+                        ? 'persona'
+                        : 'personas'
+                    }}
+                  </strong>
+
+                  <span>
+                    {{ selectedOccasionLabel }}
+                  </span>
+
+                </div>
+
+              </article>
+
+              <article class="review-card">
+
+                <span class="material-symbols-outlined">
+                  person
+                </span>
+
+                <div>
+
+                  <small>
+                    Responsable
+                  </small>
+
+                  <strong>
+                    {{ fullName }}
+                  </strong>
+
+                  <span>
+                    {{ reservation.phone }}
+                  </span>
+
+                </div>
+
+              </article>
+
+            </div>
+
+            <!-- MÉTODO DE PAGO -->
+            <fieldset class="reservation-fieldset">
+
+              <legend>
+
+                <span class="material-symbols-outlined">
+                  payments
+                </span>
+
+                Método para el adelanto
+
+              </legend>
+
+              <div class="payment-methods">
+
+                <!-- =======================================
+                     YAPE
+                ======================================== -->
+                <label
+                  class="payment-method-card payment-yape"
+                  [class.selected]="
+                    reservation.paymentMethod === 'Yape'
+                  "
+                >
+
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Yape"
+                    [(ngModel)]="reservation.paymentMethod"
+                  />
+
+                  <span class="payment-logo-container" aria-hidden="true">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                  </span>
+
+                  <div class="payment-method-information">
+
+                    <strong>
+                      Yape
+                    </strong>
+
+                    <small>
+                      Adelanto de S/ 30.00 mediante Yape
+                    </small>
+
+                  </div>
+
+                  <span
+                    *ngIf="reservation.paymentMethod === 'Yape'"
+                    class="payment-selected-icon"
+                  >
+
+                    <span class="material-symbols-outlined">
+                      check_circle
+                    </span>
+
+                  </span>
+
+                </label>
+
+                <!-- =======================================
+                     TARJETA BCP
+                ======================================== -->
+                <label
+                  class="payment-method-card payment-bcp"
+                  [class.selected]="
+                    reservation.paymentMethod === 'Tarjeta BCP'
+                  "
+                >
+
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Tarjeta BCP"
+                    [(ngModel)]="reservation.paymentMethod"
+                  />
+
+                  <span class="payment-logo-container" aria-hidden="true">
+                    <span class="material-symbols-outlined">credit_card</span>
+                  </span>
+
+                  <div class="payment-method-information">
+
+                    <strong>
+                      Tarjeta BCP
+                    </strong>
+
+                    <small>
+                      Pago mediante pasarela segura BCP
+                    </small>
+
+                  </div>
+
+                  <span
+                    *ngIf="
+                      reservation.paymentMethod ===
+                      'Tarjeta BCP'
+                    "
+                    class="payment-selected-icon"
+                  >
+
+                    <span class="material-symbols-outlined">
+                      check_circle
+                    </span>
+
+                  </span>
+
+                </label>
+
+              </div>
+
+              <!-- INFORMACIÓN DE YAPE -->
+              <div
+                *ngIf="reservation.paymentMethod === 'Yape'"
+                class="yape-information"
+              >
+
+                <div class="yape-number">
+
+                  <span class="material-symbols-outlined">
+                    smartphone
+                  </span>
+
+                  <div>
+
+                    <small>
+                      Yapea al número
+                    </small>
+
+                    <strong>
+                      932 229 386
+                    </strong>
+
+                  </div>
+
+                </div>
+
+                <div class="form-field">
+
+                  <label for="paymentReference">
+                    Número de operación
+                    <strong>*</strong>
+                  </label>
+
+                  <div class="form-control">
+
+                    <span class="material-symbols-outlined control-icon">
+                      receipt_long
+                    </span>
+
+                    <input
+                      id="paymentReference"
+                      type="text"
+                      maxlength="20"
+                      placeholder="Ingresa el número de operación"
+                      autocomplete="off"
+                      [(ngModel)]="reservation.paymentReference"
+                    />
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- INFORMACIÓN DE TARJETA BCP -->
+              <div
+                *ngIf="
+                  reservation.paymentMethod ===
+                  'Tarjeta BCP'
+                "
+                class="secure-payment-message"
+              >
+
+                <span class="material-symbols-outlined">
+                  shield_lock
+                </span>
+
+                <div>
+
+                  <strong>
+                    Pago protegido con BCP
+                  </strong>
+
+                  <p>
+                    Al confirmar serás dirigido a una pasarela segura.
+                    No almacenamos los datos de tu tarjeta.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- CONDICIONES -->
+            <label class="acceptance-control">
+
+              <input
+                type="checkbox"
+                [(ngModel)]="reservation.acceptConditions"
+              />
+
+              <span>
+
+                <strong>
+                  Acepto las condiciones de la reserva
+                </strong>
+
+                <small>
+                  El adelanto será descontado del consumo final.
+                  La tolerancia máxima de llegada es de 15 minutos.
+                </small>
+
+              </span>
+
+            </label>
+
+          </div>
+
+          <footer class="reservation-form-footer">
+
+            <button
+              type="button"
+              class="secondary-footer-button"
+              (click)="previousStep()"
+            >
+
+              <span class="material-symbols-outlined">
+                arrow_back
+              </span>
+
+              Volver
+
+            </button>
+
+            
+            <p
+              *ngIf="submissionError"
+              class="reservation-api-error"
+              role="alert"
+            >
+              {{ submissionError }}
+            </p>
+
+            <button
+              type="button"
+              [disabled]="!isStepThreeValid || isSubmitting"
+              (click)="confirmReservation()"
+            >
+
+              {{ isSubmitting ? 'Registrando reserva...' : 'Confirmar reserva' }}
+
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+
+            </button>
+
+          </footer>
+
+        </ng-container>
+
+        <!-- ===============================================
+             CONFIRMACIÓN FINAL
+        ================================================ -->
+        <ng-container *ngIf="isReservationConfirmed">
+
+          <div class="confirmation-success">
+
+            <span class="confirmation-icon">
+
+              <span class="material-symbols-outlined">
+                task_alt
+              </span>
+
+            </span>
+
+            <span class="confirmation-eyebrow">
+              Reserva confirmada
+            </span>
+
+            <h2>
+              ¡Tu mesa está asegurada!
+            </h2>
+
+            <p>
+              Hemos registrado correctamente tu reserva.
+              Guarda el código de confirmación para presentarlo
+              al llegar a la sucursal.
+            </p>
+
+            <div class="confirmation-code">
+
+              <small>
+                Código de reserva
+              </small>
+
+              <strong>
+                {{ confirmationCode }}
+              </strong>
+
+            </div>
+
+            <div class="confirmation-details">
+
+              <div>
+
+                <span>
+                  Sucursal
+                </span>
+
+                <strong>
+                  {{ selectedBranch?.name }}
+                </strong>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Fecha
+                </span>
+
+                <strong>
+                  {{ formattedDate }}
+                </strong>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Horario
+                </span>
+
+                <strong>
+                  {{ selectedTimeLabel }}
+                </strong>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Personas
+                </span>
+
+                <strong>
+                  {{ reservation.people }}
+                </strong>
+
+              </div>
+
+            </div>
+
+            <div class="confirmation-actions">
+
+              <button
+                type="button"
+                (click)="downloadConfirmation()"
+              >
+
+                <span class="material-symbols-outlined">
+                  download
+                </span>
+
+                Descargar confirmación
+
+              </button>
+
+              <button
+                type="button"
+                class="secondary-confirmation-button"
+                (click)="startNewReservation()"
+              >
+
+                <span class="material-symbols-outlined">
+                  add_circle
+                </span>
+
+                Nueva reserva
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </ng-container>
+
+      </article>
+
+      <!-- =================================================
+           RESUMEN LATERAL
+      ================================================== -->
+      <aside class="reservation-summary-card">
+
+        <header class="summary-header">
+
+          <span class="material-symbols-outlined">
+            event_note
+          </span>
+
+          <div>
+
+            <h2>
+              Resumen de tu reserva
+            </h2>
+
+            <p>
+              La información se actualiza automáticamente
+            </p>
+
+          </div>
+
+        </header>
+
+        <div class="summary-content">
+
+          <!-- SUCURSAL -->
+          <div class="summary-item">
+
+            <span class="summary-icon">
+
+              <span class="material-symbols-outlined">
+                storefront
+              </span>
+
+            </span>
+
+            <div>
+
+              <small>
+                Sucursal
+              </small>
+
+              <strong>
+                {{ selectedBranch?.name || 'Pendiente' }}
+              </strong>
+
+              <span>
+                {{
+                  selectedBranch?.location ||
+                  'Selecciona un local'
+                }}
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- FECHA -->
+          <div class="summary-item">
+
+            <span class="summary-icon">
+
+              <span class="material-symbols-outlined">
+                calendar_month
+              </span>
+
+            </span>
+
+            <div>
+
+              <small>
+                Fecha
+              </small>
+
+              <strong>
+                {{ formattedDate || 'Pendiente' }}
+              </strong>
+
+              <span>
+                Día de la visita
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- HORARIO -->
+          <div class="summary-item">
+
+            <span class="summary-icon">
+
+              <span class="material-symbols-outlined">
+                schedule
+              </span>
+
+            </span>
+
+            <div>
+
+              <small>
+                Horario
+              </small>
+
+              <strong>
+                {{ selectedTimeLabel || 'Pendiente' }}
+              </strong>
+
+              <span>
+                Hora aproximada de llegada
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- ASISTENTES -->
+          <div class="summary-item">
+
+            <span class="summary-icon">
+
+              <span class="material-symbols-outlined">
+                groups
+              </span>
+
+            </span>
+
+            <div>
+
+              <small>
+                Asistentes
+              </small>
+
+              <strong>
+                {{ reservation.people }}
+                {{
+                  reservation.people === 1
+                    ? 'persona'
+                    : 'personas'
+                }}
+              </strong>
+
+              <span>
+                Capacidad solicitada
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- MOTIVO -->
+          <div class="summary-item">
+
+            <span class="summary-icon">
+
+              <span class="material-symbols-outlined">
+                restaurant
+              </span>
+
+            </span>
+
+            <div>
+
+              <small>
+                Motivo
+              </small>
+
+              <strong>
+                {{ selectedOccasionLabel || 'Pendiente' }}
+              </strong>
+
+              <span>
+                Tipo de visita
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- ADELANTO -->
+          <div class="deposit-card">
+
+            <span>
+              Adelanto requerido
+            </span>
+
+            <strong>
+              S/ {{ depositAmount | number:'1.2-2' }}
+            </strong>
+
+            <small>
+              Se descontará del consumo final.
+            </small>
+
+          </div>
+
+          <!-- BENEFICIOS -->
+          <div class="summary-benefits">
+
+            <span>
+
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+
+              Confirmación inmediata
+
+            </span>
+
+            <span>
+
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+
+              Código único de reserva
+
+            </span>
+
+            <span>
+
+              <span class="material-symbols-outlined">
+                check_circle
+              </span>
+
+              Atención en la sucursal elegida
+
+            </span>
+
+          </div>
+
+          <!-- AYUDA -->
+          <div class="help-card">
+
+            <span class="material-symbols-outlined">
+              support_agent
+            </span>
+
+            <div>
+
+              <strong>
+                ¿Necesitas ayuda?
+              </strong>
+
+              <p>
+                Comunícate con nuestro equipo para resolver
+                cualquier duda sobre tu reserva.
+              </p>
+
+              <button
+                *ngIf="whatsappNumber"
+                type="button"
+                (click)="openWhatsApp()"
+              >
+
+                <span class="material-symbols-outlined">
+                  chat
+                </span>
+
+                Consultar por WhatsApp
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</section>

@@ -1,0 +1,800 @@
+<div class="categories-page">
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="categories-heading">
+
+    <div class="categories-heading-content">
+
+      <span class="categories-eyebrow">
+        Gestión de categorías
+      </span>
+
+      <h1>
+        Categorías
+      </h1>
+
+      <p>
+        Organiza las categorías utilizadas para clasificar
+        los productos del restaurante.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="register-category-button"
+      (click)="openCreateCategory()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        add
+      </span>
+
+      <span>
+        Nueva categoría
+      </span>
+    </button>
+
+  </header>
+
+  <!-- =====================================================
+       TARJETAS DE RESUMEN
+  ====================================================== -->
+
+  <section
+    class="categories-summary-grid"
+    aria-label="Resumen de categorías"
+  >
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          category
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Total de categorías
+        </small>
+
+        <strong>
+          {{ totalCategories }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          check_circle
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Categorías activas
+        </small>
+
+        <strong>
+          {{ activeCategories }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gray">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          visibility_off
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Categorías inactivas
+        </small>
+
+        <strong>
+          {{ inactiveCategories }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          inventory_2
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Productos asignados
+        </small>
+
+        <strong>
+          {{ assignedProductsCount }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       FILTROS
+  ====================================================== -->
+
+  <section class="categories-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+
+        <h2>
+          Filtros de búsqueda
+        </h2>
+
+        <p>
+          Encuentra una categoría por código,
+          nombre, descripción o estado.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          filter_alt_off
+        </span>
+
+        Limpiar filtros
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <div class="filter-field">
+
+        <label for="searchCategory">
+          Buscar categoría
+        </label>
+
+        <div class="input-wrapper">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            search
+          </span>
+
+          <input
+            id="searchCategory"
+            type="search"
+            placeholder="Código, nombre o descripción"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="categoryStatus">
+          Estado
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="categoryStatus"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todos los estados
+            </option>
+
+            <option
+              *ngFor="let status of statusOptions"
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       LISTADO DE CATEGORÍAS
+  ====================================================== -->
+
+  <section class="categories-list-card">
+
+    <header class="list-card-header">
+
+      <div>
+
+        <h2>
+          Lista de categorías
+        </h2>
+
+        <p>
+          Se encontraron
+          <strong>
+            {{ filteredCategories.length }}
+          </strong>
+          categorías.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="export-button"
+        (click)="exportCategories()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          download
+        </span>
+
+        Exportar
+      </button>
+
+    </header>
+
+    <div
+      *ngIf="paginatedCategories.length > 0"
+      class="categories-grid"
+    >
+
+      <article
+        *ngFor="
+          let category of paginatedCategories;
+          trackBy: trackByCategoryId
+        "
+        class="category-card"
+        [class.category-inactive]="
+          category.status === 'Inactiva'
+        "
+      >
+
+        <!-- IMAGEN -->
+
+        <div class="category-image">
+
+          <img
+            *ngIf="category.imageUrl"
+            [src]="category.imageUrl"
+            [alt]="category.name"
+            (error)="onCategoryImageError(category)"
+          />
+
+          <div
+            *ngIf="!category.imageUrl"
+            class="category-image-placeholder"
+          >
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              restaurant_menu
+            </span>
+
+            <small>
+              Sin imagen
+            </small>
+          </div>
+
+          <span
+            class="category-status"
+            [ngClass]="
+              getStatusClass(
+                category.status
+              )
+            "
+          >
+            <span
+              class="status-dot"
+              aria-hidden="true"
+            ></span>
+
+            {{ category.status }}
+          </span>
+
+        </div>
+
+        <!-- INFORMACIÓN -->
+
+        <div class="category-card-content">
+
+          <span class="category-code">
+            {{ category.code }}
+          </span>
+
+          <span class="category-options">
+            {{ category.productCount }}
+            {{
+              category.productCount === 1
+                ? 'producto'
+                : 'productos'
+            }}
+          </span>
+
+          <h3>
+            {{ category.name }}
+          </h3>
+
+          <p>
+            {{ category.description }}
+          </p>
+
+          <div class="category-card-actions">
+
+            <button
+              type="button"
+              class="category-action edit"
+              title="Editar categoría"
+              (click)="
+                openEditCategory(
+                  category
+                )
+              "
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                edit
+              </span>
+
+              Editar
+            </button>
+
+            <button
+              type="button"
+              class="category-action status"
+              [title]="
+                category.status === 'Activa'
+                  ? 'Desactivar categoría'
+                  : 'Activar categoría'
+              "
+              (click)="
+                toggleCategoryStatus(
+                  category
+                )
+              "
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                {{
+                  category.status === 'Activa'
+                    ? 'visibility_off'
+                    : 'visibility'
+                }}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="category-action delete"
+              title="Eliminar categoría"
+              (click)="
+                removeCategory(
+                  category
+                )
+              "
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                delete
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- SIN RESULTADOS -->
+
+    <div
+      *ngIf="paginatedCategories.length === 0"
+      class="empty-state"
+    >
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        category
+      </span>
+
+      <strong>
+        No se encontraron categorías
+      </strong>
+
+      <p>
+        Modifica o limpia los filtros de búsqueda.
+      </p>
+
+    </div>
+
+    <!-- PAGINACIÓN -->
+
+    <footer class="list-card-footer">
+
+      <span>
+        Mostrando
+        <strong>
+          {{ showingFrom }}
+        </strong>
+        -
+        <strong>
+          {{ showingTo }}
+        </strong>
+        de
+        <strong>
+          {{ filteredCategories.length }}
+        </strong>
+        categorías
+      </span>
+
+      <div class="pagination">
+
+        <button
+          type="button"
+          aria-label="Página anterior"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_left
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="active-page"
+          aria-current="page"
+        >
+          {{ currentPage }}
+        </button>
+
+        <button
+          type="button"
+          aria-label="Página siguiente"
+          (click)="nextPage()"
+          [disabled]="
+            currentPage === totalPages
+          "
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_right
+          </span>
+        </button>
+
+      </div>
+
+    </footer>
+
+  </section>
+
+  <!-- =====================================================
+       MODAL
+  ====================================================== -->
+
+  <div
+    *ngIf="isCategoryModalOpen"
+    class="category-modal-overlay"
+    (click)="closeCategoryModal()"
+  >
+
+    <section
+      class="category-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="categoryModalTitle"
+      (click)="$event.stopPropagation()"
+    >
+
+      <header class="category-modal-header">
+
+        <div>
+
+          <span class="modal-eyebrow">
+            Gestión de categorías
+          </span>
+
+          <h2 id="categoryModalTitle">
+            {{
+              isEditingCategory
+                ? 'Editar categoría'
+                : 'Registrar categoría'
+            }}
+          </h2>
+
+          <p>
+            Completa la información de la categoría.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          class="modal-close-button"
+          aria-label="Cerrar formulario"
+          (click)="closeCategoryModal()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            close
+          </span>
+        </button>
+
+      </header>
+
+      <div class="category-modal-content">
+
+        <!-- IMAGEN -->
+
+        <aside class="category-image-panel">
+
+          <div class="category-image-preview">
+
+            <img
+              *ngIf="categoryForm.imageUrl"
+              [src]="categoryForm.imageUrl"
+              alt="Vista previa de la categoría"
+            />
+
+            <div
+              *ngIf="!categoryForm.imageUrl"
+              class="image-placeholder"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                add_photo_alternate
+              </span>
+
+              <strong>
+                Imagen de categoría
+              </strong>
+
+              <p>
+                PNG, JPG o WEBP
+              </p>
+            </div>
+
+          </div>
+
+          <label class="upload-image-button">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              upload
+            </span>
+
+            Seleccionar imagen
+
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              (change)="onImageSelected($event)"
+            />
+
+          </label>
+
+          <button
+            *ngIf="categoryForm.imageUrl"
+            type="button"
+            class="remove-image-button"
+            (click)="removeSelectedImage()"
+          >
+            Quitar imagen
+          </button>
+
+        </aside>
+
+        <!-- FORMULARIO -->
+
+        <div class="category-form">
+
+          <div class="form-field">
+
+            <label for="categoryName">
+              Nombre de la categoría
+            </label>
+
+            <input
+              id="categoryName"
+              type="text"
+              maxlength="50"
+              placeholder="Ejemplo: Platos típicos"
+              [(ngModel)]="categoryForm.name"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="categoryStatusForm">
+              Estado
+            </label>
+
+            <div class="select-wrapper">
+
+              <select
+                id="categoryStatusForm"
+                [(ngModel)]="categoryForm.status"
+              >
+                <option
+                  *ngFor="let status of statusOptions"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="categoryDescription">
+              Descripción
+            </label>
+
+            <textarea
+              id="categoryDescription"
+              rows="5"
+              maxlength="180"
+              placeholder="Describe los productos que pertenecen a esta categoría"
+              [(ngModel)]="categoryForm.description"
+            ></textarea>
+
+            <small>
+              {{ categoryForm.description.length }}/180
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer class="category-modal-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeCategoryModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="save-category-button"
+          (click)="saveCategory()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            save
+          </span>
+
+          {{
+            isEditingCategory
+              ? 'Guardar cambios'
+              : 'Registrar categoría'
+          }}
+        </button>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+</div>

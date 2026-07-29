@@ -1,0 +1,396 @@
+/* =========================================================
+   FUENTES E ICONOS
+========================================================= */
+
+@import url(
+  'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap'
+);
+
+@import url(
+  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0'
+);
+
+/* =========================================================
+   REINICIO GENERAL
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background: #f8f4ed;
+  color: #302a26;
+
+  font-family:
+    'Poppins',
+    Arial,
+    sans-serif;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL DE ANGULAR
+========================================================= */
+
+app-root {
+  width: 100%;
+  min-height: 100vh;
+
+  display: block;
+}
+
+/* =========================================================
+   ELEMENTOS GENERALES
+========================================================= */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(208, 154, 37, 0.42);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   ICONOS DE GOOGLE
+========================================================= */
+
+.material-symbols-outlined {
+  display: inline-block;
+
+  font-family: 'Material Symbols Outlined';
+  font-size: 23px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   SELECCIÓN DE TEXTO
+========================================================= */
+
+::selection {
+  background: rgba(142, 16, 32, 0.18);
+  color: #570812;
+}
+
+/* =========================================================
+   BARRA DE DESPLAZAMIENTO GLOBAL
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1ebe4;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #f1ebe4;
+  border-radius: 20px;
+
+  background: #b9aaa0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8e1020;
+}
+
+/* =========================================================
+   REINICIO GLOBAL
+========================================================= */
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+
+  background: #f7f4ee;
+  color: #302823;
+
+  font-family:
+    "Poppins",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CAPA GLOBAL RESPONSIVE — SOLO PRESENTACIÓN
+========================================================= */
+
+:root {
+  --responsive-page-padding: clamp(14px, 4vw, 48px);
+  --responsive-section-gap: clamp(36px, 7vw, 88px);
+}
+
+html {
+  overflow-x: clip;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+app-root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+a,
+button,
+label,
+th,
+td {
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 4.75rem);
+  line-height: 1.08;
+}
+
+h2 {
+  font-size: clamp(1.65rem, 3.6vw, 3rem);
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 2.2vw, 1.65rem);
+}
+
+[class*="container"],
+[class*="content"],
+[class*="wrapper"] {
+  min-width: 0;
+}
+
+[class*="grid"] > *,
+[class*="row"] > *,
+[class*="list"] > * {
+  min-width: 0;
+}
+
+/* Tablas: el desbordamiento queda contenido en su bloque. */
+.table-responsive,
+.table-container,
+.table-wrapper,
+[class*="table-container"],
+[class*="table-wrapper"] {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+/* Formularios y modales cómodos en pantallas pequeñas. */
+form,
+[class*="form"] {
+  min-width: 0;
+}
+
+[class*="modal"],
+[class*="dialog"],
+[class*="dropdown"] {
+  max-width: calc(100vw - 24px);
+}
+
+@media (max-width: 1024px) {
+  section {
+    scroll-margin-top: 96px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+  }
+
+  [class*="actions"],
+  [class*="buttons"] {
+    flex-wrap: wrap;
+  }
+
+  [class*="actions"] > button,
+  [class*="actions"] > a,
+  [class*="buttons"] > button,
+  [class*="buttons"] > a {
+    max-width: 100%;
+  }
+
+  th,
+  td {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 10vw, 2.55rem);
+  }
+
+  h2 {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+  }
+
+  [class*="modal"],
+  [class*="dialog"],
+  [class*="dropdown"] {
+    max-width: calc(100vw - 16px);
+  }
+}

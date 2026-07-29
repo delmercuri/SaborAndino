@@ -1,0 +1,2001 @@
+<div class="orders-page">
+
+  <!-- =====================================================
+       NOTIFICACIÓN FLOTANTE
+  ====================================================== -->
+
+  <aside
+    *ngIf="toastVisible"
+    class="orders-toast"
+    [class.toast-success]="toastType === 'success'"
+    [class.toast-error]="toastType === 'error'"
+    [class.toast-info]="toastType === 'info'"
+    role="status"
+    aria-live="polite"
+  >
+
+    <span
+      class="material-symbols-outlined toast-icon"
+      aria-hidden="true"
+    >
+      {{
+        toastType === 'success'
+          ? 'check_circle'
+          : toastType === 'error'
+            ? 'error'
+            : 'info'
+      }}
+    </span>
+
+    <span class="toast-message">
+      {{ toastMessage }}
+    </span>
+
+    <button
+      type="button"
+      class="toast-close-button"
+      aria-label="Cerrar notificación"
+      (click)="closeToast()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        close
+      </span>
+    </button>
+
+  </aside>
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="orders-heading">
+
+    <div class="orders-heading-content">
+
+      <span class="orders-eyebrow">
+        Gestión de pedidos
+      </span>
+
+      <h1>
+        Pedidos
+      </h1>
+
+      <p>
+        Supervisa, confirma, consulta e imprime los pedidos
+        registrados en las sucursales de Sabor Andino.
+      </p>
+
+    </div>
+
+
+
+  </header>
+
+  <!-- =====================================================
+       TARJETAS DE RESUMEN
+  ====================================================== -->
+
+  <section
+    class="orders-summary-grid"
+    aria-label="Resumen general de pedidos"
+  >
+
+    <!-- TOTAL DE PEDIDOS -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          receipt_long
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Total de pedidos
+        </small>
+
+        <strong>
+          {{ totalOrders }}
+        </strong>
+
+        <span>
+          Pedidos registrados
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- PENDIENTES -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          schedule
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Pendientes
+        </small>
+
+        <strong>
+          {{ pendingOrders }}
+        </strong>
+
+        <span>
+          Requieren atención
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- EN PROCESO -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-blue">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          room_service
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          En proceso
+        </small>
+
+        <strong>
+          {{ inProcessOrders }}
+        </strong>
+
+        <span>
+          En preparación o reparto
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- ENTREGADOS -->
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          task_alt
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Entregados
+        </small>
+
+        <strong>
+          {{ deliveredOrders }}
+        </strong>
+
+        <span>
+          Pedidos completados
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <!-- VENTAS -->
+
+    <article class="summary-card summary-sales-card">
+
+      <span class="summary-icon summary-sales">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          payments
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Ventas registradas
+        </small>
+
+        <strong class="summary-currency">
+          {{ formatCurrency(totalSales) }}
+        </strong>
+
+        <span>
+          Sin pedidos cancelados
+        </span>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       FILTROS DE BÚSQUEDA
+  ====================================================== -->
+
+  <section class="orders-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+
+        <h2>
+          Filtros de búsqueda
+        </h2>
+
+        <p>
+          Busca por código, cliente, teléfono o sucursal.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          filter_alt_off
+        </span>
+
+        <span>
+          Limpiar filtros
+        </span>
+
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <!-- BUSCADOR -->
+
+      <div class="filter-field search-field">
+
+        <label for="searchOrder">
+          Buscar pedido
+        </label>
+
+        <div class="input-wrapper">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            search
+          </span>
+
+          <input
+            id="searchOrder"
+            type="search"
+            placeholder="Código, cliente, teléfono o sucursal"
+            autocomplete="off"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+      <!-- SUCURSAL -->
+
+      <div class="filter-field">
+
+        <label for="branchFilter">
+          Sucursal
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="branchFilter"
+            [(ngModel)]="selectedBranch"
+            (ngModelChange)="onFiltersChange()"
+          >
+
+            <option value="">
+              Todas las sucursales
+            </option>
+
+            <option
+              *ngFor="let branch of branchOptions"
+              [value]="branch"
+            >
+              {{ branch }}
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       TABLA DE PEDIDOS
+  ====================================================== -->
+
+  <section class="orders-table-card">
+
+    <header class="table-card-header">
+
+      <div>
+
+        <h2>
+          Lista de pedidos
+        </h2>
+
+        <p>
+          Se encontraron
+          <strong>
+            {{ filteredOrders.length }}
+          </strong>
+          pedidos.
+        </p>
+
+      </div>
+
+      <div class="table-header-actions">
+
+        <button
+          type="button"
+          class="export-button"
+          (click)="exportOrders()"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            download
+          </span>
+
+          <span>
+            Exportar
+          </span>
+
+        </button>
+
+      </div>
+
+    </header>
+
+    <div class="orders-table-wrapper">
+
+      <table class="orders-table">
+
+        <thead>
+
+          <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Sucursal</th>
+            <th>Fecha y hora</th>
+            <th>Total</th>
+            <th>Acciones</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let order of paginatedOrders"
+            [class.order-row-finalized]="
+              order.status === 'Entregado'
+            "
+            [class.order-row-cancelled]="
+              order.status === 'Cancelado'
+            "
+          >
+
+            <!-- PEDIDO -->
+
+            <td>
+
+              <button
+                type="button"
+                class="order-code-cell order-code-button"
+                [attr.aria-label]="
+                  'Ver detalle del pedido ' + order.code
+                "
+                (click)="openOrderDetails(order)"
+              >
+
+                <span class="order-code-icon">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    receipt_long
+                  </span>
+
+                </span>
+
+                <span class="order-code-information">
+
+                  <strong>
+                    {{ order.code }}
+                  </strong>
+
+                  <small>
+                    Ver detalle
+                  </small>
+
+                </span>
+
+              </button>
+
+            </td>
+
+            <!-- CLIENTE -->
+
+            <td>
+
+              <div class="customer-cell">
+
+                <span
+                  class="customer-avatar"
+                  aria-hidden="true"
+                >
+                  {{ order.customerInitial }}
+                </span>
+
+                <div class="customer-information">
+
+                  <strong>
+                    {{ order.customerName }}
+                  </strong>
+
+                  <span>
+                    {{ order.customerPhone }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+            <!-- SUCURSAL -->
+
+            <td>
+
+              <span class="branch-cell">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  storefront
+                </span>
+
+                <span>
+                  {{ order.branch }}
+                </span>
+
+              </span>
+
+            </td>
+
+            <!-- FECHA Y HORA -->
+
+            <td>
+
+              <span class="date-cell">
+                {{ order.dateTime }}
+              </span>
+
+            </td>
+
+            <!-- TOTAL -->
+
+            <td>
+
+              <strong class="total-amount">
+                {{ formatCurrency(order.total) }}
+              </strong>
+
+            </td>
+
+            <!-- ACCIONES -->
+
+            <td class="actions-cell">
+
+              <div class="actions-icons-row">
+
+                <!-- CONFIRMAR / AVANZAR -->
+
+                <button
+                  type="button"
+                  class="order-action-button action-confirm"
+                  [disabled]="!canChangeOrderStatus(order)"
+                  [title]="
+                    canChangeOrderStatus(order)
+                      ? getNextStatusLabel(order)
+                      : 'Pedido finalizado'
+                  "
+                  [attr.aria-label]="
+                    canChangeOrderStatus(order)
+                      ? getNextStatusLabel(order) +
+                        ' del pedido ' +
+                        order.code
+                      : 'Pedido finalizado ' + order.code
+                  "
+                  (click)="advanceOrderStatus(order)"
+                >
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    check_circle
+                  </span>
+
+                  <span class="action-button-text">
+                    Confirmar
+                  </span>
+
+                </button>
+
+                <!-- VER DETALLE -->
+
+                <button
+                  type="button"
+                  class="order-action-button action-view"
+                  title="Ver pedido"
+                  [attr.aria-label]="
+                    'Ver detalle del pedido ' + order.code
+                  "
+                  (click)="openOrderDetails(order)"
+                >
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    visibility
+                  </span>
+
+                  <span class="action-button-text">
+                    Ver
+                  </span>
+
+                </button>
+
+                <!-- IMPRIMIR -->
+
+                <button
+                  type="button"
+                  class="order-action-button action-receipt"
+                  title="Imprimir comprobante"
+                  [attr.aria-label]="
+                    'Imprimir comprobante del pedido ' +
+                    order.code
+                  "
+                  (click)="printOrderReceipt(order)"
+                >
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    print
+                  </span>
+
+                  <span class="action-button-text">
+                    Imprimir
+                  </span>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+          <!-- SIN RESULTADOS -->
+
+          <tr *ngIf="paginatedOrders.length === 0">
+
+            <td
+              colspan="6"
+              class="empty-state-cell"
+            >
+
+              <span
+                class="empty-state-icon material-symbols-outlined"
+                aria-hidden="true"
+              >
+                search_off
+              </span>
+
+              <strong>
+                No se encontraron pedidos
+              </strong>
+
+              <p>
+                Modifica los criterios o limpia los filtros
+                de búsqueda.
+              </p>
+
+              <button
+                type="button"
+                class="empty-clear-button"
+                (click)="clearFilters()"
+              >
+                Limpiar filtros
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- ===================================================
+         PIE DE TABLA
+    ==================================================== -->
+
+    <footer class="table-card-footer">
+
+      <span>
+
+        Mostrando
+
+        <strong>
+          {{ showingFrom }}
+        </strong>
+
+        -
+
+        <strong>
+          {{ showingTo }}
+        </strong>
+
+        de
+
+        <strong>
+          {{ filteredOrders.length }}
+        </strong>
+
+        pedidos
+
+      </span>
+
+      <div
+        class="pagination"
+        aria-label="Paginación de pedidos"
+      >
+
+        <button
+          type="button"
+          aria-label="Página anterior"
+          [disabled]="currentPage === 1"
+          (click)="previousPage()"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_left
+          </span>
+
+        </button>
+
+        <button
+          *ngFor="let page of pageNumbers"
+          type="button"
+          [class.active-page]="currentPage === page"
+          [attr.aria-label]="'Ir a la página ' + page"
+          [attr.aria-current]="
+            currentPage === page
+              ? 'page'
+              : null
+          "
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          type="button"
+          aria-label="Página siguiente"
+          [disabled]="currentPage === totalPages"
+          (click)="nextPage()"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_right
+          </span>
+
+        </button>
+
+      </div>
+
+    </footer>
+
+  </section>
+
+</div>
+
+<!-- =======================================================
+     MODAL: DETALLE DEL PEDIDO
+======================================================== -->
+
+<div
+  *ngIf="detailsModalOpen && selectedOrder as order"
+  class="orders-modal-backdrop"
+  role="presentation"
+  (click)="closeOrderDetails()"
+>
+
+  <section
+    class="orders-modal order-details-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="orderDetailsTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- ENCABEZADO -->
+
+    <header class="orders-modal-header">
+
+      <div class="modal-heading-group">
+
+        <span class="modal-heading-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            receipt_long
+          </span>
+
+        </span>
+
+        <div>
+
+          <span>
+            Detalle del pedido
+          </span>
+
+          <h2 id="orderDetailsTitle">
+            {{ order.code }}
+          </h2>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        aria-label="Cerrar detalle"
+        (click)="closeOrderDetails()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          close
+        </span>
+
+      </button>
+
+    </header>
+
+    <!-- ESTADO Y ACCIONES -->
+
+    <div class="order-detail-status-banner">
+
+      <div>
+
+        <span>
+          Estado actual
+        </span>
+
+        <strong
+          class="detail-status-badge"
+          [ngClass]="getStatusClass(order.status)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            {{ getStatusIcon(order.status) }}
+          </span>
+
+          {{ order.status }}
+
+        </strong>
+
+      </div>
+
+      <div class="detail-status-actions">
+
+        <!-- CONFIRMAR / AVANZAR -->
+
+        <button
+          *ngIf="canChangeOrderStatus(order)"
+          type="button"
+          class="detail-advance-button"
+          [title]="getNextStatusLabel(order)"
+          (click)="advanceOrderStatus(order)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            check_circle
+          </span>
+
+          {{ getNextStatusLabel(order) }}
+
+        </button>
+
+        <!-- EDITAR -->
+
+        <button
+          type="button"
+          class="detail-edit-button"
+          (click)="openEditOrderModal(order)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            edit
+          </span>
+
+          Editar
+
+        </button>
+
+        <!-- IMPRIMIR -->
+
+        <button
+          type="button"
+          class="detail-print-button"
+          (click)="printOrderReceipt(order)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            print
+          </span>
+
+          Imprimir
+
+        </button>
+
+        <!-- CANCELAR PEDIDO -->
+
+        <button
+          *ngIf="canChangeOrderStatus(order)"
+          type="button"
+          class="detail-cancel-button"
+          (click)="openCancellationModal(order)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            cancel
+          </span>
+
+          Cancelar pedido
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- CONTENIDO -->
+
+    <div class="orders-modal-content">
+
+      <!-- INFORMACIÓN DEL CLIENTE -->
+
+      <section class="order-detail-section">
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            person
+          </span>
+
+          <h3>
+            Información del cliente
+          </h3>
+
+        </header>
+
+        <div class="order-detail-grid">
+
+          <div class="detail-data-item">
+
+            <span>
+              Cliente
+            </span>
+
+            <strong>
+              {{ order.customerName }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Teléfono
+            </span>
+
+            <strong>
+              {{ order.customerPhone }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item detail-data-full">
+
+            <span>
+              Dirección o modalidad
+            </span>
+
+            <strong>
+              {{ order.address }}
+            </strong>
+
+          </div>
+
+          <div
+            *ngIf="order.reference"
+            class="detail-data-item detail-data-full"
+          >
+
+            <span>
+              Referencia
+            </span>
+
+            <strong>
+              {{ order.reference }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- DATOS DEL PEDIDO -->
+
+      <section class="order-detail-section">
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            info
+          </span>
+
+          <h3>
+            Datos del pedido
+          </h3>
+
+        </header>
+
+        <div class="order-detail-grid">
+
+          <div class="detail-data-item">
+
+            <span>
+              Tipo
+            </span>
+
+            <strong>
+              {{ order.type }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Método de pago
+            </span>
+
+            <strong>
+              {{ order.payment }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Estado
+            </span>
+
+            <strong>
+              {{ order.status }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Total
+            </span>
+
+            <strong>
+              {{ formatCurrency(order.total) }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item detail-data-full">
+
+            <span>
+              Sucursal
+            </span>
+
+            <strong>
+              {{ order.branch }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Registrado
+            </span>
+
+            <strong>
+              {{ order.dateTime }}
+            </strong>
+
+          </div>
+
+          <div class="detail-data-item">
+
+            <span>
+              Última actualización
+            </span>
+
+            <strong>
+              {{ order.updatedAt }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PRODUCTOS -->
+
+      <section class="order-detail-section">
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            restaurant
+          </span>
+
+          <h3>
+            Productos solicitados
+          </h3>
+
+        </header>
+
+        <div class="detail-products-list">
+
+          <article
+            *ngFor="let product of order.products"
+            class="detail-product-item"
+          >
+
+            <span class="product-quantity">
+              {{ product.quantity }}×
+            </span>
+
+            <div>
+
+              <strong>
+                {{ product.name }}
+              </strong>
+
+              <small>
+                {{ formatCurrency(product.unitPrice) }}
+                por unidad
+              </small>
+
+            </div>
+
+            <strong class="product-subtotal">
+              {{
+                formatCurrency(
+                  calculateProductSubtotal(product)
+                )
+              }}
+            </strong>
+
+          </article>
+
+          <div
+            *ngIf="order.products.length === 0"
+            class="detail-empty-products"
+          >
+            No se registraron productos para este pedido.
+          </div>
+
+          <div class="detail-order-total">
+
+            <span>
+              Total del pedido
+            </span>
+
+            <strong>
+              {{ formatCurrency(order.total) }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- NOTAS -->
+
+      <section
+        *ngIf="order.notes"
+        class="order-detail-section"
+      >
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            notes
+          </span>
+
+          <h3>
+            Indicaciones
+          </h3>
+
+        </header>
+
+        <p class="detail-order-notes">
+          {{ order.notes }}
+        </p>
+
+      </section>
+
+      <!-- MOTIVO DE CANCELACIÓN -->
+
+      <section
+        *ngIf="
+          order.status === 'Cancelado' &&
+          order.cancellationReason
+        "
+        class="order-detail-section cancellation-detail-section"
+      >
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            cancel
+          </span>
+
+          <h3>
+            Motivo de cancelación
+          </h3>
+
+        </header>
+
+        <p>
+          {{ order.cancellationReason }}
+        </p>
+
+      </section>
+
+      <!-- HISTORIAL -->
+
+      <section class="order-detail-section">
+
+        <header class="detail-section-header">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            history
+          </span>
+
+          <h3>
+            Historial del pedido
+          </h3>
+
+        </header>
+
+        <div class="order-history-list">
+
+          <article
+            *ngFor="
+              let historyItem of order.history;
+              let isLast = last
+            "
+            class="order-history-item"
+            [class.history-last-item]="isLast"
+          >
+
+            <span
+              class="history-status-icon"
+              [ngClass]="getStatusClass(historyItem.status)"
+            >
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                {{ getStatusIcon(historyItem.status) }}
+              </span>
+
+            </span>
+
+            <div class="history-information">
+
+              <strong>
+                {{ historyItem.status }}
+              </strong>
+
+              <p>
+                {{ historyItem.note }}
+              </p>
+
+              <small>
+                {{ historyItem.dateTime }}
+              </small>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- PIE DEL DETALLE -->
+
+    <footer class="orders-modal-footer">
+
+      <button
+        type="button"
+        class="modal-secondary-button"
+        (click)="closeOrderDetails()"
+      >
+        Cerrar
+      </button>
+
+    </footer>
+
+  </section>
+
+</div>
+
+<!-- =======================================================
+     MODAL: CANCELAR PEDIDO
+======================================================== -->
+
+<div
+  *ngIf="cancellationModalOpen"
+  class="orders-modal-backdrop"
+  role="presentation"
+  (click)="closeCancellationModal()"
+>
+
+  <section
+    class="orders-modal cancellation-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cancelOrderTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- ENCABEZADO -->
+
+    <header class="orders-modal-header cancellation-modal-header">
+
+      <div class="modal-heading-group">
+
+        <span class="modal-heading-icon modal-warning-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            warning
+          </span>
+
+        </span>
+
+        <div>
+
+          <span>
+            Acción importante
+          </span>
+
+          <h2 id="cancelOrderTitle">
+            Cancelar pedido
+          </h2>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        aria-label="Cerrar cancelación"
+        (click)="closeCancellationModal()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          close
+        </span>
+
+      </button>
+
+    </header>
+
+    <!-- CONTENIDO -->
+
+    <div class="orders-modal-content">
+
+      <div class="cancellation-warning">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          info
+        </span>
+
+        <p>
+          El pedido
+
+          <strong>
+            {{ orderPendingCancellation?.code }}
+          </strong>
+
+          quedará cancelado y no podrá continuar con el flujo
+          normal de atención.
+        </p>
+
+      </div>
+
+      <div class="modal-form-field">
+
+        <label for="cancellationReason">
+          Motivo de cancelación
+        </label>
+
+        <textarea
+          id="cancellationReason"
+          rows="4"
+          maxlength="250"
+          placeholder="Describe por qué se cancela el pedido..."
+          [(ngModel)]="cancellationReason"
+          (ngModelChange)="cancellationError = ''"
+        ></textarea>
+
+        <small>
+          {{ cancellationReason.length }}/250 caracteres
+        </small>
+
+      </div>
+
+      <div
+        *ngIf="cancellationError"
+        class="modal-form-error"
+        role="alert"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          error
+        </span>
+
+        {{ cancellationError }}
+
+      </div>
+
+    </div>
+
+    <!-- PIE -->
+
+    <footer class="orders-modal-footer">
+
+      <button
+        type="button"
+        class="modal-secondary-button"
+        (click)="closeCancellationModal()"
+      >
+        Volver
+      </button>
+
+      <button
+        type="button"
+        class="modal-danger-button"
+        (click)="confirmCancellation()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          cancel
+        </span>
+
+        Confirmar cancelación
+
+      </button>
+
+    </footer>
+
+  </section>
+
+</div>
+
+<!-- =======================================================
+     MODAL: EDITAR PEDIDO
+======================================================== -->
+
+<div
+  *ngIf="editOrderModalOpen && editingOrder as order"
+  class="orders-modal-backdrop"
+  role="presentation"
+  (click)="closeEditOrderModal()"
+>
+
+  <section
+    class="orders-modal edit-order-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editOrderTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- ENCABEZADO -->
+
+    <header class="orders-modal-header">
+
+      <div class="modal-heading-group">
+
+        <span class="modal-heading-icon modal-edit-icon">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            edit
+          </span>
+
+        </span>
+
+        <div>
+
+          <span>
+            Modificar información
+          </span>
+
+          <h2 id="editOrderTitle">
+            Editar {{ order.code }}
+          </h2>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        aria-label="Cerrar edición"
+        [disabled]="isUpdatingOrder"
+        (click)="closeEditOrderModal()"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          close
+        </span>
+
+      </button>
+
+    </header>
+
+    <!-- CONTENIDO -->
+
+    <div class="orders-modal-content">
+
+      <div
+        *ngIf="editOrderError"
+        class="modal-form-error"
+        role="alert"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          error
+        </span>
+
+        {{ editOrderError }}
+
+      </div>
+
+      <div class="register-order-form-grid">
+
+        <!-- CLIENTE -->
+
+        <div class="modal-form-field">
+
+          <label for="editCustomerName">
+            Nombre del cliente
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              person
+            </span>
+
+            <input
+              id="editCustomerName"
+              type="text"
+              maxlength="100"
+              autocomplete="name"
+              [(ngModel)]="order.customerName"
+              [disabled]="isUpdatingOrder"
+              (ngModelChange)="editOrderError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- TELÉFONO -->
+
+        <div class="modal-form-field">
+
+          <label for="editCustomerPhone">
+            Teléfono
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              call
+            </span>
+
+            <input
+              id="editCustomerPhone"
+              type="tel"
+              maxlength="20"
+              inputmode="tel"
+              autocomplete="tel"
+              [(ngModel)]="order.customerPhone"
+              [disabled]="isUpdatingOrder"
+              (ngModelChange)="editOrderError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- TIPO -->
+
+        <div class="modal-form-field">
+
+          <label for="editOrderType">
+            Tipo de pedido
+          </label>
+
+          <div class="modal-select-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              delivery_dining
+            </span>
+
+            <select
+              id="editOrderType"
+              [(ngModel)]="order.type"
+              [disabled]="isUpdatingOrder"
+              (ngModelChange)="editOrderError = ''"
+            >
+
+              <option
+                *ngFor="let type of typeOptions"
+                [ngValue]="type"
+              >
+                {{ type }}
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <!-- MÉTODO DE PAGO -->
+
+        <div class="modal-form-field">
+
+          <label for="editOrderPayment">
+            Método de pago
+          </label>
+
+          <div class="modal-select-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              payments
+            </span>
+
+            <select
+              id="editOrderPayment"
+              [(ngModel)]="order.payment"
+              [disabled]="isUpdatingOrder"
+            >
+
+              <option
+                *ngFor="let payment of paymentOptions"
+                [ngValue]="payment"
+              >
+                {{ payment }}
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <!-- SUCURSAL -->
+
+        <div class="modal-form-field modal-form-field-full">
+
+          <label for="editOrderBranch">
+            Sucursal
+          </label>
+
+          <div class="modal-select-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              storefront
+            </span>
+
+            <select
+              id="editOrderBranch"
+              [(ngModel)]="order.branch"
+              [disabled]="isUpdatingOrder"
+              (ngModelChange)="editOrderError = ''"
+            >
+
+              <option
+                *ngFor="let branch of branchOptions"
+                [ngValue]="branch"
+              >
+                {{ branch }}
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <!-- DIRECCIÓN -->
+
+        <div
+          *ngIf="order.type === 'Delivery'"
+          class="modal-form-field modal-form-field-full"
+        >
+
+          <label for="editOrderAddress">
+            Dirección de entrega
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              location_on
+            </span>
+
+            <input
+              id="editOrderAddress"
+              type="text"
+              maxlength="180"
+              autocomplete="street-address"
+              [(ngModel)]="order.address"
+              [disabled]="isUpdatingOrder"
+              (ngModelChange)="editOrderError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- REFERENCIA -->
+
+        <div
+          *ngIf="order.type === 'Delivery'"
+          class="modal-form-field modal-form-field-full"
+        >
+
+          <label for="editOrderReference">
+            Referencia
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              near_me
+            </span>
+
+            <input
+              id="editOrderReference"
+              type="text"
+              maxlength="150"
+              [(ngModel)]="order.reference"
+              [disabled]="isUpdatingOrder"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- TOTAL -->
+
+        <div class="modal-form-field modal-form-field-full">
+
+          <label for="editOrderTotal">
+            Total del pedido
+          </label>
+
+          <div class="modal-input-wrapper">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              paid
+            </span>
+
+            <input
+              id="editOrderTotal"
+              type="number"
+              min="0.10"
+              step="0.10"
+              inputmode="decimal"
+              [(ngModel)]="order.total"
+              [disabled]="isUpdatingOrder"
+              (ngModelChange)="editOrderError = ''"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- NOTAS -->
+
+        <div class="modal-form-field modal-form-field-full">
+
+          <label for="editOrderNotes">
+            Notas o indicaciones
+          </label>
+
+          <textarea
+            id="editOrderNotes"
+            rows="4"
+            maxlength="250"
+            [(ngModel)]="order.notes"
+            [disabled]="isUpdatingOrder"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PIE -->
+
+    <footer class="orders-modal-footer">
+
+      <button
+        type="button"
+        class="modal-secondary-button"
+        [disabled]="isUpdatingOrder"
+        (click)="closeEditOrderModal()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="modal-primary-button"
+        [disabled]="isUpdatingOrder"
+        (click)="saveEditedOrder()"
+      >
+
+        <ng-container *ngIf="!isUpdatingOrder">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            save
+          </span>
+
+          Guardar cambios
+
+        </ng-container>
+
+        <ng-container *ngIf="isUpdatingOrder">
+
+          <span
+            class="modal-loading-spinner"
+            aria-hidden="true"
+          ></span>
+
+          Guardando...
+
+        </ng-container>
+
+      </button>
+
+    </footer>
+
+  </section>
+
+</div>

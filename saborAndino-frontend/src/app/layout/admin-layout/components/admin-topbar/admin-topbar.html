@@ -1,0 +1,1220 @@
+<header class="admin-topbar">
+
+  <!-- =====================================================
+       PARTE IZQUIERDA
+  ====================================================== -->
+
+  <div class="admin-topbar-left">
+
+    <!-- BOTÓN DEL MENÚ LATERAL -->
+
+    <button
+      type="button"
+      class="admin-menu-button"
+      aria-label="Abrir o cerrar menú administrativo"
+      title="Abrir o cerrar menú"
+      (click)="toggleMenu()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        menu
+      </span>
+    </button>
+
+    <!-- BUSCADOR ADMINISTRATIVO -->
+
+    <label class="admin-search">
+
+      <span
+        class="material-symbols-outlined admin-search-leading"
+        aria-hidden="true"
+      >
+        search
+      </span>
+
+      <input
+        type="search"
+        placeholder="Buscar pedidos, reservas, productos, sucursales..."
+        aria-label="Buscar en el panel administrativo"
+        autocomplete="off"
+        (keyup.enter)="searchAdministration($event)"
+      />
+
+      <span
+        class="admin-search-shortcut"
+        aria-hidden="true"
+      >
+        Ctrl K
+      </span>
+
+    </label>
+
+  </div>
+
+  <!-- =====================================================
+       PARTE DERECHA
+  ====================================================== -->
+
+  <div class="admin-topbar-actions">
+
+    <!-- MENSAJES -->
+
+    <button
+      type="button"
+      class="topbar-action-button"
+      aria-label="Ver mensajes"
+      title="Mensajes"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        mail
+      </span>
+    </button>
+
+    <!-- NOTIFICACIONES -->
+
+    <button
+      type="button"
+      class="topbar-action-button notification-button"
+      aria-label="Ver notificaciones"
+      title="Notificaciones"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        notifications
+      </span>
+
+      <span
+        class="notification-count"
+        aria-label="3 notificaciones pendientes"
+      >
+        3
+      </span>
+    </button>
+
+    <!-- DIVISOR -->
+
+    <span
+      class="topbar-divider"
+      aria-hidden="true"
+    ></span>
+
+    <!-- ===================================================
+         CUENTA DEL ADMINISTRADOR
+    ==================================================== -->
+
+    <div class="administrator-account">
+
+      <!-- PERFIL Y MENÚ DESPLEGABLE -->
+
+      <div class="administrator-profile-wrapper">
+
+        <button
+          type="button"
+          class="administrator-profile"
+          [class.profile-active]="profileMenuOpen"
+          aria-label="Abrir configuración del perfil"
+          [attr.aria-expanded]="profileMenuOpen"
+          aria-haspopup="true"
+          (click)="toggleProfileMenu()"
+        >
+
+          <!-- FOTO -->
+
+          <span class="administrator-avatar">
+
+            <img
+              [src]="adminAvatar"
+              alt=""
+              (error)="handleAvatarError($event)"
+            />
+
+            <span
+              class="administrator-online"
+              aria-hidden="true"
+            ></span>
+
+          </span>
+
+          <!-- INFORMACIÓN PRINCIPAL -->
+
+          <span class="administrator-information">
+
+            <strong>
+              {{ adminName }}
+            </strong>
+
+            <small>
+              {{ adminPosition }}
+            </small>
+
+          </span>
+
+          <!-- FLECHA -->
+
+          <span
+            class="material-symbols-outlined profile-menu-arrow"
+            [class.profile-menu-arrow-open]="profileMenuOpen"
+            aria-hidden="true"
+          >
+            keyboard_arrow_down
+          </span>
+
+        </button>
+
+        <!-- ===============================================
+             CONFIGURACIÓN DEL PERFIL
+        ================================================ -->
+
+        <section
+          *ngIf="profileMenuOpen"
+          class="administrator-profile-dropdown"
+          aria-label="Configuración del perfil"
+        >
+
+          <!-- ENCABEZADO DEL MENÚ -->
+
+          <header class="profile-dropdown-header">
+
+            <div class="profile-dropdown-title">
+
+              <span class="profile-title-icon">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  manage_accounts
+                </span>
+
+              </span>
+
+              <div>
+
+                <strong>
+                  Configuración de cuenta
+                </strong>
+
+                <span>
+                  Administra tu perfil y seguridad
+                </span>
+
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              class="profile-dropdown-close"
+              aria-label="Cerrar configuración del perfil"
+              title="Cerrar"
+              (click)="closeProfileMenu()"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                close
+              </span>
+            </button>
+
+          </header>
+
+          <!-- RESUMEN DEL USUARIO -->
+
+          <div class="profile-account-summary">
+
+            <span class="profile-account-avatar">
+
+              <img
+                [src]="adminAvatar"
+                alt=""
+                (error)="handleAvatarError($event)"
+              />
+
+            </span>
+
+            <div class="profile-account-information">
+
+              <strong>
+                {{ adminName }}
+              </strong>
+
+              <span>
+                {{ adminEmail }}
+              </span>
+
+              <small>
+                {{ adminPosition }} · {{ adminBranch }}
+              </small>
+
+            </div>
+
+            <span class="profile-account-status">
+              Activo
+            </span>
+
+          </div>
+
+          <!-- =============================================
+               PESTAÑAS
+          ============================================== -->
+
+          <nav
+            class="profile-tabs"
+            aria-label="Opciones de configuración"
+          >
+
+            <button
+              type="button"
+              class="profile-tab-button"
+              [class.profile-tab-active]="
+                activeProfileTab === 'personal'
+              "
+              (click)="selectProfileTab('personal')"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                badge
+              </span>
+
+              Datos personales
+            </button>
+
+            <button
+              type="button"
+              class="profile-tab-button"
+              [class.profile-tab-active]="
+                activeProfileTab === 'security'
+              "
+              (click)="selectProfileTab('security')"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                shield_lock
+              </span>
+
+              Seguridad
+            </button>
+
+          </nav>
+
+          <!-- =============================================
+               PESTAÑA: DATOS PERSONALES
+          ============================================== -->
+
+          <div
+            *ngIf="activeProfileTab === 'personal'"
+            class="profile-tab-content"
+          >
+
+            <!-- FOTO DEL PERFIL -->
+
+            <div class="profile-photo-section">
+
+              <div class="profile-photo-preview">
+
+                <img
+                  [src]="profileAvatarPreview"
+                  alt=""
+                  (error)="handleAvatarError($event)"
+                />
+
+                <label
+                  class="profile-photo-change"
+                  title="Cambiar fotografía"
+                  aria-label="Seleccionar una nueva fotografía"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    photo_camera
+                  </span>
+
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    aria-label="Seleccionar fotografía del perfil"
+                    [disabled]="isSavingProfile"
+                    (change)="onAvatarSelected($event)"
+                  />
+                </label>
+
+              </div>
+
+              <div class="profile-photo-information">
+
+                <strong>
+                  Fotografía del perfil
+                </strong>
+
+                <span>
+                  Formatos PNG, JPG o WEBP
+                </span>
+
+                <small>
+                  Tamaño máximo permitido: 1 MB
+                </small>
+
+              </div>
+
+              <button
+                type="button"
+                class="profile-small-reset-button"
+                [disabled]="isSavingProfile"
+                (click)="resetAdminPhoto()"
+              >
+                Restablecer
+              </button>
+
+            </div>
+
+            <!-- MENSAJE DE ERROR -->
+
+            <div
+              *ngIf="profileError"
+              class="profile-message profile-message-error"
+              role="alert"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                error
+              </span>
+
+              <span>
+                {{ profileError }}
+              </span>
+            </div>
+
+            <!-- MENSAJE DE ÉXITO -->
+
+            <div
+              *ngIf="profileMessage"
+              class="profile-message profile-message-success"
+              role="status"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                check_circle
+              </span>
+
+              <span>
+                {{ profileMessage }}
+              </span>
+            </div>
+
+            <!-- FORMULARIO -->
+
+            <div class="profile-form-grid">
+
+              <!-- NOMBRE VISIBLE -->
+
+              <div class="profile-form-field profile-form-field-full">
+
+                <label for="administratorProfileName">
+                  Nombre visible
+                </label>
+
+                <div class="profile-input-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    account_circle
+                  </span>
+
+                  <input
+                    id="administratorProfileName"
+                    name="administratorProfileName"
+                    type="text"
+                    maxlength="60"
+                    placeholder="Nombre que aparecerá en la barra"
+                    autocomplete="name"
+                    [(ngModel)]="profileName"
+                    [disabled]="isSavingProfile"
+                  />
+
+                </div>
+
+                <small class="profile-field-help">
+                  Este nombre se mostrará en la barra superior.
+                </small>
+
+              </div>
+
+              <!-- NOMBRES -->
+
+              <div class="profile-form-field">
+
+                <label for="administratorFirstName">
+                  Nombres
+                </label>
+
+                <div class="profile-input-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    person
+                  </span>
+
+                  <input
+                    id="administratorFirstName"
+                    name="administratorFirstName"
+                    type="text"
+                    maxlength="80"
+                    placeholder="Nombres"
+                    autocomplete="given-name"
+                    [(ngModel)]="profileFirstName"
+                    [disabled]="isSavingProfile"
+                  />
+
+                </div>
+
+              </div>
+
+              <!-- APELLIDOS -->
+
+              <div class="profile-form-field">
+
+                <label for="administratorLastName">
+                  Apellidos
+                </label>
+
+                <div class="profile-input-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    person
+                  </span>
+
+                  <input
+                    id="administratorLastName"
+                    name="administratorLastName"
+                    type="text"
+                    maxlength="100"
+                    placeholder="Apellidos"
+                    autocomplete="family-name"
+                    [(ngModel)]="profileLastName"
+                    [disabled]="isSavingProfile"
+                  />
+
+                </div>
+
+              </div>
+
+              <!-- CORREO -->
+
+              <div class="profile-form-field profile-form-field-full">
+
+                <label for="administratorEmail">
+                  Correo electrónico
+                </label>
+
+                <div class="profile-input-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    mail
+                  </span>
+
+                  <input
+                    id="administratorEmail"
+                    name="administratorEmail"
+                    type="email"
+                    maxlength="120"
+                    placeholder="administrador@correo.com"
+                    autocomplete="email"
+                    [(ngModel)]="profileEmail"
+                    [disabled]="isSavingProfile"
+                  />
+
+                </div>
+
+                <small class="profile-field-help">
+                  Este correo será utilizado para el próximo inicio de sesión.
+                </small>
+
+              </div>
+
+              <!-- TELÉFONO -->
+
+              <div class="profile-form-field profile-form-field-full">
+
+                <label for="administratorPhone">
+                  Teléfono
+                </label>
+
+                <div class="profile-input-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    call
+                  </span>
+
+                  <input
+                    id="administratorPhone"
+                    name="administratorPhone"
+                    type="tel"
+                    maxlength="20"
+                    placeholder="987 654 321"
+                    autocomplete="tel"
+                    [(ngModel)]="profilePhone"
+                    [disabled]="isSavingProfile"
+                  />
+
+                </div>
+
+              </div>
+
+              <!-- CARGO -->
+
+              <div class="profile-form-field profile-form-field-full">
+
+                <label for="administratorPosition">
+                  Cargo
+                </label>
+
+                <div class="profile-select-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    work
+                  </span>
+
+                  <select
+                    id="administratorPosition"
+                    name="administratorPosition"
+                    [(ngModel)]="profilePosition"
+                    [disabled]="isSavingProfile"
+                  >
+                    <option
+                      *ngFor="let position of positionOptions"
+                      [value]="position"
+                    >
+                      {{ position }}
+                    </option>
+                  </select>
+
+                </div>
+
+              </div>
+
+              <!-- SUCURSAL -->
+
+              <div class="profile-form-field profile-form-field-full">
+
+                <label for="administratorBranch">
+                  Sucursal asignada
+                </label>
+
+                <div class="profile-select-container">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    storefront
+                  </span>
+
+                  <select
+                    id="administratorBranch"
+                    name="administratorBranch"
+                    [(ngModel)]="profileBranch"
+                    [disabled]="isSavingProfile"
+                  >
+                    <option
+                      *ngFor="let branch of branchOptions"
+                      [value]="branch"
+                    >
+                      {{ branch }}
+                    </option>
+                  </select>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- ACCIONES DEL PERFIL -->
+
+            <footer class="profile-dropdown-actions">
+
+              <button
+                type="button"
+                class="profile-cancel-button"
+                [disabled]="isSavingProfile"
+                (click)="closeProfileMenu()"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                class="profile-save-button"
+                [disabled]="isSavingProfile"
+                (click)="saveProfile()"
+              >
+
+                <ng-container *ngIf="!isSavingProfile">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    save
+                  </span>
+
+                  Guardar cambios
+
+                </ng-container>
+
+                <ng-container *ngIf="isSavingProfile">
+
+                  <span
+                    class="profile-saving-spinner"
+                    aria-hidden="true"
+                  ></span>
+
+                  Guardando...
+
+                </ng-container>
+
+              </button>
+
+            </footer>
+
+          </div>
+
+          <!-- =============================================
+               PESTAÑA: SEGURIDAD
+          ============================================== -->
+
+          <div
+            *ngIf="activeProfileTab === 'security'"
+            class="profile-tab-content security-tab-content"
+          >
+
+            <!-- INFORMACIÓN DE SEGURIDAD -->
+
+            <div class="security-information-card">
+
+              <span class="security-information-icon">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  verified_user
+                </span>
+
+              </span>
+
+              <div>
+
+                <strong>
+                  Protección de la cuenta
+                </strong>
+
+                <p>
+                  Utiliza una contraseña segura y diferente
+                  a la que usas en otros servicios.
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- MENSAJE DE ERROR -->
+
+            <div
+              *ngIf="securityError"
+              class="profile-message profile-message-error"
+              role="alert"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                error
+              </span>
+
+              <span>
+                {{ securityError }}
+              </span>
+            </div>
+
+            <!-- MENSAJE DE ÉXITO -->
+
+            <div
+              *ngIf="securityMessage"
+              class="profile-message profile-message-success"
+              role="status"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                check_circle
+              </span>
+
+              <span>
+                {{ securityMessage }}
+              </span>
+            </div>
+
+            <!-- CONTRASEÑA ACTUAL -->
+
+            <div class="profile-form-field">
+
+              <label for="administratorCurrentPassword">
+                Contraseña actual
+              </label>
+
+              <div class="profile-password-container">
+
+                <span
+                  class="material-symbols-outlined profile-password-leading"
+                  aria-hidden="true"
+                >
+                  lock
+                </span>
+
+                <input
+                  id="administratorCurrentPassword"
+                  name="administratorCurrentPassword"
+                  [type]="
+                    showCurrentPassword
+                      ? 'text'
+                      : 'password'
+                  "
+                  maxlength="100"
+                  placeholder="Ingresa tu contraseña actual"
+                  autocomplete="current-password"
+                  [(ngModel)]="currentPassword"
+                  [disabled]="isChangingPassword"
+                />
+
+                <button
+                  type="button"
+                  class="profile-password-toggle"
+                  [attr.aria-label]="
+                    showCurrentPassword
+                      ? 'Ocultar contraseña actual'
+                      : 'Mostrar contraseña actual'
+                  "
+                  (click)="toggleCurrentPasswordVisibility()"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    {{
+                      showCurrentPassword
+                        ? 'visibility_off'
+                        : 'visibility'
+                    }}
+                  </span>
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- NUEVA CONTRASEÑA -->
+
+            <div class="profile-form-field">
+
+              <label for="administratorNewPassword">
+                Nueva contraseña
+              </label>
+
+              <div class="profile-password-container">
+
+                <span
+                  class="material-symbols-outlined profile-password-leading"
+                  aria-hidden="true"
+                >
+                  password
+                </span>
+
+                <input
+                  id="administratorNewPassword"
+                  name="administratorNewPassword"
+                  [type]="
+                    showNewPassword
+                      ? 'text'
+                      : 'password'
+                  "
+                  maxlength="100"
+                  placeholder="Crea una nueva contraseña"
+                  autocomplete="new-password"
+                  [(ngModel)]="newPassword"
+                  [disabled]="isChangingPassword"
+                />
+
+                <button
+                  type="button"
+                  class="profile-password-toggle"
+                  [attr.aria-label]="
+                    showNewPassword
+                      ? 'Ocultar nueva contraseña'
+                      : 'Mostrar nueva contraseña'
+                  "
+                  (click)="toggleNewPasswordVisibility()"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    {{
+                      showNewPassword
+                        ? 'visibility_off'
+                        : 'visibility'
+                    }}
+                  </span>
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- MEDIDOR DE SEGURIDAD -->
+
+            <div
+              *ngIf="newPassword"
+              class="password-strength-section"
+            >
+
+              <div class="password-strength-heading">
+
+                <span>
+                  Seguridad de la contraseña
+                </span>
+
+                <strong
+                  [ngClass]="passwordStrengthClass"
+                >
+                  {{ passwordStrengthText }}
+                </strong>
+
+              </div>
+
+              <div class="password-strength-track">
+
+                <span
+                  [ngClass]="passwordStrengthClass"
+                  [style.width.%]="passwordStrengthPercentage"
+                ></span>
+
+              </div>
+
+            </div>
+
+            <!-- CONFIRMAR CONTRASEÑA -->
+
+            <div class="profile-form-field">
+
+              <label for="administratorConfirmPassword">
+                Confirmar nueva contraseña
+              </label>
+
+              <div class="profile-password-container">
+
+                <span
+                  class="material-symbols-outlined profile-password-leading"
+                  aria-hidden="true"
+                >
+                  lock_reset
+                </span>
+
+                <input
+                  id="administratorConfirmPassword"
+                  name="administratorConfirmPassword"
+                  [type]="
+                    showConfirmPassword
+                      ? 'text'
+                      : 'password'
+                  "
+                  maxlength="100"
+                  placeholder="Repite la nueva contraseña"
+                  autocomplete="new-password"
+                  [(ngModel)]="confirmPassword"
+                  [disabled]="isChangingPassword"
+                />
+
+                <button
+                  type="button"
+                  class="profile-password-toggle"
+                  [attr.aria-label]="
+                    showConfirmPassword
+                      ? 'Ocultar confirmación'
+                      : 'Mostrar confirmación'
+                  "
+                  (click)="toggleConfirmPasswordVisibility()"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    {{
+                      showConfirmPassword
+                        ? 'visibility_off'
+                        : 'visibility'
+                    }}
+                  </span>
+                </button>
+
+              </div>
+
+              <small
+                *ngIf="
+                  confirmPassword &&
+                  passwordsMatch
+                "
+                class="password-match-message"
+              >
+                <span class="material-symbols-outlined">
+                  check_circle
+                </span>
+
+                Las contraseñas coinciden.
+              </small>
+
+              <small
+                *ngIf="
+                  confirmPassword &&
+                  !passwordsMatch
+                "
+                class="password-mismatch-message"
+              >
+                <span class="material-symbols-outlined">
+                  cancel
+                </span>
+
+                Las contraseñas no coinciden.
+              </small>
+
+            </div>
+
+            <!-- REQUISITOS -->
+
+            <section class="password-requirements">
+
+              <strong>
+                La contraseña debe incluir:
+              </strong>
+
+              <div class="password-requirements-grid">
+
+                <span
+                  [class.requirement-completed]="
+                    hasMinimumPasswordLength
+                  "
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      hasMinimumPasswordLength
+                        ? 'check_circle'
+                        : 'radio_button_unchecked'
+                    }}
+                  </span>
+
+                  Mínimo 8 caracteres
+                </span>
+
+                <span
+                  [class.requirement-completed]="
+                    hasPasswordUppercase
+                  "
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      hasPasswordUppercase
+                        ? 'check_circle'
+                        : 'radio_button_unchecked'
+                    }}
+                  </span>
+
+                  Una letra mayúscula
+                </span>
+
+                <span
+                  [class.requirement-completed]="
+                    hasPasswordLowercase
+                  "
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      hasPasswordLowercase
+                        ? 'check_circle'
+                        : 'radio_button_unchecked'
+                    }}
+                  </span>
+
+                  Una letra minúscula
+                </span>
+
+                <span
+                  [class.requirement-completed]="
+                    hasPasswordNumber
+                  "
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      hasPasswordNumber
+                        ? 'check_circle'
+                        : 'radio_button_unchecked'
+                    }}
+                  </span>
+
+                  Un número
+                </span>
+
+                <span
+                  [class.requirement-completed]="
+                    hasPasswordSymbol
+                  "
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      hasPasswordSymbol
+                        ? 'check_circle'
+                        : 'radio_button_unchecked'
+                    }}
+                  </span>
+
+                  Un símbolo especial
+                </span>
+
+              </div>
+
+            </section>
+
+            <!-- AVISO DE CIERRE DE SESIÓN -->
+
+            <div class="security-session-warning">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                info
+              </span>
+
+              <p>
+                Después de cambiar la contraseña se cerrará la
+                sesión y deberás ingresar nuevamente con la
+                nueva contraseña.
+              </p>
+
+            </div>
+
+            <!-- ACCIONES DE SEGURIDAD -->
+
+            <footer class="profile-dropdown-actions">
+
+              <button
+                type="button"
+                class="profile-cancel-button"
+                [disabled]="isChangingPassword"
+                (click)="closeProfileMenu()"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                class="profile-save-button security-save-button"
+                [disabled]="isChangingPassword"
+                (click)="changePassword()"
+              >
+
+                <ng-container *ngIf="!isChangingPassword">
+
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    password
+                  </span>
+
+                  Cambiar contraseña
+
+                </ng-container>
+
+                <ng-container *ngIf="isChangingPassword">
+
+                  <span
+                    class="profile-saving-spinner"
+                    aria-hidden="true"
+                  ></span>
+
+                  Actualizando...
+
+                </ng-container>
+
+              </button>
+
+            </footer>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- =================================================
+           CERRAR SESIÓN
+      ================================================== -->
+
+      <button
+        type="button"
+        class="administrator-logout-button"
+        title="Cerrar sesión"
+        aria-label="Cerrar sesión"
+        (click)="logout()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          logout
+        </span>
+
+        <span class="administrator-logout-text">
+          Cerrar sesión
+        </span>
+      </button>
+
+    </div>
+
+  </div>
+
+</header>

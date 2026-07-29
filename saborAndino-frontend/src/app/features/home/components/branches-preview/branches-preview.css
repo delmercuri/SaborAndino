@@ -1,0 +1,793 @@
+/* =========================================================
+   COMPONENTE: VISTA PREVIA DE SUCURSALES
+========================================================= */
+
+:host {
+  display: block;
+
+  --branches-wine: #8b1021;
+  --branches-wine-dark: #4b050d;
+  --branches-wine-light: #b32639;
+
+  --branches-gold: #c89a3a;
+  --branches-gold-dark: #9d7323;
+
+  --branches-white: #ffffff;
+  --branches-text: #302823;
+  --branches-muted: #7f746c;
+  --branches-border: #e6dbcf;
+}
+
+/* =========================================================
+   SECCIÓN GENERAL
+========================================================= */
+
+.branches-section {
+  width: 100%;
+  padding: 84px 0 90px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fdfaf7
+    );
+
+  color: var(--branches-text);
+}
+
+.branches-container {
+  width: min(
+    calc(100% - 64px),
+    1450px
+  );
+  margin: 0 auto;
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.branches-heading {
+  margin-bottom: 45px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 35px;
+}
+
+.branches-heading-information {
+  max-width: 760px;
+}
+
+.branches-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+
+  color: var(--branches-gold-dark);
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.branches-heading h2 {
+  margin: 0;
+
+  color: var(--branches-text);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: clamp(
+    38px,
+    3vw,
+    50px
+  );
+
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -1px;
+}
+
+.branches-heading p {
+  max-width: 750px;
+  margin: 15px 0 0;
+
+  color: var(--branches-muted);
+
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   BOTÓN SUPERIOR
+========================================================= */
+
+.branches-link-button {
+  min-height: 48px;
+  padding: 0 19px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  flex-shrink: 0;
+
+  border:
+    1px solid rgba(139, 16, 33, 0.3);
+  border-radius: 11px;
+
+  background: var(--branches-white);
+  color: var(--branches-wine);
+
+  box-shadow:
+    0 7px 18px rgba(66, 44, 31, 0.05);
+
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.branches-link-button:hover {
+  background: var(--branches-wine);
+  color: var(--branches-white);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 11px 24px rgba(118, 17, 28, 0.18);
+}
+
+.branches-link-button
+.material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* =========================================================
+   CUADRÍCULA
+========================================================= */
+
+.branches-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  align-items: stretch;
+
+  gap: 24px;
+}
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.branch-card {
+  min-width: 0;
+  height: 100%;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  border:
+    1px solid var(--branches-border);
+  border-radius: 20px;
+
+  background: var(--branches-white);
+
+  box-shadow:
+    0 10px 28px rgba(52, 38, 29, 0.065);
+
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    border-color 0.24s ease;
+}
+
+.branch-card:hover {
+  border-color:
+    rgba(139, 16, 33, 0.18);
+
+  transform: translateY(-7px);
+
+  box-shadow:
+    0 22px 44px rgba(52, 38, 29, 0.13);
+}
+
+/* =========================================================
+   IMAGEN
+========================================================= */
+
+.branch-card-image {
+  width: 100%;
+  height: 260px;
+
+  position: relative;
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  background-color: #ddd1c5;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  cursor: pointer;
+
+  transition:
+    background-size 0.4s ease,
+    filter 0.3s ease;
+}
+
+.branch-card-image:focus-visible {
+  outline:
+    3px solid rgba(200, 154, 58, 0.65);
+
+  outline-offset: -4px;
+}
+
+.branch-image-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 5, 4, 0.02) 20%,
+      transparent 45%,
+      rgba(20, 5, 4, 0.58) 100%
+    );
+}
+
+.branch-image-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 17px;
+}
+
+/* =========================================================
+   ETIQUETA DE SUCURSAL
+========================================================= */
+
+.branch-name-badge {
+  min-height: 43px;
+  max-width: calc(100% - 20px);
+  padding: 0 17px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+
+  background:
+    rgba(139, 16, 33, 0.92);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 10px 25px rgba(32, 17, 12, 0.24);
+
+  font-size: 13px;
+  font-weight: 700;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.branch-name-badge
+.material-symbols-outlined {
+  color: #f1ca6c;
+
+  font-size: 20px;
+
+  font-variation-settings:
+    "FILL" 1;
+}
+
+/* =========================================================
+   ACCIÓN SOBRE LA IMAGEN
+========================================================= */
+
+.branch-image-action {
+  min-height: 36px;
+  padding: 0 12px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+
+  background:
+    rgba(37, 23, 18, 0.78);
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(8px);
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease,
+    transform 0.2s ease;
+}
+
+.branch-card-image:hover
+.branch-image-action,
+.branch-card-image:focus-visible
+.branch-image-action {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(0);
+}
+
+.branch-image-action
+.material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* =========================================================
+   CUERPO
+========================================================= */
+
+.branch-card-body {
+  padding: 22px;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* =========================================================
+   ABIERTO AHORA
+========================================================= */
+
+.branch-open-badge {
+  width: max-content;
+  min-height: 28px;
+  padding: 0 10px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  border-radius: 999px;
+
+  background: #edf6eb;
+  color: #52764b;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.branch-open-badge > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #5e8c55;
+
+  box-shadow:
+    0 0 0 4px rgba(94, 140, 85, 0.1);
+}
+
+/* =========================================================
+   TÍTULO Y DIRECCIÓN
+========================================================= */
+
+.branch-card-body h3 {
+  margin: 13px 0 9px;
+
+  color: #39312d;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.branch-address {
+  margin: 0;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+
+  color: #6e645d;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.branch-address
+.material-symbols-outlined {
+  flex-shrink: 0;
+
+  color: var(--branches-wine);
+
+  font-size: 17px;
+}
+
+/* =========================================================
+   DETALLES
+========================================================= */
+
+.branch-details {
+  margin-top: 17px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.branch-details > span {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  color: #82776f;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.branch-details
+.material-symbols-outlined {
+  flex-shrink: 0;
+
+  color: var(--branches-gold-dark);
+
+  font-size: 17px;
+}
+
+/* =========================================================
+   SERVICIOS
+========================================================= */
+
+.branch-services {
+  margin-top: 17px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.branch-services span {
+  min-height: 28px;
+  padding: 0 10px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border: 1px solid #e1d6cb;
+  border-radius: 999px;
+
+  background: #faf7f2;
+  color: #746a62;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.branch-actions {
+  margin-top: auto;
+  padding-top: 17px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  border-top:
+    1px solid #eee6de;
+}
+
+.branch-location-button {
+  min-height: 42px;
+  padding: 0 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  flex: 1;
+
+  border:
+    1px solid var(--branches-wine);
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--branches-wine-dark),
+      var(--branches-wine-light)
+    );
+
+  color: var(--branches-white);
+
+  box-shadow:
+    0 8px 18px rgba(118, 17, 28, 0.15);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.branch-location-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 24px rgba(118, 17, 28, 0.24);
+}
+
+.branch-call-button {
+  width: 43px;
+  height: 43px;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  border:
+    1px solid rgba(139, 16, 33, 0.3);
+  border-radius: 10px;
+
+  background: var(--branches-white);
+  color: var(--branches-wine);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.branch-call-button:hover {
+  background: var(--branches-wine);
+  color: var(--branches-white);
+
+  transform: translateY(-2px);
+}
+
+.branch-location-button
+.material-symbols-outlined,
+.branch-call-button
+.material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* =========================================================
+   RESPONSIVE: PANTALLAS MEDIANAS
+========================================================= */
+
+@media (max-width: 1280px) {
+
+  .branches-container {
+    width: min(
+      calc(100% - 48px),
+      1180px
+    );
+  }
+
+  .branches-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+  .branches-section {
+    padding: 72px 0 78px;
+  }
+
+  .branches-container {
+    width: min(
+      calc(100% - 40px),
+      820px
+    );
+  }
+
+  .branches-heading {
+    align-items: flex-start;
+    flex-direction: column;
+
+    margin-bottom: 38px;
+  }
+
+  .branches-link-button {
+    align-self: flex-start;
+  }
+
+  .branches-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .branch-card {
+    width: 100%;
+    max-width: 690px;
+    margin: 0 auto;
+  }
+
+  .branch-card-image {
+    height: 285px;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: CELULAR
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .branches-section {
+    padding: 60px 0 65px;
+  }
+
+  .branches-container {
+    width: min(
+      calc(100% - 30px),
+      620px
+    );
+  }
+
+  .branches-heading {
+    margin-bottom: 32px;
+  }
+
+  .branches-eyebrow {
+    font-size: 11px;
+  }
+
+  .branches-heading h2 {
+    font-size: 36px;
+  }
+
+  .branches-heading p {
+    font-size: 14px;
+  }
+
+  .branches-link-button {
+    width: 100%;
+  }
+
+  .branch-card-image {
+    height: 235px;
+  }
+
+  .branch-image-content {
+    padding: 13px;
+  }
+
+  .branch-name-badge {
+    min-height: 39px;
+    padding: 0 13px;
+
+    font-size: 11px;
+  }
+
+  .branch-image-action {
+    display: none;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE: CELULAR PEQUEÑO
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .branches-container {
+    width: min(
+      calc(100% - 22px),
+      430px
+    );
+  }
+
+  .branches-heading h2 {
+    font-size: 32px;
+  }
+
+  .branches-heading p {
+    font-size: 13px;
+  }
+
+  .branch-card-image {
+    height: 215px;
+  }
+
+  .branch-card-body {
+    padding: 19px;
+  }
+
+  .branch-card-body h3 {
+    font-size: 21px;
+  }
+
+  .branch-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .branch-location-button,
+  .branch-call-button {
+    width: 100%;
+  }
+
+}
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .branch-card,
+  .branch-image-action,
+  .branches-link-button,
+  .branch-location-button,
+  .branch-call-button {
+    transition: none;
+  }
+
+}

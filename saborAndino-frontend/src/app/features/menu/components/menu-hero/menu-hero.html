@@ -1,0 +1,186 @@
+<section
+  class="menu-hero"
+  aria-labelledby="menuHeroTitle"
+>
+
+  <!-- SOMBREADO GENERAL -->
+  <div
+    class="menu-hero-overlay"
+    aria-hidden="true"
+  ></div>
+
+  <!-- DECORACIONES -->
+  <div
+    class="menu-hero-pattern menu-hero-pattern-left"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="menu-hero-pattern menu-hero-pattern-right"
+    aria-hidden="true"
+  ></div>
+
+  <!-- CONTENIDO -->
+  <div class="menu-hero-content">
+
+    <div class="menu-hero-information">
+
+      <!-- TÍTULO -->
+      <h1 id="menuHeroTitle">
+
+        <span>
+          Descubre nuestra carta
+        </span>
+
+        <em>
+          con identidad peruana
+        </em>
+
+      </h1>
+
+      <!-- SEPARADOR -->
+      <div
+        class="menu-hero-divider"
+        aria-hidden="true"
+      >
+        <span></span>
+        <strong></strong>
+        <span></span>
+      </div>
+
+      <!-- DESCRIPCIÓN -->
+      <p class="menu-hero-description">
+        Sabores que cuentan historias. Platos preparados al momento con
+        ingredientes seleccionados y recetas tradicionales que celebran
+        lo mejor del Perú.
+      </p>
+
+      <!-- BENEFICIOS -->
+      <div class="menu-hero-benefits">
+
+        <article>
+
+          <span class="menu-benefit-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              eco
+            </span>
+
+          </span>
+
+          <div>
+
+            <strong>
+              Ingredientes
+            </strong>
+
+            <span>
+              seleccionados
+            </span>
+
+          </div>
+
+        </article>
+
+        <article>
+
+          <span class="menu-benefit-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              local_fire_department
+            </span>
+
+          </span>
+
+          <div>
+
+            <strong>
+              Preparación
+            </strong>
+
+            <span>
+              al momento
+            </span>
+
+          </div>
+
+        </article>
+
+        <article>
+
+          <span class="menu-benefit-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              favorite
+            </span>
+
+          </span>
+
+          <div>
+
+            <strong>
+              Sabor auténtico
+            </strong>
+
+            <span>
+              hecho con pasión
+            </span>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- ACCIONES -->
+      <div class="menu-hero-actions">
+
+        <a
+          href="#menu-content"
+          class="menu-hero-primary-action"
+          (click)="handleExploreMenu($event)"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            menu_book
+          </span>
+
+          Explorar toda la carta
+
+        </a>
+
+        <a
+          routerLink="/reservas"
+          class="menu-hero-secondary-action"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            calendar_month
+          </span>
+
+          Reservar una mesa
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

@@ -1,0 +1,313 @@
+<section
+  id="featured-products-section"
+  class="featured-products-section"
+>
+  <div class="featured-products-container">
+
+    <!-- =========================
+         ENCABEZADO
+    ========================== -->
+    <header class="section-heading">
+
+      <div class="section-heading-information">
+
+        <span class="section-eyebrow">
+          Favoritos de nuestros clientes
+        </span>
+
+        <h2>
+          Productos destacados
+        </h2>
+
+        <p>
+          Una selección de nuestros platos más pedidos y mejor valorados.
+        </p>
+
+      </div>
+
+      <a
+        routerLink="/menu"
+        class="section-link-button"
+      >
+        Ver menú completo
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          arrow_forward
+        </span>
+      </a>
+
+    </header>
+
+    <!-- =========================
+         FILTROS
+    ========================== -->
+    <div
+      class="product-category-filters"
+      aria-label="Filtrar productos por categoría"
+    >
+      <button
+        *ngFor="let category of availableCategories"
+        type="button"
+        [class.active]="selectedCategory === category"
+        [attr.aria-pressed]="selectedCategory === category"
+        (click)="selectCategory(category)"
+      >
+        {{ category }}
+      </button>
+    </div>
+
+    <!-- =========================
+         CARRUSEL
+    ========================== -->
+    <div
+      *ngIf="visibleProducts.length > 0"
+      class="products-carousel"
+    >
+
+      <!-- FLECHA IZQUIERDA -->
+      <button
+        type="button"
+        class="products-carousel-button products-carousel-button-left"
+        aria-label="Ver productos anteriores"
+        title="Ver productos anteriores"
+        (click)="scrollFeaturedProducts('left')"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          chevron_left
+        </span>
+      </button>
+
+      <!-- CONTENEDOR DESPLAZABLE -->
+      <div
+        #featuredProductsContainer
+        class="products-carousel-track"
+      >
+
+        <article
+          *ngFor="
+            let product of visibleProducts;
+            trackBy: trackByProductId
+          "
+          class="product-card"
+        >
+
+          <!-- IMAGEN DEL PRODUCTO -->
+          <div class="product-visual">
+
+            <span
+              *ngIf="product.badge"
+              class="product-badge"
+              [ngClass]="product.badgeClass"
+            >
+              {{ product.badge }}
+            </span>
+
+            <button
+              type="button"
+              class="favorite-button"
+              [class.active]="isFavorite(product.id)"
+              [attr.aria-label]="
+                isFavorite(product.id)
+                  ? 'Quitar ' + product.name + ' de favoritos'
+                  : 'Agregar ' + product.name + ' a favoritos'
+              "
+              [attr.aria-pressed]="isFavorite(product.id)"
+              title="Agregar a favoritos"
+              (click)="
+                toggleFavorite(product.id);
+                $event.stopPropagation()
+              "
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                favorite
+              </span>
+            </button>
+
+            <div class="product-image-container">
+
+              <img
+                class="product-image"
+                [src]="product.image"
+                [alt]="product.name"
+                loading="lazy"
+              />
+
+              <div
+                class="product-image-overlay"
+                aria-hidden="true"
+              ></div>
+
+            </div>
+
+            <button
+              type="button"
+              class="quick-view-button"
+              (click)="viewProduct(product)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                visibility
+              </span>
+
+              Vista rápida
+            </button>
+
+          </div>
+
+          <!-- INFORMACIÓN DEL PRODUCTO -->
+          <div class="product-card-body">
+
+            <span class="product-category">
+              {{ product.category }}
+            </span>
+
+            <h3>
+              {{ product.name }}
+            </h3>
+
+            <p>
+              {{ product.description }}
+            </p>
+
+            <!-- CALIFICACIÓN -->
+            <div class="product-rating">
+
+              <div aria-hidden="true">
+                <span
+                  *ngFor="let star of stars"
+                  class="material-symbols-outlined"
+                >
+                  star
+                </span>
+              </div>
+
+              <strong>
+                {{ product.rating | number:'1.1-1' }}
+              </strong>
+
+              <span>
+                ({{ product.reviews }})
+              </span>
+
+            </div>
+
+            <!-- TIEMPO DE PREPARACIÓN -->
+            <div class="product-preparation">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                schedule
+              </span>
+
+              <span>
+                Listo en aproximadamente
+                {{ product.preparationTime }} minutos
+              </span>
+
+            </div>
+
+            <!-- PRECIO Y CARRITO -->
+            <footer class="product-footer">
+
+              <div class="product-price">
+
+                <span
+                  *ngIf="product.previousPrice"
+                  class="previous-price"
+                >
+                  S/
+                  {{ product.previousPrice | number:'1.2-2' }}
+                </span>
+
+                <strong>
+                  S/ {{ product.price | number:'1.2-2' }}
+                </strong>
+
+              </div>
+
+              <button
+                type="button"
+                class="add-cart-button"
+                (click)="addToCart(product)"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  add_shopping_cart
+                </span>
+
+                Agregar
+              </button>
+
+            </footer>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- FLECHA DERECHA -->
+      <button
+        type="button"
+        class="products-carousel-button products-carousel-button-right"
+        aria-label="Ver productos siguientes"
+        title="Ver productos siguientes"
+        (click)="scrollFeaturedProducts('right')"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          chevron_right
+        </span>
+      </button>
+
+    </div>
+
+    <!-- =========================
+         ESTADO VACÍO
+    ========================== -->
+    <div
+      *ngIf="visibleProducts.length === 0"
+      class="products-empty-state"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        no_meals
+      </span>
+
+      <h3>
+        No encontramos productos
+      </h3>
+
+      <p>
+        Prueba seleccionando una categoría diferente.
+      </p>
+
+      <button
+        type="button"
+        (click)="selectCategory('Todos')"
+      >
+        Ver todos los productos
+      </button>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.seguimiento-page {
+  width: 100%;
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  background: #f8f4ed;
+}
+
+app-seguimiento-hero,
+app-seguimiento-process {
+  display: block;
+}

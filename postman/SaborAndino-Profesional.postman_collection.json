@@ -1,0 +1,287 @@
+{
+  "info": {
+    "_postman_id": "6fa8c831-20d7-4da4-a123-saborandino-profesional",
+    "name": "Sabor Andino Profesional",
+    "description": "Pruebas del backend integrado. Ejecuta Login administrador para guardar automáticamente el token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Estado y autenticación",
+      "item": [
+        {
+          "name": "Estado del backend",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/frontend/health"
+          }
+        },
+        {
+          "name": "Login administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@saborandino.pe\",\n  \"password\": \"Admin123*\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login correcto', function () { pm.expect(pm.response.code).to.equal(200); });",
+                  "const data = pm.response.json();",
+                  "if (data.accessToken) { pm.collectionVariables.set('token', data.accessToken); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Perfil administrador",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/profile?email=admin@saborandino.pe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sitio público",
+      "item": [
+        {
+          "name": "Sucursales activas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/frontend/public/branches"
+          }
+        },
+        {
+          "name": "Categorías activas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/frontend/public/categories"
+          }
+        },
+        {
+          "name": "Productos disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/frontend/public/products"
+          }
+        },
+        {
+          "name": "Promoción activa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/frontend/public/promotion"
+          }
+        },
+        {
+          "name": "Seguimiento de pedido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/frontend/public/orders/track?code=CODIGO&phone=999999999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Panel administrativo",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/dashboard"
+          }
+        },
+        {
+          "name": "Sucursales",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/branches"
+          }
+        },
+        {
+          "name": "Categorías",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/categories"
+          }
+        },
+        {
+          "name": "Productos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/products"
+          }
+        },
+        {
+          "name": "Mesas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/tables"
+          }
+        },
+        {
+          "name": "Clientes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/clients"
+          }
+        },
+        {
+          "name": "Reservas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/reservations"
+          }
+        },
+        {
+          "name": "Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/orders"
+          }
+        },
+        {
+          "name": "Pagos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/payments"
+          }
+        },
+        {
+          "name": "Promociones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/promotions"
+          }
+        },
+        {
+          "name": "Reportes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/frontend/admin/reports"
+          }
+        }
+      ]
+    }
+  ]
+}

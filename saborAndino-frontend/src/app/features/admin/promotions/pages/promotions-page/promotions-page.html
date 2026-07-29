@@ -1,0 +1,46 @@
+<main class="promotions-page">
+  <header class="page-header">
+    <div><span class="eyebrow">Campañas comerciales</span><h1>Promociones</h1><p>Administra la promoción visible en la página de inicio.</p></div>
+    <button type="button" class="primary-button" (click)="create()"><span class="material-symbols-outlined">add</span>Nueva promoción</button>
+  </header>
+
+  <p *ngIf="successMessage" class="message success">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="message error">{{ errorMessage }}</p>
+
+  <section class="filters-card">
+    <label>Buscar<input [(ngModel)]="search" placeholder="Código, título o producto" /></label>
+    <label>Estado<select [(ngModel)]="selectedStatus"><option value="">Todos</option><option *ngFor="let status of statuses" [value]="status">{{ statusLabel(status) }}</option></select></label>
+    <button type="button" class="secondary-button" (click)="clearFilters()">Limpiar</button>
+  </section>
+
+  <section class="table-card">
+    <div *ngIf="isLoading" class="empty-state">Cargando promociones...</div>
+    <div *ngIf="!isLoading && filteredPromotions.length === 0" class="empty-state"><span class="material-symbols-outlined">campaign</span><h2>No hay promociones configuradas</h2><p>Crea una promoción para mostrarla en el inicio.</p></div>
+    <div *ngIf="!isLoading && filteredPromotions.length > 0" class="desktop-table">
+      <table><thead><tr><th>Promoción</th><th>Producto</th><th>Precio</th><th>Vigencia</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody><tr *ngFor="let item of filteredPromotions; trackBy: trackById"><td><strong>{{ item.title }}</strong><small>{{ item.code }}</small></td><td>{{ item.productName }}</td><td><strong>{{ formatMoney(item.price) }}</strong><small *ngIf="item.previousPrice">Antes {{ formatMoney(item.previousPrice) }}</small></td><td>{{ item.startDate || 'Sin inicio' }}<small>{{ item.endDate || 'Sin fin' }}</small></td><td><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span></td><td><div class="actions"><button type="button" title="Editar" (click)="edit(item)"><span class="material-symbols-outlined">edit</span></button><button type="button" class="danger" title="Eliminar" (click)="remove(item)"><span class="material-symbols-outlined">delete</span></button></div></td></tr></tbody></table>
+    </div>
+    <div *ngIf="!isLoading && filteredPromotions.length > 0" class="mobile-list"><article *ngFor="let item of filteredPromotions; trackBy: trackById"><header><strong>{{ item.title }}</strong><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span></header><p>{{ item.productName }}</p><strong>{{ formatMoney(item.price) }}</strong><small>{{ item.startDate || 'Sin inicio' }} — {{ item.endDate || 'Sin fin' }}</small><footer><button type="button" (click)="edit(item)">Editar</button><button type="button" class="danger" (click)="remove(item)">Eliminar</button></footer></article></div>
+  </section>
+
+  <div *ngIf="editing" class="dialog-backdrop" (click)="close()">
+    <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <header><div><span class="eyebrow">Configuración</span><h2>{{ editing.idPromotion ? 'Editar promoción' : 'Nueva promoción' }}</h2></div><button type="button" class="close-button" (click)="close()"><span class="material-symbols-outlined">close</span></button></header>
+      <div class="form-grid">
+        <label>Producto<select [(ngModel)]="editing.idProduct" (ngModelChange)="productChanged()"><option value="">Selecciona un producto</option><option *ngFor="let product of products" [value]="product.idProduct">{{ product.name }} — {{ formatMoney(product.price) }}</option></select></label>
+        <label>Código<input [(ngModel)]="editing.code" maxlength="20" placeholder="Se genera automáticamente" /></label>
+        <label class="full">Título<input [(ngModel)]="editing.title" maxlength="150" /></label>
+        <label class="full">Descripción<textarea [(ngModel)]="editing.description" rows="3" maxlength="700"></textarea></label>
+        <label>Precio<input type="number" min="0.01" step="0.10" [(ngModel)]="editing.price" /></label>
+        <label>Precio anterior<input type="number" min="0.01" step="0.10" [(ngModel)]="editing.previousPrice" /></label>
+        <label>Etiqueta de descuento<input [(ngModel)]="editing.discount" maxlength="80" placeholder="Ej.: 18 % de descuento" /></label>
+        <label>Estado<select [(ngModel)]="editing.status"><option *ngFor="let status of statuses" [value]="status">{{ statusLabel(status) }}</option></select></label>
+        <label>Fecha inicial<input type="date" [(ngModel)]="editing.startDate" /></label>
+        <label>Fecha final<input type="date" [(ngModel)]="editing.endDate" /></label>
+        <label class="full">Ruta o URL de imagen<input [(ngModel)]="editing.image" maxlength="500" /></label>
+        <label class="full">Incluye <small>Un elemento por línea</small><textarea [(ngModel)]="includesText" rows="5"></textarea></label>
+      </div>
+      <footer><button type="button" class="secondary-button" (click)="close()">Cancelar</button><button type="button" class="primary-button" [disabled]="isSaving" (click)="save()">{{ isSaving ? 'Guardando...' : 'Guardar promoción' }}</button></footer>
+    </section>
+  </div>
+</main>

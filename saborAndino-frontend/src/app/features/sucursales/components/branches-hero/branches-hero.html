@@ -1,0 +1,210 @@
+<section
+  class="branches-hero"
+  aria-labelledby="branchesHeroTitle"
+>
+
+  <!-- SOMBRA Y DEGRADADO -->
+  <div
+    class="branches-hero-shadow"
+    aria-hidden="true"
+  ></div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="branches-hero-content">
+
+    <div class="branches-hero-information">
+
+      <!-- =================================================
+           TÍTULO
+      ================================================== -->
+
+      <h1 id="branchesHeroTitle">
+
+        Encuentra tu sucursal
+
+        <span>
+          Sabor Andino
+          <br />
+          más cercana
+        </span>
+
+      </h1>
+
+      <!-- =================================================
+           DESCRIPCIÓN
+      ================================================== -->
+
+      <p class="branches-hero-description">
+        Visita nuestros locales en Lima, Apurímac y Ayacucho.
+        Consulta horarios, servicios, fotografías, ubicación y
+        disponibilidad antes de realizar tu pedido o reserva.
+      </p>
+
+      <!-- =================================================
+           ACCIONES
+      ================================================== -->
+
+      <div class="branches-hero-actions">
+
+        <button
+          type="button"
+          class="branches-primary-action"
+          (click)="requestBranches()"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            location_on
+          </span>
+
+          <span>
+            Ver sucursales
+          </span>
+
+        </button>
+
+        <a
+          routerLink="/reservas"
+          class="branches-secondary-action"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            calendar_month
+          </span>
+
+          <span>
+            Reservar una mesa
+          </span>
+
+        </a>
+
+      </div>
+
+      <!-- =================================================
+           ESTADÍSTICAS
+      ================================================== -->
+
+      <div class="hero-statistics">
+
+        <!-- SUCURSALES -->
+        <article class="hero-stat-card">
+
+          <span class="hero-stat-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              storefront
+            </span>
+
+          </span>
+
+          <div class="hero-stat-information">
+
+            <strong>
+              {{ totalBranches }}
+            </strong>
+
+            <span>
+              Sucursales
+            </span>
+
+          </div>
+
+          <span
+            class="hero-stat-decoration"
+            aria-hidden="true"
+          ></span>
+
+        </article>
+
+        <!-- ABIERTAS AHORA -->
+        <article class="hero-stat-card">
+
+          <span class="hero-stat-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              meeting_room
+            </span>
+
+          </span>
+
+          <div class="hero-stat-information">
+
+            <strong>
+              {{ openBranches }}
+            </strong>
+
+            <span>
+              Abiertas ahora
+            </span>
+
+          </div>
+
+          <span class="hero-stat-status">
+
+            <span
+              class="hero-stat-status-dot"
+              aria-hidden="true"
+            ></span>
+
+            Disponible
+
+          </span>
+
+          <span
+            class="hero-stat-decoration"
+            aria-hidden="true"
+          ></span>
+
+        </article>
+
+        <!-- CIUDADES Y DISTRITOS -->
+        <article class="hero-stat-card">
+
+          <span class="hero-stat-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              location_city
+            </span>
+
+          </span>
+
+          <div class="hero-stat-information">
+
+            <strong>
+              {{ totalLocations }}
+            </strong>
+
+            <span>
+              Ciudades y distritos
+            </span>
+
+          </div>
+
+          <span
+            class="hero-stat-decoration"
+            aria-hidden="true"
+          ></span>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

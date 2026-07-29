@@ -1,0 +1,33 @@
+<main class="payments-page">
+  <header class="page-header">
+    <div><span class="eyebrow">Control financiero</span><h1>Pagos</h1><p>Valida los pagos vinculados a pedidos y reservas registrados desde el sitio web.</p></div>
+  </header>
+
+  <section class="summary-grid" aria-label="Resumen de pagos">
+    <article><span>Total de pagos</span><strong>{{ payments.length }}</strong></article>
+    <article><span>Pendientes</span><strong>{{ pendingCount }}</strong></article>
+    <article><span>Monto aprobado</span><strong>{{ formatMoney(approvedAmount) }}</strong></article>
+  </section>
+
+  <p *ngIf="successMessage" class="message success">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="message error">{{ errorMessage }}</p>
+
+  <section class="filters-card">
+    <label>Buscar<input [(ngModel)]="search" placeholder="Código, cliente, referencia o sucursal" /></label>
+    <label>Origen<select [(ngModel)]="selectedType"><option value="">Todos</option><option value="PEDIDO">Pedido</option><option value="RESERVA">Reserva</option></select></label>
+    <label>Estado<select [(ngModel)]="selectedStatus"><option value="">Todos</option><option *ngFor="let status of statuses" [value]="status">{{ statusLabel(status) }}</option></select></label>
+    <button type="button" class="secondary-button" (click)="clearFilters()">Limpiar</button>
+  </section>
+
+  <section class="table-card">
+    <div *ngIf="isLoading" class="empty-state">Cargando pagos...</div>
+    <div *ngIf="!isLoading && filteredPayments.length === 0" class="empty-state"><span class="material-symbols-outlined">payments</span><h2>No hay pagos registrados</h2><p>Los pagos aparecerán cuando se creen pedidos o reservas desde la web.</p></div>
+    <div *ngIf="!isLoading && filteredPayments.length > 0" class="desktop-table">
+      <table><thead><tr><th>Código</th><th>Cliente</th><th>Sucursal</th><th>Método</th><th>Monto</th><th>Referencia</th><th>Estado</th><th>Acción</th></tr></thead>
+      <tbody><tr *ngFor="let item of filteredPayments; trackBy: trackById"><td><strong>{{ item.sourceCode }}</strong><small>{{ item.sourceType }}</small></td><td>{{ item.customer }}</td><td>{{ item.branch }}</td><td>{{ item.paymentMethod }}</td><td>{{ formatMoney(item.amount) }}</td><td>{{ item.reference || 'Sin referencia' }}</td><td><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span></td><td><button type="button" class="icon-button" title="Editar" (click)="edit(item)"><span class="material-symbols-outlined">edit</span></button></td></tr></tbody></table>
+    </div>
+    <div *ngIf="!isLoading && filteredPayments.length > 0" class="mobile-list"><article *ngFor="let item of filteredPayments; trackBy: trackById"><header><strong>{{ item.sourceCode }}</strong><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span></header><p>{{ item.customer }}</p><small>{{ item.branch }} · {{ item.paymentMethod }}</small><strong>{{ formatMoney(item.amount) }}</strong><footer><span>{{ item.reference || 'Sin referencia' }}</span><button type="button" (click)="edit(item)">Editar</button></footer></article></div>
+  </section>
+
+  <div *ngIf="editing" class="dialog-backdrop" (click)="close()"><section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()"><header><div><span class="eyebrow">{{ editing.sourceCode }}</span><h2>Validar pago</h2></div><button type="button" class="icon-button" (click)="close()"><span class="material-symbols-outlined">close</span></button></header><div class="form-grid"><label>Estado<select [(ngModel)]="editing.status"><option *ngFor="let status of statuses" [value]="status">{{ statusLabel(status) }}</option></select></label><label>Referencia<input [(ngModel)]="editing.reference" maxlength="100" /></label><label>Fecha de operación<input type="datetime-local" [(ngModel)]="editing.operationDate" /></label><label class="full">Observaciones<textarea rows="4" [(ngModel)]="editing.notes" maxlength="500"></textarea></label></div><footer><button type="button" class="secondary-button" (click)="close()">Cancelar</button><button type="button" class="primary-button" [disabled]="isSaving" (click)="save()">{{ isSaving ? 'Guardando...' : 'Guardar cambios' }}</button></footer></section></div>
+</main>

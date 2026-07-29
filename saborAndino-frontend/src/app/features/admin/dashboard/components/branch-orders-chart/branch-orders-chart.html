@@ -1,0 +1,99 @@
+<section class="branch-chart-card">
+
+  <header class="chart-card-header">
+
+    <div class="chart-title-group">
+
+      <span class="chart-header-icon">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          star
+        </span>
+
+      </span>
+
+      <div>
+
+        <h2>
+          Pedidos por sucursal
+        </h2>
+
+        <p>
+          Rendimiento de cada establecimiento
+        </p>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="chart-options-button"
+      aria-label="Mostrar opciones"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        more_horiz
+      </span>
+    </button>
+
+  </header>
+
+  <div class="branch-chart-content">
+
+    <div class="chart-scale">
+
+      <span>400</span>
+      <span>300</span>
+      <span>200</span>
+      <span>100</span>
+      <span>0</span>
+
+    </div>
+
+    <div class="branch-bars-area">
+
+      <div class="chart-grid-lines" aria-hidden="true">
+
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+      <article
+        *ngFor="let item of branchOrders"
+        class="branch-bar-item"
+      >
+
+        <div class="branch-bar-value">
+          {{ item.orders }}
+        </div>
+
+        <div class="branch-bar-track">
+
+          <span
+            class="branch-bar"
+            [style.height.%]="item.percentage"
+          ></span>
+
+        </div>
+
+        <span class="branch-bar-label">
+          {{ item.branch }}
+        </span>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>

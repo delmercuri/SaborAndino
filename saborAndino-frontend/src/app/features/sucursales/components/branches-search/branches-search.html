@@ -1,0 +1,254 @@
+<section
+  class="branches-search-section"
+  aria-labelledby="branchesSearchTitle"
+>
+  <div class="branches-search-container">
+
+    <div class="branches-search-card">
+
+      <!-- =========================
+           CABECERA
+      ========================== -->
+      <header class="branches-search-heading">
+
+        <span
+          class="branches-search-heading-icon"
+          aria-hidden="true"
+        >
+          <span class="material-symbols-outlined">
+            travel_explore
+          </span>
+        </span>
+
+        <div>
+          <h2 id="branchesSearchTitle">
+            Busca la sede ideal para ti
+          </h2>
+
+          <p>
+            Filtra por ubicación, servicio o disponibilidad
+          </p>
+        </div>
+
+      </header>
+
+      <!-- =========================
+           CONTROLES
+      ========================== -->
+      <div class="branches-search-controls">
+
+        <!-- BUSCADOR -->
+        <div class="branches-search-field">
+
+          <label for="branchSearch">
+            Buscar sucursal
+          </label>
+
+          <div class="branches-input-wrapper">
+
+            <span
+              class="material-symbols-outlined branches-input-icon"
+              aria-hidden="true"
+            >
+              search
+            </span>
+
+            <input
+              id="branchSearch"
+              type="search"
+              [(ngModel)]="searchTerm"
+              placeholder="Nombre, dirección, ciudad o referencia..."
+              autocomplete="off"
+              (ngModelChange)="notifyFiltersChange()"
+            />
+
+            <button
+              *ngIf="searchTerm"
+              type="button"
+              class="branches-clear-search-button"
+              aria-label="Limpiar búsqueda"
+              title="Limpiar búsqueda"
+              (click)="clearSearch()"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                close
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- CIUDAD O DISTRITO -->
+        <div class="branches-search-field">
+
+          <label for="districtFilter">
+            Ciudad o distrito
+          </label>
+
+          <div class="branches-select-wrapper">
+
+            <span
+              class="material-symbols-outlined branches-input-icon"
+              aria-hidden="true"
+            >
+              location_city
+            </span>
+
+            <select
+              id="districtFilter"
+              [(ngModel)]="selectedDistrict"
+              (ngModelChange)="notifyFiltersChange()"
+            >
+              <option
+                *ngFor="let district of districtOptions"
+                [value]="district"
+              >
+                {{ district }}
+              </option>
+            </select>
+
+            <span
+              class="material-symbols-outlined branches-select-arrow"
+              aria-hidden="true"
+            >
+              keyboard_arrow_down
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- SERVICIO -->
+        <div class="branches-search-field">
+
+          <label for="serviceFilter">
+            Servicio
+          </label>
+
+          <div class="branches-select-wrapper">
+
+            <span
+              class="material-symbols-outlined branches-input-icon"
+              aria-hidden="true"
+            >
+              room_service
+            </span>
+
+            <select
+              id="serviceFilter"
+              [(ngModel)]="selectedService"
+              (ngModelChange)="notifyFiltersChange()"
+            >
+              <option
+                *ngFor="let service of serviceOptions"
+                [value]="service"
+              >
+                {{ service }}
+              </option>
+            </select>
+
+            <span
+              class="material-symbols-outlined branches-select-arrow"
+              aria-hidden="true"
+            >
+              keyboard_arrow_down
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- ESTADO -->
+        <div class="branches-search-field">
+
+          <label for="statusFilter">
+            Estado
+          </label>
+
+          <div class="branches-select-wrapper">
+
+            <span
+              class="material-symbols-outlined branches-input-icon"
+              aria-hidden="true"
+            >
+              schedule
+            </span>
+
+            <select
+              id="statusFilter"
+              [(ngModel)]="selectedStatus"
+              (ngModelChange)="notifyFiltersChange()"
+            >
+              <option
+                *ngFor="let status of statusOptions"
+                [value]="status"
+              >
+                {{ status }}
+              </option>
+            </select>
+
+            <span
+              class="material-symbols-outlined branches-select-arrow"
+              aria-hidden="true"
+            >
+              keyboard_arrow_down
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- =========================
+           PIE DEL BUSCADOR
+      ========================== -->
+      <footer class="branches-search-footer">
+
+        <span class="branches-search-notice">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            info
+          </span>
+
+          La disponibilidad y los horarios pueden variar durante
+          feriados y fechas especiales.
+
+        </span>
+
+        <button
+          type="button"
+          class="branches-clear-filters-button"
+          [disabled]="activeFiltersCount === 0"
+          (click)="clearFilters()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            filter_alt_off
+          </span>
+
+          Limpiar filtros
+
+          <strong
+            *ngIf="activeFiltersCount > 0"
+            aria-label="Cantidad de filtros activos"
+          >
+            {{ activeFiltersCount }}
+          </strong>
+        </button>
+
+      </footer>
+
+    </div>
+
+  </div>
+</section>

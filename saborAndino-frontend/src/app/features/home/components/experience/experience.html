@@ -1,0 +1,197 @@
+<section
+  class="experience-section"
+  aria-labelledby="experience-title"
+>
+  <div class="experience-container">
+
+    <!-- =========================
+         BLOQUE VISUAL
+    ========================== -->
+    <div class="experience-visual">
+
+      <!-- IMAGEN PRINCIPAL -->
+      <div class="experience-main-image">
+
+        <img
+          src="/images/productos/tallarin-abanquino.jpg"
+          alt="Plato tradicional preparado en Sabor Andino"
+          class="experience-main-photo"
+          loading="lazy"
+        />
+
+        <div
+          class="experience-main-overlay"
+          aria-hidden="true"
+        ></div>
+
+      </div>
+
+      <!-- IMAGEN DEL CHEF -->
+      <div class="experience-secondary-image">
+
+        <img
+          src="/images/productos/chef.jpg"
+          alt="Chef preparando platos de Sabor Andino"
+          class="experience-chef-photo"
+          loading="lazy"
+        />
+
+        <div
+          class="experience-chef-overlay"
+          aria-hidden="true"
+        ></div>
+
+        <span class="experience-chef-label">
+          Nuestro chef
+        </span>
+
+      </div>
+
+      <!-- AÑOS DE EXPERIENCIA -->
+      <article class="experience-years-card">
+
+        <strong>
+          15+
+        </strong>
+
+        <span>
+          años compartiendo tradición y sabor
+        </span>
+
+      </article>
+
+    </div>
+
+    <!-- =========================
+         INFORMACIÓN
+    ========================== -->
+    <div class="experience-information">
+
+      <span class="experience-eyebrow">
+        Más que un restaurante
+      </span>
+
+      <h2 id="experience-title">
+        Una experiencia pensada para compartir
+      </h2>
+
+      <p class="experience-description">
+        En Sabor Andino combinamos recetas tradicionales, atención cercana
+        y tecnología para que puedas ordenar, reservar y seguir tus pedidos.
+      </p>
+
+      <!-- PUNTOS PRINCIPALES -->
+      <div class="experience-points">
+
+        <article>
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            restaurant
+          </span>
+
+          <div>
+
+            <strong>
+              Recetas con identidad
+            </strong>
+
+            <p>
+              Conservamos sabores tradicionales con el estilo de
+              Sabor Andino.
+            </p>
+
+          </div>
+
+        </article>
+
+        <article>
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            groups
+          </span>
+
+          <div>
+
+            <strong>
+              Ambientes para compartir
+            </strong>
+
+            <p>
+              Espacios cómodos para reuniones, celebraciones y encuentros.
+            </p>
+
+          </div>
+
+        </article>
+
+        <article>
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            mobile_friendly
+          </span>
+
+          <div>
+
+            <strong>
+              Atención digital sencilla
+            </strong>
+
+            <p>
+              Realiza pedidos, reservas y consultas desde cualquier
+              dispositivo.
+            </p>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- ACCIONES -->
+      <div class="experience-actions">
+
+        <a
+          routerLink="/reservas"
+          class="experience-primary-button"
+        >
+          Reservar una mesa
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            arrow_forward
+          </span>
+        </a>
+
+        <button
+          *ngIf="whatsapp"
+          type="button"
+          class="experience-secondary-button"
+          (click)="openWhatsApp()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chat
+          </span>
+
+          Hablar con nosotros
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

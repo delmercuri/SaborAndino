@@ -1,0 +1,130 @@
+<section class="orders-chart-card">
+
+  <!-- ENCABEZADO -->
+  <header class="chart-card-header">
+
+    <div class="chart-title-group">
+
+      <span class="chart-header-icon">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          monitoring
+        </span>
+
+      </span>
+
+      <div>
+
+        <h2>
+          Pedidos por estado
+        </h2>
+
+        <p>
+          Distribución de los pedidos registrados
+        </p>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="chart-options-button"
+      aria-label="Mostrar opciones del gráfico"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        more_horiz
+      </span>
+    </button>
+
+  </header>
+
+  <!-- CONTENIDO -->
+  <div class="chart-card-content">
+
+    <!-- TOTAL -->
+    <div class="orders-total">
+
+      <span class="orders-total-icon">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          receipt_long
+        </span>
+
+      </span>
+
+      <div>
+
+        <small>
+          Total de pedidos
+        </small>
+
+        <strong>
+          {{ totalOrders }}
+        </strong>
+
+        <span>
+          Pedidos registrados
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- ESTADOS -->
+    <div class="orders-status-list">
+
+      <article
+        *ngFor="let status of orderStatuses"
+        class="order-status-item"
+      >
+
+        <div class="status-heading">
+
+          <span class="status-name">
+
+            <span
+              class="status-dot"
+              [ngClass]="status.cssClass"
+            ></span>
+
+            {{ status.label }}
+
+          </span>
+
+          <strong>
+            {{ status.quantity }}
+          </strong>
+
+        </div>
+
+        <div class="status-progress">
+
+          <span
+            [ngClass]="status.cssClass"
+            [style.width.%]="status.percentage"
+          ></span>
+
+        </div>
+
+        <small>
+          {{ status.percentage | number:'1.1-1' }}%
+          del total de pedidos
+        </small>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>

@@ -1,0 +1,252 @@
+<section
+  class="branches-section"
+  aria-labelledby="branches-preview-title"
+>
+  <div class="branches-container">
+
+    <!-- =========================
+         ENCABEZADO
+    ========================== -->
+    <header class="branches-heading">
+
+      <div class="branches-heading-information">
+
+        <span class="branches-eyebrow">
+          Estamos cerca de ti
+        </span>
+
+        <h2 id="branches-preview-title">
+          Visita nuestras sucursales
+        </h2>
+
+        <p>
+          Encuentra el local más cercano en Lima, Abancay o Ayacucho
+          y disfruta atención en salón, delivery, recojo y reservas.
+        </p>
+
+      </div>
+
+      <a
+        routerLink="/sucursales"
+        class="branches-link-button"
+      >
+        Ver todas las sucursales
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          arrow_forward
+        </span>
+      </a>
+
+    </header>
+
+    <!-- =========================
+         TARJETAS
+    ========================== -->
+    <div class="branches-grid">
+
+      <article
+        *ngFor="
+          let branch of branches;
+          trackBy: trackByBranchId
+        "
+        class="branch-card"
+        [ngClass]="branch.className"
+      >
+
+        <!-- IMAGEN CLICABLE -->
+        <div
+          class="branch-card-image"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="
+            'Abrir ubicación de ' +
+            branch.name +
+            ' en Google Maps'
+          "
+          [attr.title]="
+            'Ver ubicación de ' + branch.name
+          "
+          [style.background-image]="
+            'url(' + branch.image + ')'
+          "
+          (click)="openBranchLocation(branch)"
+          (keydown)="
+            handleBranchImageKeydown(
+              $event,
+              branch
+            )
+          "
+        >
+
+          <div
+            class="branch-image-overlay"
+            aria-hidden="true"
+          ></div>
+
+          <div class="branch-image-content">
+
+            <span class="branch-name-badge">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                location_on
+              </span>
+
+              {{ branch.name }}
+
+            </span>
+
+            <span class="branch-image-action">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                open_in_new
+              </span>
+
+              Ver ubicación
+
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- INFORMACIÓN -->
+        <div class="branch-card-body">
+
+          <span class="branch-open-badge">
+
+            <span aria-hidden="true"></span>
+
+            Abierto ahora
+
+          </span>
+
+          <h3>
+            {{ branch.name }}
+          </h3>
+
+          <p class="branch-address">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              location_on
+            </span>
+
+            {{ branch.address }}
+
+          </p>
+
+          <!-- DETALLES -->
+          <div class="branch-details">
+
+            <span>
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                schedule
+              </span>
+
+              {{ branch.schedule }}
+
+            </span>
+
+            <span>
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                call
+              </span>
+
+              {{ branch.phone }}
+
+            </span>
+
+            <span>
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                near_me
+              </span>
+
+              {{ branch.reference }}
+
+            </span>
+
+          </div>
+
+          <!-- SERVICIOS -->
+          <div class="branch-services">
+
+            <span
+              *ngFor="let service of branch.services"
+            >
+              {{ service }}
+            </span>
+
+          </div>
+
+          <!-- ACCIONES -->
+          <div class="branch-actions">
+
+            <button
+              type="button"
+              class="branch-location-button"
+              (click)="openBranchLocation(branch)"
+            >
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                map
+              </span>
+
+              Ver ubicación
+
+            </button>
+
+            <button
+              type="button"
+              class="branch-call-button"
+              [attr.aria-label]="
+                'Llamar a ' + branch.name
+              "
+              title="Llamar a la sucursal"
+              (click)="callBranch(branch)"
+            >
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                call
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+</section>

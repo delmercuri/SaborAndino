@@ -1,0 +1,41 @@
+:host {
+  display: block;
+
+  --public-wine: #8e1020;
+  --public-wine-dark: #570812;
+  --public-wine-light: #b32235;
+
+  --public-red: #c7192d;
+  --public-gold: #d09a25;
+  --public-gold-light: #efca68;
+
+  --public-cream: #f8f4ed;
+  --public-text: #302a26;
+  --public-muted: #7f756d;
+  --public-border: #e8dfd5;
+  --public-white: #ffffff;
+
+  --public-shadow:
+    0 12px 30px rgba(48, 32, 25, 0.1);
+}
+
+.public-layout {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-x: hidden;
+
+  background: var(--public-cream);
+  color: var(--public-text);
+}
+
+.public-main {
+  width: 100%;
+  min-height: 600px;
+  flex: 1;
+
+  background: var(--public-cream);
+}

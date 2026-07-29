@@ -1,0 +1,438 @@
+<!-- =========================
+     BARRA SUPERIOR
+========================== -->
+<div class="top-information-bar">
+
+  <div class="top-information-content">
+
+    <div class="top-information-left">
+
+      <span *ngIf="openingHours">
+        <span class="material-symbols-outlined">schedule</span>
+        Atención: {{ openingHours }}
+      </span>
+
+      <span *ngIf="contactPhone">
+        <span class="material-symbols-outlined">call</span>
+        Pedidos: {{ contactPhone }}
+      </span>
+
+    </div>
+
+    <div class="top-information-right">
+
+      <span>
+        <span class="material-symbols-outlined">
+          delivery_dining
+        </span>
+
+        Delivery disponible
+      </span>
+
+      <span>
+        <span class="material-symbols-outlined">
+          payments
+        </span>
+
+        Pago seguro con Yape y tarjeta
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     ENCABEZADO PRINCIPAL
+========================== -->
+<header class="public-header">
+
+  <div class="header-content">
+
+    <!-- LOGOTIPO -->
+    <a
+      class="brand"
+      routerLink="/"
+      aria-label="Ir al inicio de Sabor Andino"
+      (click)="closeMobileMenu(); closeSearch()"
+    >
+
+      <img
+        src="/images/logo/logo-sabor-andino.png"
+        alt="Logotipo del restaurante Sabor Andino"
+        class="brand-logo"
+      />
+
+    </a>
+
+    <!-- NAVEGACIÓN DE ESCRITORIO -->
+    <nav
+      class="desktop-navigation"
+      aria-label="Navegación principal"
+    >
+
+      <a
+        *ngFor="let item of navigationItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{
+          exact: item.exact
+        }"
+        (click)="closeSearch()"
+      >
+
+        <span class="material-symbols-outlined">
+          {{ item.icon }}
+        </span>
+
+        {{ item.label }}
+
+      </a>
+
+    </nav>
+
+    <!-- ACCIONES -->
+    <div class="header-actions">
+
+      <!-- BUSCADOR -->
+      <button
+        type="button"
+        class="header-action-button search"
+        aria-label="Buscar productos"
+        [class.active]="isSearchOpen"
+        (click)="toggleSearch()"
+      >
+
+        <span class="material-symbols-outlined">
+          {{ isSearchOpen ? 'close' : 'search' }}
+        </span>
+
+      </button>
+
+      <!-- CARRITO -->
+      <button
+        type="button"
+        class="header-action-button cart"
+        aria-label="Abrir carrito"
+        (click)="openCart()"
+      >
+
+        <span class="material-symbols-outlined">
+          shopping_cart
+        </span>
+
+        <span
+          *ngIf="cartItemCount > 0"
+          class="cart-count"
+        >
+          {{ cartItemCount }}
+        </span>
+
+      </button>
+
+      <!-- PEDIR AHORA -->
+      <a
+        class="order-now-button"
+        routerLink="/menu"
+        (click)="closeMobileMenu(); closeSearch()"
+      >
+
+        <span class="material-symbols-outlined">
+          restaurant_menu
+        </span>
+
+        Pedir ahora
+
+      </a>
+
+      <!-- MENÚ MÓVIL -->
+      <button
+        type="button"
+        class="mobile-menu-button"
+        aria-label="Abrir menú de navegación"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        [class.active]="isMobileMenuOpen"
+        (click)="toggleMobileMenu()"
+      >
+
+        <span class="material-symbols-outlined">
+          {{ isMobileMenuOpen ? 'close' : 'menu' }}
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
+       BUSCADOR DESPLEGABLE
+  ========================== -->
+  <div
+    *ngIf="isSearchOpen"
+    class="search-panel"
+  >
+
+    <div class="search-panel-content">
+
+      <div class="search-heading">
+
+        <span class="search-heading-icon">
+
+          <span class="material-symbols-outlined">
+            manage_search
+          </span>
+
+        </span>
+
+        <div>
+
+          <strong>
+            ¿Qué deseas comer?
+          </strong>
+
+          <span>
+            Busca platos, bebidas, postres o promociones.
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="public-search-wrapper">
+
+        <span class="material-symbols-outlined search-input-icon">
+          search
+        </span>
+
+        <input
+          #publicSearchInput
+          type="search"
+          placeholder="Ejemplo: lomo saltado, pachamanca, pollo..."
+          autocomplete="off"
+          aria-label="Buscar productos"
+          (keyup.enter)="handleSearch(publicSearchInput)"
+        />
+
+        <button
+          type="button"
+          (click)="handleSearch(publicSearchInput)"
+        >
+          Buscar
+        </button>
+
+      </div>
+
+      <div class="popular-searches">
+
+        <span>
+          Búsquedas populares:
+        </span>
+
+        <button
+          type="button"
+          (click)="searchPopularProduct(
+            publicSearchInput,
+            'Lomo saltado'
+          )"
+        >
+          Lomo saltado
+        </button>
+
+        <button
+          type="button"
+          (click)="searchPopularProduct(
+            publicSearchInput,
+            'Pachamanca'
+          )"
+        >
+          Pachamanca
+        </button>
+
+        <button
+          type="button"
+          (click)="searchPopularProduct(
+            publicSearchInput,
+            'Pollo a la parrilla'
+          )"
+        >
+          Pollo a la parrilla
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+<!-- =========================
+     FONDO DEL MENÚ MÓVIL
+========================== -->
+<div
+  *ngIf="isMobileMenuOpen"
+  class="mobile-menu-overlay"
+  (click)="closeMobileMenu()"
+></div>
+
+<!-- =========================
+     MENÚ MÓVIL
+========================== -->
+<aside
+  class="mobile-navigation-panel"
+  [class.open]="isMobileMenuOpen"
+  [attr.aria-hidden]="!isMobileMenuOpen"
+  aria-label="Menú móvil"
+>
+
+  <div class="mobile-navigation-header">
+
+    <a
+      class="mobile-brand"
+      routerLink="/"
+      aria-label="Ir al inicio de Sabor Andino"
+      (click)="closeMobileMenu()"
+    >
+
+      <img
+        src="/images/logo/logo-sabor-andino.png"
+        alt="Logotipo de Sabor Andino"
+        class="mobile-brand-logo"
+      />
+
+      <span class="mobile-brand-information">
+
+        <strong>
+          Sabor Andino
+        </strong>
+
+        <small>
+          Tradición que deja huella
+        </small>
+
+      </span>
+
+    </a>
+
+    <button
+      type="button"
+      aria-label="Cerrar menú"
+      (click)="closeMobileMenu()"
+    >
+
+      <span class="material-symbols-outlined">
+        close
+      </span>
+
+    </button>
+
+  </div>
+
+  <!-- NAVEGACIÓN MÓVIL -->
+  <nav
+    class="mobile-navigation"
+    aria-label="Navegación móvil"
+  >
+
+    <a
+      *ngFor="let item of navigationItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{
+        exact: item.exact
+      }"
+      (click)="closeMobileMenu()"
+    >
+
+      <span class="mobile-navigation-icon">
+
+        <span class="material-symbols-outlined">
+          {{ item.icon }}
+        </span>
+
+      </span>
+
+      <span class="mobile-navigation-information">
+
+        <strong>
+          {{ item.label }}
+        </strong>
+
+        <small>
+          {{ item.description }}
+        </small>
+
+      </span>
+
+      <span class="material-symbols-outlined mobile-navigation-arrow">
+        chevron_right
+      </span>
+
+    </a>
+
+  </nav>
+
+  <!-- ACCIONES MÓVILES -->
+  <div class="mobile-quick-actions">
+
+    <a
+      routerLink="/menu"
+      class="mobile-primary-action"
+      (click)="closeMobileMenu()"
+    >
+
+      <span class="material-symbols-outlined">
+        restaurant_menu
+      </span>
+
+      Realizar pedido
+
+    </a>
+
+    <a
+      routerLink="/reservas"
+      class="mobile-secondary-action"
+      (click)="closeMobileMenu()"
+    >
+
+      <span class="material-symbols-outlined">
+        calendar_month
+      </span>
+
+      Reservar mesa
+
+    </a>
+
+  </div>
+
+  <!-- CONTACTO -->
+  <div *ngIf="whatsapp" class="mobile-contact-card">
+
+    <span class="material-symbols-outlined">
+      support_agent
+    </span>
+
+    <div>
+
+      <strong>
+        ¿Necesitas ayuda?
+      </strong>
+
+      <span>
+        Comunícate con el equipo de atención de Sabor Andino.
+      </span>
+
+      <button
+        type="button"
+        (click)="openWhatsApp()"
+      >
+        Escribir por WhatsApp
+      </button>
+
+    </div>
+
+  </div>
+
+</aside>

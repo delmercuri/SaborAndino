@@ -1,0 +1,327 @@
+/* =========================================================
+   COMPONENTE: RESERVAS POR ESTADO
+========================================================= */
+
+:host {
+  display: block;
+
+  --chart-wine: #8b1021;
+  --chart-wine-dark: #650914;
+
+  --chart-gold: #d7aa42;
+
+  --chart-white: #ffffff;
+  --chart-text: #302823;
+  --chart-muted: #8a7e76;
+  --chart-border: #e8ded4;
+}
+
+:host,
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.reservations-chart-card {
+  width: 100%;
+  min-height: 410px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--chart-border);
+  border-radius: 17px;
+
+  background: var(--chart-white);
+
+  box-shadow:
+    0 13px 30px rgba(61, 41, 29, 0.07);
+}
+
+/* =========================================================
+   CABECERA
+========================================================= */
+
+.chart-card-header {
+  min-height: 78px;
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.chart-title-group {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-header-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--chart-wine-dark),
+      var(--chart-wine)
+    );
+
+  color: #ffffff;
+}
+
+.chart-header-icon .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.chart-title-group h2 {
+  margin: 0;
+
+  color: var(--chart-text);
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.chart-title-group p {
+  margin: 4px 0 0;
+
+  color: var(--chart-muted);
+
+  font-size: 10px;
+}
+
+.chart-options-button {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--chart-border);
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #9c9189;
+
+  cursor: pointer;
+}
+
+.chart-options-button .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* =========================================================
+   CONTENIDO
+========================================================= */
+
+.chart-card-content {
+  min-height: 310px;
+  padding: 22px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(190px, 0.9fr)
+    minmax(220px, 1.1fr);
+
+  align-items: center;
+  gap: 28px;
+}
+
+/* =========================================================
+   GRÁFICO CIRCULAR
+========================================================= */
+
+.reservation-donut-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reservation-donut {
+  width: 200px;
+  height: 200px;
+
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      var(--chart-wine) 0deg 242.28deg,
+      var(--chart-gold) 242.28deg 360deg
+    );
+
+  box-shadow:
+    0 14px 30px rgba(61, 41, 29, 0.09);
+}
+
+.reservation-donut::before {
+  content: "";
+
+  width: 112px;
+  height: 112px;
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(232, 222, 212, 0.65);
+}
+
+.reservation-donut-center {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.reservation-donut-center strong {
+  color: var(--chart-wine);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.reservation-donut-center span {
+  margin-top: 5px;
+
+  color: var(--chart-muted);
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   LEYENDA
+========================================================= */
+
+.reservation-status-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.reservation-status-item {
+  min-height: 70px;
+
+  display: grid;
+  grid-template-columns:
+    12px minmax(0, 1fr) auto;
+
+  align-items: center;
+  gap: 12px;
+
+  border-bottom: 1px solid #eee6df;
+}
+
+.reservation-status-item:last-child {
+  border-bottom: none;
+}
+
+.status-color {
+  width: 11px;
+  height: 11px;
+
+  border-radius: 50%;
+}
+
+.status-color.confirmed {
+  background: var(--chart-wine);
+}
+
+.status-color.cancelled {
+  background: var(--chart-gold);
+}
+
+.status-information {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.status-information span {
+  color: var(--chart-muted);
+
+  font-size: 10px;
+}
+
+.status-information strong {
+  margin-top: 4px;
+
+  color: var(--chart-text);
+
+  font-size: 14px;
+}
+
+.status-percentage {
+  color: #9a8e86;
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+  .chart-card-content {
+    grid-template-columns: 1fr;
+  }
+
+  .reservation-status-list {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .reservations-chart-card {
+    min-height: auto;
+  }
+
+  .chart-card-content {
+    padding: 18px;
+  }
+
+  .reservation-donut {
+    width: 175px;
+    height: 175px;
+  }
+
+  .reservation-donut::before {
+    width: 98px;
+    height: 98px;
+  }
+}

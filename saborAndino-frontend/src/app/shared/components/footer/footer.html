@@ -1,0 +1,94 @@
+<footer class="public-footer">
+  <div class="footer-main">
+    <section class="footer-brand-section">
+      <a
+        class="footer-brand"
+        routerLink="/"
+        aria-label="Ir al inicio de Sabor Andino"
+        (click)="scrollToTop()"
+      >
+        <span class="footer-brand-logo-container">
+          <img
+            src="/images/logo/logo-sabor-andino.png"
+            alt="Logotipo del restaurante Sabor Andino"
+            class="footer-brand-logo"
+          />
+        </span>
+      </a>
+
+      <p>
+        Disfruta el auténtico sabor de la cocina peruana y andina,
+        preparada con ingredientes seleccionados, tradición y dedicación.
+      </p>
+
+      <div *ngIf="whatsapp" class="footer-social-networks">
+        <button
+          type="button"
+          aria-label="Contactar por WhatsApp"
+          title="WhatsApp"
+          (click)="openWhatsApp()"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">chat</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="footer-column">
+      <h2>Explora</h2>
+      <a routerLink="/" (click)="scrollToTop()">Inicio</a>
+      <a routerLink="/menu" (click)="scrollToTop()">Nuestro menú</a>
+      <a routerLink="/sucursales" (click)="scrollToTop()">Sucursales</a>
+      <a routerLink="/reservas" (click)="scrollToTop()">Reservar mesa</a>
+      <a routerLink="/seguimiento" (click)="scrollToTop()">Seguir pedido</a>
+    </section>
+
+    <section class="footer-column">
+      <h2>Servicios</h2>
+      <a routerLink="/menu" (click)="scrollToTop()">Pedidos para delivery</a>
+      <a routerLink="/menu" (click)="scrollToTop()">Recojo en sucursal</a>
+      <a routerLink="/reservas" (click)="scrollToTop()">Reservas en línea</a>
+      <a routerLink="/seguimiento" (click)="scrollToTop()">Seguimiento de pedidos</a>
+      <a routerLink="/sucursales" (click)="scrollToTop()">Atención por sucursal</a>
+    </section>
+
+    <section class="footer-column contact">
+      <h2>Contáctanos</h2>
+
+      <ng-container *ngIf="contact; else noContactConfigured">
+        <span *ngIf="locationLabel">
+          <span class="material-symbols-outlined">location_on</span>
+          {{ locationLabel }}
+        </span>
+        <span *ngIf="contact.phone">
+          <span class="material-symbols-outlined">call</span>
+          {{ contact.phone }}
+        </span>
+        <span *ngIf="contact.email">
+          <span class="material-symbols-outlined">mail</span>
+          {{ contact.email }}
+        </span>
+        <span *ngIf="contact.openingHours">
+          <span class="material-symbols-outlined">schedule</span>
+          {{ contact.openingHours }}
+        </span>
+      </ng-container>
+
+      <ng-template #noContactConfigured>
+        <span>
+          <span class="material-symbols-outlined">info</span>
+          La información aparecerá al registrar una sucursal activa.
+        </span>
+      </ng-template>
+    </section>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© {{ currentYear }} Sabor Andino. Todos los derechos reservados.</span>
+    <div>
+      <button type="button" (click)="scrollToTop()">
+        <span class="material-symbols-outlined">arrow_upward</span>
+        Volver arriba
+      </button>
+    </div>
+  </div>
+</footer>

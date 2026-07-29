@@ -1,0 +1,237 @@
+<section
+  id="reservation-process"
+  class="reservation-progress-section"
+  aria-labelledby="reservationProgressTitle"
+>
+  <div class="reservation-progress-container">
+
+    <div class="reservation-progress-card">
+
+      <div class="reservation-progress-main">
+
+        <!-- =============================================
+             INFORMACIÓN DEL PROCESO
+        ============================================== -->
+        <div class="progress-heading">
+
+          <div class="progress-title-group">
+
+            <span
+              class="material-symbols-outlined progress-main-icon"
+              aria-hidden="true"
+            >
+              event_available
+            </span>
+
+            <div>
+
+              <strong id="reservationProgressTitle">
+                Proceso de reserva
+              </strong>
+
+              <span>
+                Completa los tres pasos para confirmar tu mesa
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- =============================================
+             PASOS
+        ============================================== -->
+        <div
+          class="reservation-steps"
+          aria-label="Progreso de la reserva"
+        >
+
+          <!-- PASO 1 -->
+          <button
+            type="button"
+            class="reservation-step"
+            [ngClass]="getStepStatus(1)"
+            [attr.aria-current]="
+              currentStep === 1
+                ? 'step'
+                : null
+            "
+            (click)="selectStep(1)"
+          >
+
+            <span class="step-number">
+
+              <span
+                *ngIf="getStepStatus(1) !== 'completed'"
+              >
+                1
+              </span>
+
+              <span
+                *ngIf="getStepStatus(1) === 'completed'"
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                check
+              </span>
+
+            </span>
+
+            <span class="step-information">
+
+              <strong>
+                Tu reserva
+              </strong>
+
+              <small>
+                Elige sucursal, fecha, horario y personas
+              </small>
+
+            </span>
+
+          </button>
+
+          <!-- CONECTOR 1 -->
+          <span
+            class="step-connector"
+            [class.completed]="currentStep > 1"
+            aria-hidden="true"
+          ></span>
+
+          <!-- PASO 2 -->
+          <button
+            type="button"
+            class="reservation-step"
+            [ngClass]="getStepStatus(2)"
+            [disabled]="isStepDisabled(2)"
+            [attr.aria-current]="
+              currentStep === 2
+                ? 'step'
+                : null
+            "
+            (click)="selectStep(2)"
+          >
+
+            <span class="step-number">
+
+              <span
+                *ngIf="getStepStatus(2) !== 'completed'"
+              >
+                2
+              </span>
+
+              <span
+                *ngIf="getStepStatus(2) === 'completed'"
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                check
+              </span>
+
+            </span>
+
+            <span class="step-information">
+
+              <strong>
+                Tus datos
+              </strong>
+
+              <small>
+                Completa tus datos de contacto
+              </small>
+
+            </span>
+
+          </button>
+
+          <!-- CONECTOR 2 -->
+          <span
+            class="step-connector"
+            [class.completed]="currentStep > 2"
+            aria-hidden="true"
+          ></span>
+
+          <!-- PASO 3 -->
+          <button
+            type="button"
+            class="reservation-step"
+            [ngClass]="getStepStatus(3)"
+            [disabled]="isStepDisabled(3)"
+            [attr.aria-current]="
+              currentStep === 3
+                ? 'step'
+                : null
+            "
+            (click)="selectStep(3)"
+          >
+
+            <span class="step-number">
+
+              <span
+                *ngIf="getStepStatus(3) !== 'completed'"
+              >
+                3
+              </span>
+
+              <span
+                *ngIf="getStepStatus(3) === 'completed'"
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                check
+              </span>
+
+            </span>
+
+            <span class="step-information">
+
+              <strong>
+                Confirmación
+              </strong>
+
+              <small>
+                Recibe tu código y mesa asegurada
+              </small>
+
+            </span>
+
+          </button>
+
+        </div>
+
+        <!-- =============================================
+             PORCENTAJE
+        ============================================== -->
+        <span
+          class="progress-percentage"
+          [attr.aria-label]="
+            progressPercentage +
+            ' por ciento completado'
+          "
+        >
+          {{ progressPercentage }} %
+        </span>
+
+      </div>
+
+      <!-- =============================================
+           BARRA INFERIOR
+      ============================================== -->
+      <div
+        class="progress-bar"
+        role="progressbar"
+        aria-label="Progreso de la reserva"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="progressPercentage"
+      >
+        <span
+          [style.width.%]="progressPercentage"
+        ></span>
+      </div>
+
+    </div>
+
+  </div>
+</section>

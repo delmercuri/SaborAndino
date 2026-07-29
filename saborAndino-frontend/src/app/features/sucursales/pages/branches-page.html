@@ -1,0 +1,23 @@
+<div class="branches-page">
+
+  <app-branches-hero
+    [totalBranches]="totalBranches"
+    [openBranches]="openBranches"
+    [totalLocations]="totalLocations"
+    (viewBranches)="scrollToBranches()"
+  ></app-branches-hero>
+
+  <app-branches-search
+    id="branches-content"
+    [districtOptions]="districtOptions"
+    [serviceOptions]="serviceOptions"
+    [statusOptions]="statusOptions"
+    (filtersChanged)="onFiltersChanged($event)"
+  ></app-branches-search>
+
+  <app-branches-list
+    [filters]="branchFilters"
+    (clearFiltersRequested)="clearBranchFilters()"
+  ></app-branches-list>
+
+</div>

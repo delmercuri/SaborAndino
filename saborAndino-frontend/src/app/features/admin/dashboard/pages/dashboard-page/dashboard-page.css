@@ -1,0 +1,225 @@
+/* =========================================================
+   PÁGINA DEL DASHBOARD
+========================================================= */
+
+:host {
+  display: block;
+
+  --dashboard-wine: #8b1021;
+  --dashboard-gold: #b88322;
+
+  --dashboard-white: #ffffff;
+  --dashboard-text: #302823;
+  --dashboard-muted: #857970;
+  --dashboard-border: #e8ddd4;
+}
+
+:host,
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+.dashboard-page {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.dashboard-heading {
+  min-height: 102px;
+  margin-bottom: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.dashboard-welcome {
+  display: block;
+  margin-bottom: 5px;
+
+  color: #956913;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dashboard-heading h1 {
+  margin: 0;
+
+  color: var(--dashboard-text);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: clamp(42px, 3.4vw, 53px);
+  font-weight: 600;
+  line-height: 0.94;
+}
+
+.dashboard-heading p {
+  margin: 9px 0 0;
+
+  color: var(--dashboard-muted);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   FECHA
+========================================================= */
+
+.dashboard-date-card {
+  width: 285px;
+  min-height: 78px;
+  padding: 12px 15px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  border:
+    1px solid var(--dashboard-border);
+
+  border-radius: 13px;
+
+  background: var(--dashboard-white);
+
+  box-shadow:
+    0 9px 22px rgba(52, 33, 23, 0.055);
+}
+
+.dashboard-date-icon {
+  width: 47px;
+  height: 47px;
+  flex: 0 0 47px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background: #f6eee1;
+  color: #ab7418;
+}
+
+.dashboard-date-icon
+.material-symbols-outlined {
+  font-size: 24px;
+}
+
+.dashboard-date-information {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-date-information small {
+  color: #958a82;
+
+  font-size: 8px;
+}
+
+.dashboard-date-information strong {
+  margin-top: 4px;
+
+  color: #332b27;
+
+  font-size: 10px;
+}
+
+.dashboard-date-information span {
+  margin-top: 3px;
+
+  color: #81756d;
+
+  font-size: 9px;
+  text-transform: capitalize;
+}
+
+.dashboard-date-decoration {
+  position: absolute;
+  right: 9px;
+  bottom: -9px;
+
+  color: rgba(139, 16, 33, 0.045);
+
+  font-size: 63px;
+}
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.dashboard-summary-section {
+  width: 100%;
+}
+
+.dashboard-charts {
+  width: 100%;
+  margin-top: 17px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.94fr)
+    minmax(0, 0.94fr)
+    minmax(0, 1.12fr);
+
+  align-items: stretch;
+  gap: 12px;
+}
+
+.dashboard-products {
+  width: 100%;
+  margin-top: 14px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1280px) {
+
+  .dashboard-charts {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  app-branch-orders-chart {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 850px) {
+
+  .dashboard-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-date-card {
+    width: 100%;
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+
+  app-branch-orders-chart {
+    grid-column: auto;
+  }
+}

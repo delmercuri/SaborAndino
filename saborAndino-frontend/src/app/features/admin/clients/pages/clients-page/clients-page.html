@@ -1,0 +1,1056 @@
+<div class="clients-page">
+
+  <!-- ENCABEZADO -->
+
+  <header class="clients-heading">
+
+    <div class="clients-heading-content">
+
+      <span class="clients-eyebrow">
+        Gestión de clientes
+      </span>
+
+      <h1>
+        Clientes
+      </h1>
+
+      <p>
+        Consulta cuántos clientes se registraron y administra
+        la información de sus cuentas.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="register-client-button"
+      (click)="openCreateClient()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        person_add
+      </span>
+
+      Registrar cliente
+    </button>
+
+  </header>
+
+  <!-- RESUMEN -->
+
+  <section
+    class="clients-summary-grid"
+    aria-label="Resumen de clientes"
+  >
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+        <span class="material-symbols-outlined">
+          groups
+        </span>
+      </span>
+
+      <div class="summary-content">
+        <small>Clientes registrados</small>
+        <strong>{{ totalClients }}</strong>
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+        <span class="material-symbols-outlined">
+          verified_user
+        </span>
+      </span>
+
+      <div class="summary-content">
+        <small>Clientes activos</small>
+        <strong>{{ activeClients }}</strong>
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+        <span class="material-symbols-outlined">
+          person_add
+        </span>
+      </span>
+
+      <div class="summary-content">
+        <small>Nuevos este mes</small>
+        <strong>{{ newClientsThisMonth }}</strong>
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-blue">
+        <span class="material-symbols-outlined">
+          shopping_bag
+        </span>
+      </span>
+
+      <div class="summary-content">
+        <small>Clientes con pedidos</small>
+        <strong>{{ clientsWithOrders }}</strong>
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+  </section>
+
+  <!-- FILTROS -->
+
+  <section class="clients-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+        <h2>Filtros de búsqueda</h2>
+
+        <p>
+          Busca por nombre, documento, teléfono o correo.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+        <span class="material-symbols-outlined">
+          filter_alt_off
+        </span>
+
+        Limpiar filtros
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <div class="filter-field">
+
+        <label for="searchClient">
+          Buscar cliente
+        </label>
+
+        <div class="input-wrapper">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+          <input
+            id="searchClient"
+            type="search"
+            placeholder="Código, nombre, documento, teléfono o correo"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="clientDepartment">
+          Departamento
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="clientDepartment"
+            [(ngModel)]="selectedDepartment"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todos los departamentos
+            </option>
+
+            <option
+              *ngFor="let department of departmentOptions"
+              [value]="department"
+            >
+              {{ department }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="clientStatus">
+          Estado
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="clientStatus"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todos los estados
+            </option>
+
+            <option
+              *ngFor="let status of statusOptions"
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- TABLA -->
+
+  <section class="clients-table-card">
+
+    <header class="table-card-header">
+
+      <div>
+        <h2>Lista de clientes</h2>
+
+        <p>
+          Se encontraron
+          <strong>{{ filteredClients.length }}</strong>
+          clientes.
+        </p>
+      </div>
+
+      <div class="table-header-actions">
+
+        <span class="revenue-indicator">
+          <span class="material-symbols-outlined">
+            payments
+          </span>
+
+          Total acumulado:
+          <strong>
+            {{ formatCurrency(totalRevenue) }}
+          </strong>
+        </span>
+
+        <button
+          type="button"
+          class="export-button"
+          (click)="exportClients()"
+        >
+          <span class="material-symbols-outlined">
+            download
+          </span>
+
+          Exportar
+        </button>
+
+      </div>
+
+    </header>
+
+    <div class="clients-table-wrapper">
+
+      <table class="clients-table">
+
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Documento</th>
+            <th>Contacto</th>
+            <th>Ubicación</th>
+            <th>Registro</th>
+            <th>Pedidos</th>
+            <th>Total gastado</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let client of paginatedClients;
+              trackBy: trackByClientId
+            "
+          >
+
+            <td>
+
+              <div class="client-information-cell">
+
+                <span class="client-avatar">
+                  {{ getInitials(client) }}
+                </span>
+
+                <div>
+                  <strong>
+                    {{ getFullName(client) }}
+                  </strong>
+
+                  <span>
+                    {{ client.code }}
+                  </span>
+                </div>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              <div class="document-cell">
+
+                <span>
+                  {{ client.documentType }}
+                </span>
+
+                <strong>
+                  {{ client.documentNumber }}
+                </strong>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              <div class="contact-cell">
+
+                <span>
+                  <span class="material-symbols-outlined">
+                    call
+                  </span>
+
+                  {{ client.phone }}
+                </span>
+
+                <span>
+                  <span class="material-symbols-outlined">
+                    mail
+                  </span>
+
+                  {{ client.email }}
+                </span>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              <div class="location-cell">
+
+                <span class="material-symbols-outlined">
+                  location_on
+                </span>
+
+                <span>
+                  {{ getLocationText(client) }}
+                </span>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              <div class="date-cell">
+
+                <strong>
+                  {{ formatDate(client.registrationDate) }}
+                </strong>
+
+                <span>
+                  Último pedido:
+                  {{ formatDate(client.lastOrderDate) }}
+                </span>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              <span
+                class="orders-badge"
+                [class.without-orders]="
+                  client.orderCount === 0
+                "
+              >
+                <span class="material-symbols-outlined">
+                  shopping_bag
+                </span>
+
+                {{ client.orderCount }}
+              </span>
+
+            </td>
+
+            <td>
+
+              <strong class="total-spent">
+                {{ formatCurrency(client.totalSpent) }}
+              </strong>
+
+            </td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="getStatusClass(client.status)"
+              >
+                <span class="status-dot"></span>
+
+                {{ client.status }}
+              </span>
+
+            </td>
+
+            <td>
+
+              <div class="actions-cell">
+
+                <button
+                  type="button"
+                  class="table-action-button view"
+                  title="Ver cliente"
+                  (click)="viewClient(client)"
+                >
+                  <span class="material-symbols-outlined">
+                    visibility
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="table-action-button edit"
+                  title="Editar cliente"
+                  (click)="openEditClient(client)"
+                >
+                  <span class="material-symbols-outlined">
+                    edit
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="table-action-button status"
+                  title="Activar o desactivar"
+                  (click)="toggleClientStatus(client)"
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      client.status === 'Activo'
+                        ? 'person_off'
+                        : 'person'
+                    }}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="table-action-button block"
+                  title="Bloquear o desbloquear"
+                  (click)="blockClient(client)"
+                >
+                  <span class="material-symbols-outlined">
+                    {{
+                      client.status === 'Bloqueado'
+                        ? 'lock_open'
+                        : 'block'
+                    }}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="table-action-button delete"
+                  title="Eliminar cliente"
+                  (click)="removeClient(client)"
+                >
+                  <span class="material-symbols-outlined">
+                    delete
+                  </span>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="paginatedClients.length === 0">
+
+            <td
+              colspan="9"
+              class="empty-state-cell"
+            >
+              <span class="material-symbols-outlined">
+                person_search
+              </span>
+
+              <strong>
+                No se encontraron clientes
+              </strong>
+
+              <p>
+                Modifica o limpia los filtros de búsqueda.
+              </p>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <footer class="table-card-footer">
+
+      <span>
+        Mostrando
+        <strong>{{ showingFrom }}</strong>
+        -
+        <strong>{{ showingTo }}</strong>
+        de
+        <strong>{{ filteredClients.length }}</strong>
+        clientes
+      </span>
+
+      <div class="pagination">
+
+        <button
+          type="button"
+          aria-label="Página anterior"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+        >
+          <span class="material-symbols-outlined">
+            chevron_left
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="active-page"
+        >
+          {{ currentPage }}
+        </button>
+
+        <button
+          type="button"
+          aria-label="Página siguiente"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          <span class="material-symbols-outlined">
+            chevron_right
+          </span>
+        </button>
+
+      </div>
+
+    </footer>
+
+  </section>
+
+  <!-- MODAL REGISTRO Y EDICIÓN -->
+
+  <div
+    *ngIf="isClientModalOpen"
+    class="client-modal-overlay"
+    (click)="closeClientModal()"
+  >
+
+    <section
+      class="client-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="clientModalTitle"
+      (click)="$event.stopPropagation()"
+    >
+
+      <header class="client-modal-header">
+
+        <div>
+          <span class="modal-eyebrow">
+            Gestión de clientes
+          </span>
+
+          <h2 id="clientModalTitle">
+            {{
+              isEditingClient
+                ? 'Editar cliente'
+                : 'Registrar cliente'
+            }}
+          </h2>
+
+          <p>
+            Completa los datos personales y de contacto.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close-button"
+          aria-label="Cerrar"
+          (click)="closeClientModal()"
+        >
+          <span class="material-symbols-outlined">
+            close
+          </span>
+        </button>
+
+      </header>
+
+      <div class="client-form-grid">
+
+        <div class="form-field">
+
+          <label for="clientNames">
+            Nombres
+          </label>
+
+          <input
+            id="clientNames"
+            type="text"
+            maxlength="80"
+            placeholder="Nombres del cliente"
+            [(ngModel)]="clientForm.names"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientSurnames">
+            Apellidos
+          </label>
+
+          <input
+            id="clientSurnames"
+            type="text"
+            maxlength="100"
+            placeholder="Apellidos del cliente"
+            [(ngModel)]="clientForm.surnames"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="documentType">
+            Tipo de documento
+          </label>
+
+          <div class="select-wrapper">
+
+            <select
+              id="documentType"
+              [(ngModel)]="clientForm.documentType"
+            >
+              <option
+                *ngFor="let type of documentTypeOptions"
+                [value]="type"
+              >
+                {{ type }}
+              </option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="documentNumber">
+            Número de documento
+          </label>
+
+          <input
+            id="documentNumber"
+            type="text"
+            maxlength="15"
+            placeholder="Número de documento"
+            [(ngModel)]="clientForm.documentNumber"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientPhone">
+            Teléfono
+          </label>
+
+          <input
+            id="clientPhone"
+            type="tel"
+            maxlength="20"
+            placeholder="987 654 321"
+            [(ngModel)]="clientForm.phone"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientEmail">
+            Correo electrónico
+          </label>
+
+          <input
+            id="clientEmail"
+            type="email"
+            maxlength="120"
+            placeholder="cliente@correo.com"
+            [(ngModel)]="clientForm.email"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientDepartmentForm">
+            Departamento
+          </label>
+
+          <div class="select-wrapper">
+
+            <select
+              id="clientDepartmentForm"
+              [(ngModel)]="clientForm.department"
+            >
+              <option value="">
+                Seleccionar departamento
+              </option>
+
+              <option
+                *ngFor="let department of departmentOptions"
+                [value]="department"
+              >
+                {{ department }}
+              </option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientProvince">
+            Provincia
+          </label>
+
+          <input
+            id="clientProvince"
+            type="text"
+            maxlength="80"
+            placeholder="Provincia"
+            [(ngModel)]="clientForm.province"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientDistrict">
+            Distrito
+          </label>
+
+          <input
+            id="clientDistrict"
+            type="text"
+            maxlength="80"
+            placeholder="Distrito"
+            [(ngModel)]="clientForm.district"
+          />
+
+        </div>
+
+        <div class="form-field">
+
+          <label for="clientRegistrationDate">
+            Fecha de registro
+          </label>
+
+          <input
+            id="clientRegistrationDate"
+            type="date"
+            [(ngModel)]="clientForm.registrationDate"
+          />
+
+        </div>
+
+        <div class="form-field form-field-full">
+
+          <label for="clientAddress">
+            Dirección
+          </label>
+
+          <input
+            id="clientAddress"
+            type="text"
+            maxlength="160"
+            placeholder="Dirección completa"
+            [(ngModel)]="clientForm.address"
+          />
+
+        </div>
+
+        <div class="form-field form-field-full">
+
+          <label for="clientStatusForm">
+            Estado de la cuenta
+          </label>
+
+          <div class="select-wrapper">
+
+            <select
+              id="clientStatusForm"
+              [(ngModel)]="clientForm.status"
+            >
+              <option
+                *ngFor="let status of statusOptions"
+                [value]="status"
+              >
+                {{ status }}
+              </option>
+            </select>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer class="client-modal-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeClientModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="save-client-button"
+          (click)="saveClient()"
+        >
+          <span class="material-symbols-outlined">
+            save
+          </span>
+
+          {{
+            isEditingClient
+              ? 'Guardar cambios'
+              : 'Registrar cliente'
+          }}
+        </button>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+  <!-- MODAL DETALLE -->
+
+  <div
+    *ngIf="
+      isClientDetailOpen &&
+      selectedClient as client
+    "
+    class="client-modal-overlay"
+    (click)="closeClientDetail()"
+  >
+
+    <section
+      class="client-detail-modal"
+      role="dialog"
+      aria-modal="true"
+      (click)="$event.stopPropagation()"
+    >
+
+      <header class="client-detail-header">
+
+        <div class="detail-client-main">
+
+          <span class="detail-avatar">
+            {{ getInitials(client) }}
+          </span>
+
+          <div>
+            <span>{{ client.code }}</span>
+
+            <h2>
+              {{ getFullName(client) }}
+            </h2>
+
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(client.status)"
+            >
+              <span class="status-dot"></span>
+              {{ client.status }}
+            </span>
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="modal-close-button"
+          (click)="closeClientDetail()"
+        >
+          <span class="material-symbols-outlined">
+            close
+          </span>
+        </button>
+
+      </header>
+
+      <div class="client-detail-content">
+
+        <article class="detail-stat-card">
+          <span class="material-symbols-outlined">
+            shopping_bag
+          </span>
+
+          <div>
+            <small>Pedidos realizados</small>
+            <strong>{{ client.orderCount }}</strong>
+          </div>
+        </article>
+
+        <article class="detail-stat-card">
+          <span class="material-symbols-outlined">
+            payments
+          </span>
+
+          <div>
+            <small>Total gastado</small>
+            <strong>
+              {{ formatCurrency(client.totalSpent) }}
+            </strong>
+          </div>
+        </article>
+
+        <div class="client-detail-grid">
+
+          <div class="detail-item">
+            <small>Documento</small>
+            <strong>
+              {{ client.documentType }}
+              {{ client.documentNumber }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <small>Teléfono</small>
+            <strong>{{ client.phone }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <small>Correo</small>
+            <strong>{{ client.email }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <small>Ubicación</small>
+            <strong>
+              {{ getLocationText(client) }}
+            </strong>
+          </div>
+
+          <div class="detail-item detail-item-full">
+            <small>Dirección</small>
+            <strong>
+              {{ client.address || 'Sin dirección registrada' }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <small>Fecha de registro</small>
+            <strong>
+              {{ formatDate(client.registrationDate) }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <small>Último pedido</small>
+            <strong>
+              {{ formatDate(client.lastOrderDate) }}
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer class="client-detail-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeClientDetail()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          type="button"
+          class="save-client-button"
+          (click)="
+            closeClientDetail();
+            openEditClient(client)
+          "
+        >
+          <span class="material-symbols-outlined">
+            edit
+          </span>
+
+          Editar cliente
+        </button>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+</div>

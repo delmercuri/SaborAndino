@@ -1,0 +1,44 @@
+# FRONTEND ANGULAR
+**/node_modules/
+**/.angular/
+**/dist/
+**/coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# BACKEND SPRING BOOT
+**/target/
+*.class
+*.jar
+*.war
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# LOGS
+*.log
+logs/
+
+# SISTEMA
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ARCHIVOS SENSIBLES
+.env
+.env.*
+application-local.properties
+application-prod.properties
+application-secret.properties
+secrets/
+*.pem
+*.key
+
+# ARCHIVOS SUBIDOS
+**/uploads/

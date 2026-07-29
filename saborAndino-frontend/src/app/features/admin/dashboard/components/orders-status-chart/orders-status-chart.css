@@ -1,0 +1,371 @@
+/* =========================================================
+   COMPONENTE: PEDIDOS POR ESTADO
+========================================================= */
+
+:host {
+  display: block;
+
+  --orders-wine: #8b1021;
+  --orders-wine-dark: #570812;
+  --orders-gold: #c89a3a;
+
+  --orders-blue: #4d7890;
+  --orders-orange: #b77834;
+  --orders-green: #55804f;
+
+  --orders-white: #ffffff;
+  --orders-text: #302823;
+  --orders-muted: #8a7e76;
+  --orders-border: #e8ded4;
+}
+
+:host,
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+button {
+  font: inherit;
+}
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.orders-chart-card {
+  width: 100%;
+  min-height: 410px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--orders-border);
+  border-radius: 17px;
+
+  background: var(--orders-white);
+
+  box-shadow:
+    0 13px 30px rgba(61, 41, 29, 0.07);
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.chart-card-header {
+  min-height: 78px;
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+
+  border-bottom: 1px solid #eee6df;
+}
+
+.chart-title-group {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-header-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--orders-wine-dark),
+      var(--orders-wine)
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 18px rgba(139, 16, 33, 0.18);
+}
+
+.chart-header-icon .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.chart-title-group h2 {
+  margin: 0;
+
+  color: var(--orders-text);
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.chart-title-group p {
+  margin: 4px 0 0;
+
+  color: var(--orders-muted);
+
+  font-size: 10px;
+}
+
+.chart-options-button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  flex: 0 0 38px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--orders-border);
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #9c9189;
+
+  cursor: pointer;
+}
+
+.chart-options-button .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* =========================================================
+   CONTENIDO
+========================================================= */
+
+.chart-card-content {
+  min-height: 310px;
+  padding: 22px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(170px, 0.72fr)
+    minmax(270px, 1.28fr);
+
+  align-items: center;
+  gap: 30px;
+}
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+.orders-total {
+  min-height: 220px;
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  border: 1px solid #eadfd5;
+  border-radius: 16px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(200, 154, 58, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #fffdf9,
+      #faf5ee
+    );
+
+  text-align: center;
+}
+
+.orders-total-icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background: #f3e4e6;
+  color: var(--orders-wine);
+}
+
+.orders-total-icon .material-symbols-outlined {
+  font-size: 29px;
+}
+
+.orders-total > div {
+  margin-top: 16px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.orders-total small {
+  color: var(--orders-muted);
+
+  font-size: 9px;
+}
+
+.orders-total strong {
+  margin-top: 7px;
+
+  color: var(--orders-wine);
+
+  font-family:
+    'Playfair Display',
+    Georgia,
+    serif;
+
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.orders-total div > span {
+  margin-top: 7px;
+
+  color: #9a8e86;
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+.orders-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-status-item {
+  min-width: 0;
+}
+
+.status-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.status-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #5d534d;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.status-heading strong {
+  color: var(--orders-text);
+
+  font-size: 12px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+
+  border-radius: 50%;
+}
+
+.status-dot.pending,
+.status-progress span.pending {
+  background: var(--orders-gold);
+}
+
+.status-dot.preparing,
+.status-progress span.preparing {
+  background: var(--orders-blue);
+}
+
+.status-dot.ready,
+.status-progress span.ready {
+  background: var(--orders-orange);
+}
+
+.status-dot.delivered,
+.status-progress span.delivered {
+  background: var(--orders-green);
+}
+
+.status-progress {
+  width: 100%;
+  height: 8px;
+  margin-top: 7px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #eee8e2;
+}
+
+.status-progress span {
+  height: 100%;
+
+  display: block;
+
+  border-radius: inherit;
+}
+
+.order-status-item > small {
+  display: block;
+  margin-top: 5px;
+
+  color: #9d928a;
+
+  font-size: 8px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+  .chart-card-content {
+    grid-template-columns: 1fr;
+  }
+
+  .orders-total {
+    min-height: 170px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .orders-chart-card {
+    min-height: auto;
+  }
+
+  .chart-card-header {
+    padding: 16px;
+  }
+
+  .chart-card-content {
+    padding: 17px;
+  }
+
+  .orders-total {
+    min-height: 150px;
+  }
+}

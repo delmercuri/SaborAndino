@@ -1,0 +1,26 @@
+<div class="reservations-page">
+
+  <!-- PORTADA -->
+  <app-reservations-hero
+    [reservationDate]="processState.date"
+    [selectedTimeLabel]="processState.timeLabel"
+    [peopleCount]="processState.people"
+    (continueRequested)="scrollToReservationProcess()"
+  ></app-reservations-hero>
+
+  <!-- PROGRESO -->
+  <app-reservations-progress
+    [currentStep]="processState.currentStep"
+    [totalSteps]="3"
+    [stepOneCompleted]="processState.stepOneCompleted"
+    [stepTwoCompleted]="processState.stepTwoCompleted"
+    [isReservationConfirmed]="processState.confirmed"
+    (stepSelected)="goToStep($event)"
+  ></app-reservations-progress>
+
+  <!-- PASOS 1, 2 Y 3 -->
+  <app-reservation-process
+    (stateChange)="onProcessStateChange($event)"
+  ></app-reservation-process>
+
+</div>

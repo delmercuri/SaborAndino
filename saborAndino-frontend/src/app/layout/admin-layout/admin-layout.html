@@ -1,0 +1,29 @@
+<div
+  class="admin-layout"
+  [class.sidebar-collapsed]="sidebarCollapsed"
+  [class.mobile-sidebar-open]="mobileSidebarOpen"
+>
+  <button
+    *ngIf="mobileSidebarOpen"
+    type="button"
+    class="admin-sidebar-overlay"
+    aria-label="Cerrar menú administrativo"
+    (click)="closeMobileSidebar()"
+  ></button>
+
+  <div class="admin-sidebar-shell">
+    <app-admin-sidebar
+      [collapsed]="sidebarCollapsed"
+    ></app-admin-sidebar>
+  </div>
+
+  <div class="admin-main">
+    <app-admin-topbar
+      (menuRequested)="toggleSidebar()"
+    ></app-admin-topbar>
+
+    <main class="admin-content" (click)="closeMobileSidebar()">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

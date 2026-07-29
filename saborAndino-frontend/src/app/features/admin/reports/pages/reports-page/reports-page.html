@@ -1,0 +1,1133 @@
+<div class="reports-page">
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="reports-heading">
+
+    <div class="reports-heading-content">
+
+      <span class="reports-eyebrow">
+        Análisis administrativo
+      </span>
+
+      <h1>
+        Reportes
+      </h1>
+
+      <p>
+        Consulta las ventas, pedidos, clientes,
+        reservas y rendimiento de cada sucursal.
+      </p>
+
+    </div>
+
+    <div class="reports-heading-actions">
+
+      <button
+        type="button"
+        class="print-report-button"
+        (click)="printReport()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          print
+        </span>
+
+        Imprimir
+      </button>
+
+      <button
+        type="button"
+        class="export-report-button"
+        (click)="exportReport()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          download
+        </span>
+
+        Exportar reporte
+      </button>
+
+    </div>
+
+  </header>
+
+  <!-- =====================================================
+       FILTROS
+  ====================================================== -->
+
+  <section class="reports-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+
+        <h2>
+          Filtros del reporte
+        </h2>
+
+        <p>
+          Selecciona el periodo, la sucursal,
+          el estado y el método de pago.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="resetFilters()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          restart_alt
+        </span>
+
+        Restablecer
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <div class="filter-field">
+
+        <label for="reportDateFrom">
+          Fecha inicial
+        </label>
+
+        <input
+          id="reportDateFrom"
+          type="date"
+          [(ngModel)]="dateFrom"
+        />
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="reportDateTo">
+          Fecha final
+        </label>
+
+        <input
+          id="reportDateTo"
+          type="date"
+          [(ngModel)]="dateTo"
+        />
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="reportBranch">
+          Sucursal
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="reportBranch"
+            [(ngModel)]="selectedBranch"
+          >
+            <option value="">
+              Todas las sucursales
+            </option>
+
+            <option
+              *ngFor="let branch of branchOptions"
+              [value]="branch"
+            >
+              {{ branch }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="reportStatus">
+          Estado del pedido
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="reportStatus"
+            [(ngModel)]="selectedStatus"
+          >
+            <option value="">
+              Todos los estados
+            </option>
+
+            <option
+              *ngFor="let status of statusOptions"
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="reportPayment">
+          Método de pago
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="reportPayment"
+            [(ngModel)]="selectedPaymentMethod"
+          >
+            <option value="">
+              Todos los métodos
+            </option>
+
+            <option
+              *ngFor="
+                let paymentMethod
+                of paymentMethodOptions
+              "
+              [value]="paymentMethod"
+            >
+              {{ paymentMethod }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       INDICADORES PRINCIPALES
+  ====================================================== -->
+
+  <section
+    class="reports-summary-grid"
+    aria-label="Resumen general"
+  >
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          payments
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Ventas totales
+        </small>
+
+        <strong>
+          {{ formatCurrency(totalSales) }}
+        </strong>
+
+        <span>
+          Ingresos sin pedidos cancelados
+        </span>
+
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-blue">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          shopping_bag
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Pedidos registrados
+        </small>
+
+        <strong>
+          {{ totalOrders }}
+        </strong>
+
+        <span>
+          {{ completedOrders }} entregados
+        </span>
+
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          groups
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Clientes registrados
+        </small>
+
+        <strong>
+          {{ registeredClients }}
+        </strong>
+
+        <span>
+          Dentro del periodo seleccionado
+        </span>
+
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          event_available
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Reservas registradas
+        </small>
+
+        <strong>
+          {{ totalReservations }}
+        </strong>
+
+        <span>
+          En las sucursales seleccionadas
+        </span>
+
+      </div>
+
+      <span class="summary-decoration"></span>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       INDICADORES SECUNDARIOS
+  ====================================================== -->
+
+  <section class="secondary-indicators">
+
+    <article>
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        receipt_long
+      </span>
+
+      <div>
+        <small>Ticket promedio</small>
+
+        <strong>
+          {{ formatCurrency(averageTicket) }}
+        </strong>
+      </div>
+
+    </article>
+
+    <article>
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        restaurant
+      </span>
+
+      <div>
+        <small>Productos vendidos</small>
+
+        <strong>
+          {{ totalProductsSold }}
+        </strong>
+      </div>
+
+    </article>
+
+    <article>
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        task_alt
+      </span>
+
+      <div>
+        <small>Pedidos completados</small>
+
+        <strong>
+          {{ completedOrders }}
+        </strong>
+      </div>
+
+    </article>
+
+    <article>
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        cancel
+      </span>
+
+      <div>
+        <small>Tasa de cancelación</small>
+
+        <strong>
+          {{ cancellationRate | number:'1.0-1' }}%
+        </strong>
+      </div>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       VENTAS MENSUALES Y ESTADOS
+  ====================================================== -->
+
+  <section class="reports-main-grid">
+
+    <!-- VENTAS MENSUALES -->
+
+    <article class="report-panel monthly-sales-panel">
+
+      <header class="report-panel-header">
+
+        <div>
+
+          <span class="panel-icon panel-wine">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              monitoring
+            </span>
+
+          </span>
+
+          <div>
+            <h2>Ventas por mes</h2>
+
+            <p>
+              Evolución de los ingresos en el periodo.
+            </p>
+          </div>
+
+        </div>
+
+        <strong class="panel-total">
+          {{ formatCurrency(totalSales) }}
+        </strong>
+
+      </header>
+
+      <div
+        *ngIf="monthlyReport.length > 0"
+        class="monthly-chart"
+      >
+
+        <div
+          *ngFor="
+            let month of monthlyReport;
+            trackBy: trackByMonth
+          "
+          class="monthly-column"
+        >
+
+          <span class="monthly-value">
+            {{ formatCurrency(month.sales) }}
+          </span>
+
+          <div class="monthly-bar-area">
+
+            <span
+              class="monthly-bar"
+              [style.height.%]="
+                getMonthlyBarHeight(
+                  month.sales
+                )
+              "
+            ></span>
+
+          </div>
+
+          <strong>
+            {{ month.label }}
+          </strong>
+
+          <small>
+            {{ month.orders }}
+            {{
+              month.orders === 1
+                ? 'pedido'
+                : 'pedidos'
+            }}
+          </small>
+
+        </div>
+
+      </div>
+
+      <div
+        *ngIf="monthlyReport.length === 0"
+        class="empty-report-state"
+      >
+        <span class="material-symbols-outlined">
+          bar_chart_off
+        </span>
+
+        <strong>
+          No hay ventas en este periodo
+        </strong>
+      </div>
+
+    </article>
+
+    <!-- ESTADOS DE PEDIDOS -->
+
+    <article class="report-panel">
+
+      <header class="report-panel-header">
+
+        <div>
+
+          <span class="panel-icon panel-blue">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              checklist
+            </span>
+
+          </span>
+
+          <div>
+            <h2>Estado de pedidos</h2>
+
+            <p>
+              Distribución de los pedidos registrados.
+            </p>
+          </div>
+
+        </div>
+
+      </header>
+
+      <div class="status-report-list">
+
+        <div
+          *ngFor="let statusItem of statusReport"
+          class="status-report-item"
+        >
+
+          <div class="status-report-heading">
+
+            <span
+              class="status-badge"
+              [ngClass]="statusItem.className"
+            >
+              <span class="status-dot"></span>
+
+              {{ statusItem.status }}
+            </span>
+
+            <strong>
+              {{ statusItem.count }}
+            </strong>
+
+          </div>
+
+          <div class="progress-track">
+
+            <span
+              [ngClass]="statusItem.className"
+              [style.width.%]="
+                statusItem.percentage
+              "
+            ></span>
+
+          </div>
+
+          <small>
+            {{
+              statusItem.percentage
+                | number:'1.0-1'
+            }}%
+            del total de pedidos
+          </small>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       RENDIMIENTO POR SUCURSAL
+  ====================================================== -->
+
+  <section class="report-panel branch-performance-panel">
+
+    <header class="report-panel-header">
+
+      <div>
+
+        <span class="panel-icon panel-gold">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            storefront
+          </span>
+
+        </span>
+
+        <div>
+          <h2>Rendimiento por sucursal</h2>
+
+          <p>
+            Comparación entre Lima, Apurímac y Ayacucho.
+          </p>
+        </div>
+
+      </div>
+
+    </header>
+
+    <div class="branch-report-grid">
+
+      <article
+        *ngFor="
+          let branch of branchReport;
+          trackBy: trackByBranch
+        "
+        class="branch-report-card"
+      >
+
+        <header>
+
+          <span class="branch-report-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              location_on
+            </span>
+
+          </span>
+
+          <div>
+            <small>Sucursal</small>
+
+            <h3>
+              {{ branch.branch }}
+            </h3>
+          </div>
+
+        </header>
+
+        <strong class="branch-sales">
+          {{ formatCurrency(branch.sales) }}
+        </strong>
+
+        <div class="branch-progress">
+
+          <span
+            [style.width.%]="
+              getBranchSalesPercentage(
+                branch.sales
+              )
+            "
+          ></span>
+
+        </div>
+
+        <div class="branch-statistics">
+
+          <div>
+            <small>Pedidos</small>
+            <strong>{{ branch.orders }}</strong>
+          </div>
+
+          <div>
+            <small>Reservas</small>
+            <strong>{{ branch.reservations }}</strong>
+          </div>
+
+          <div>
+            <small>Clientes</small>
+            <strong>{{ branch.customers }}</strong>
+          </div>
+
+          <div>
+            <small>Ticket promedio</small>
+
+            <strong>
+              {{ formatCurrency(branch.averageTicket) }}
+            </strong>
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       PRODUCTOS Y MÉTODOS DE PAGO
+  ====================================================== -->
+
+  <section class="reports-secondary-grid">
+
+    <!-- PRODUCTOS MÁS VENDIDOS -->
+
+    <article class="report-panel">
+
+      <header class="report-panel-header">
+
+        <div>
+
+          <span class="panel-icon panel-green">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              restaurant_menu
+            </span>
+
+          </span>
+
+          <div>
+            <h2>Productos más vendidos</h2>
+
+            <p>
+              Clasificación según cantidad vendida.
+            </p>
+          </div>
+
+        </div>
+
+      </header>
+
+      <div
+        *ngIf="productReport.length > 0"
+        class="product-report-list"
+      >
+
+        <div
+          *ngFor="
+            let product of productReport;
+            let position = index;
+            trackBy: trackByProduct
+          "
+          class="product-report-item"
+        >
+
+          <span class="product-position">
+            {{ position + 1 }}
+          </span>
+
+          <div class="product-report-information">
+
+            <div class="product-report-heading">
+
+              <div>
+                <strong>{{ product.name }}</strong>
+                <small>{{ product.category }}</small>
+              </div>
+
+              <div>
+                <strong>
+                  {{ product.quantity }}
+                  unidades
+                </strong>
+
+                <small>
+                  {{ formatCurrency(product.sales) }}
+                </small>
+              </div>
+
+            </div>
+
+            <div class="product-progress">
+
+              <span
+                [style.width.%]="
+                  getProductPercentage(
+                    product.quantity
+                  )
+                "
+              ></span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div
+        *ngIf="productReport.length === 0"
+        class="empty-report-state"
+      >
+        <span class="material-symbols-outlined">
+          inventory_2
+        </span>
+
+        <strong>
+          No hay productos vendidos
+        </strong>
+      </div>
+
+    </article>
+
+    <!-- MÉTODOS DE PAGO -->
+
+    <article class="report-panel">
+
+      <header class="report-panel-header">
+
+        <div>
+
+          <span class="panel-icon panel-blue">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              account_balance_wallet
+            </span>
+
+          </span>
+
+          <div>
+            <h2>Métodos de pago</h2>
+
+            <p>
+              Distribución de los ingresos recibidos.
+            </p>
+          </div>
+
+        </div>
+
+      </header>
+
+      <div class="payment-report-list">
+
+        <article
+          *ngFor="let payment of paymentReport"
+          class="payment-report-item"
+        >
+
+          <span class="payment-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              {{ payment.icon }}
+            </span>
+
+          </span>
+
+          <div class="payment-information">
+
+            <div>
+
+              <strong>
+                {{ payment.paymentMethod }}
+              </strong>
+
+              <small>
+                {{ payment.count }}
+                {{
+                  payment.count === 1
+                    ? 'operación'
+                    : 'operaciones'
+                }}
+              </small>
+
+            </div>
+
+            <div>
+
+              <strong>
+                {{ formatCurrency(payment.amount) }}
+              </strong>
+
+              <small>
+                {{
+                  payment.percentage
+                    | number:'1.0-1'
+                }}%
+              </small>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       DETALLE DE PEDIDOS
+  ====================================================== -->
+
+  <section class="report-panel report-table-panel">
+
+    <header class="report-panel-header">
+
+      <div>
+
+        <span class="panel-icon panel-wine">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            receipt_long
+          </span>
+
+        </span>
+
+        <div>
+          <h2>Detalle de pedidos</h2>
+
+          <p>
+            Últimos movimientos del periodo seleccionado.
+          </p>
+        </div>
+
+      </div>
+
+      <span class="record-count">
+        {{ filteredSales.length }}
+        registros
+      </span>
+
+    </header>
+
+    <div class="report-table-wrapper">
+
+      <table class="report-table">
+
+        <thead>
+
+          <tr>
+            <th>Pedido</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Sucursal</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Pago</th>
+            <th>Importe</th>
+            <th>Estado</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let record of recentSales;
+              trackBy: trackBySaleId
+            "
+          >
+
+            <td>
+              <strong class="order-code">
+                {{ record.orderCode }}
+              </strong>
+            </td>
+
+            <td>
+              {{ formatDate(record.date) }}
+            </td>
+
+            <td>
+              <strong class="customer-name">
+                {{ record.customer }}
+              </strong>
+            </td>
+
+            <td>
+
+              <span class="branch-badge">
+
+                <span class="material-symbols-outlined">
+                  location_on
+                </span>
+
+                {{ record.branch }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <div class="product-cell">
+                <strong>{{ record.product }}</strong>
+                <span>{{ record.category }}</span>
+              </div>
+
+            </td>
+
+            <td>
+              {{ record.quantity }}
+            </td>
+
+            <td>
+
+              <span class="payment-badge">
+
+                <span class="material-symbols-outlined">
+                  {{
+                    getPaymentIcon(
+                      record.paymentMethod
+                    )
+                  }}
+                </span>
+
+                {{ record.paymentMethod }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <strong class="order-amount">
+                {{ formatCurrency(record.amount) }}
+              </strong>
+
+            </td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="
+                  getStatusClass(record.status)
+                "
+              >
+                <span class="status-dot"></span>
+
+                {{ record.status }}
+              </span>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="recentSales.length === 0">
+
+            <td
+              colspan="9"
+              class="empty-table-cell"
+            >
+              <span class="material-symbols-outlined">
+                search_off
+              </span>
+
+              <strong>
+                No se encontraron pedidos
+              </strong>
+
+              <p>
+                Cambia los filtros para consultar otro periodo.
+              </p>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

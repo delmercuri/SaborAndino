@@ -1,0 +1,941 @@
+/* =========================================================
+   COMPONENTE: PORTADA DE SUCURSALES
+========================================================= */
+
+:host {
+  display: block;
+
+  --branches-wine: #8b1021;
+  --branches-wine-dark: #4b050d;
+  --branches-wine-deep: #2e0207;
+
+  --branches-gold: #c89a3a;
+  --branches-gold-dark: #a8751d;
+  --branches-gold-light: #edcb70;
+
+  --branches-white: #ffffff;
+  --branches-green: #76c66b;
+
+  --branches-transition: 0.24s ease;
+}
+
+:host,
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+/* =========================================================
+   PORTADA
+========================================================= */
+
+.branches-hero {
+  width: 100%;
+
+  /*
+   * Barra superior y navegación:
+   * aproximadamente 100px.
+   */
+  height: calc(100vh - 100px);
+  height: calc(100dvh - 100px);
+
+  min-height: 650px;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  background-color: var(--branches-wine-deep);
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(31, 0, 5, 1) 0%,
+      rgba(46, 1, 10, 0.99) 24%,
+      rgba(65, 3, 16, 0.94) 42%,
+      rgba(68, 3, 16, 0.66) 57%,
+      rgba(45, 1, 10, 0.28) 72%,
+      rgba(15, 0, 3, 0.03) 100%
+    ),
+    url("/images/banners/branches-hero-background.png");
+
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: cover;
+
+  color: var(--branches-white);
+
+  font-family:
+    "Poppins",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+/* =========================================================
+   SOMBRA SUPERIOR E INFERIOR
+========================================================= */
+
+.branches-hero-shadow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 38%,
+      rgba(19, 0, 4, 0.12) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(15, 0, 3, 0.05) 0%,
+      transparent 42%,
+      rgba(16, 0, 3, 0.34) 100%
+    );
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.branches-hero-content {
+  width: min(
+    calc(100% - 80px),
+    1450px
+  );
+
+  height: 100%;
+  margin: 0 auto;
+  padding: 34px 55px 40px;
+
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.branches-hero-information {
+  width: min(100%, 670px);
+
+  position: relative;
+  z-index: 3;
+}
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.branches-hero-information h1 {
+  max-width: 650px;
+  margin: 0;
+
+  color: var(--branches-white);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: clamp(
+    52px,
+    4.1vw,
+    68px
+  );
+
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -1.8px;
+
+  text-shadow:
+    0 6px 24px rgba(14, 0, 3, 0.3);
+}
+
+.branches-hero-information h1 span {
+  display: block;
+  margin-top: 7px;
+
+  color: var(--branches-gold-light);
+
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1;
+}
+
+/* =========================================================
+   DESCRIPCIÓN
+========================================================= */
+
+.branches-hero-description {
+  max-width: 610px;
+  margin: 25px 0 0;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 14px;
+  line-height: 1.75;
+
+  text-shadow:
+    0 3px 14px rgba(14, 0, 3, 0.2);
+}
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.branches-hero-actions {
+  margin-top: 26px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.branches-primary-action,
+.branches-secondary-action {
+  min-height: 55px;
+  padding: 0 25px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  border-radius: 11px;
+
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--branches-transition),
+    box-shadow var(--branches-transition),
+    background var(--branches-transition),
+    border-color var(--branches-transition);
+}
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+========================================================= */
+
+.branches-primary-action {
+  min-width: 220px;
+
+  border: 1px solid var(--branches-gold-light);
+
+  background:
+    radial-gradient(
+      circle at 25% 10%,
+      rgba(255, 255, 255, 0.32),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #f2d477 0%,
+      #dea83c 100%
+    );
+
+  color: #392506;
+
+  box-shadow:
+    0 12px 27px rgba(204, 148, 39, 0.27),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
+}
+
+.branches-primary-action:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 17px 34px rgba(204, 148, 39, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.branches-primary-action:active {
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   BOTÓN SECUNDARIO
+========================================================= */
+
+.branches-secondary-action {
+  min-width: 230px;
+
+  border:
+    1px solid rgba(235, 199, 104, 0.64);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(84, 6, 20, 0.74),
+      rgba(44, 1, 8, 0.69)
+    );
+
+  color: var(--branches-white);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 23px rgba(20, 0, 4, 0.13);
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+.branches-secondary-action:hover {
+  border-color:
+    rgba(239, 208, 118, 0.92);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(112, 10, 28, 0.84),
+      rgba(62, 2, 13, 0.81)
+    );
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 15px 29px rgba(20, 0, 4, 0.21);
+}
+
+.branches-secondary-action:active {
+  transform: translateY(-1px);
+}
+
+.branches-primary-action .material-symbols-outlined,
+.branches-secondary-action .material-symbols-outlined {
+  font-size: 20px;
+  line-height: 1;
+
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 550,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+/* =========================================================
+   ACCESIBILIDAD DE LOS BOTONES
+========================================================= */
+
+.branches-primary-action:focus-visible,
+.branches-secondary-action:focus-visible {
+  outline:
+    3px solid rgba(237, 203, 112, 0.7);
+
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   ESTADÍSTICAS
+========================================================= */
+
+.hero-statistics {
+  width: 100%;
+  max-width: 670px;
+  margin-top: 28px;
+
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+/* =========================================================
+   TARJETA DE ESTADÍSTICA
+========================================================= */
+
+.hero-stat-card {
+  min-width: 0;
+  min-height: 84px;
+  padding: 13px 14px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns:
+    45px minmax(0, 1fr);
+
+  align-items: center;
+  gap: 11px;
+
+  border:
+    1px solid rgba(237, 205, 119, 0.26);
+
+  border-radius: 14px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(239, 205, 112, 0.13),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.035)
+    );
+
+  color: var(--branches-white);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 12px 27px rgba(20, 0, 4, 0.17);
+
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+
+  transition:
+    transform var(--branches-transition),
+    border-color var(--branches-transition),
+    background var(--branches-transition),
+    box-shadow var(--branches-transition);
+}
+
+.hero-stat-card::before {
+  content: "";
+
+  width: 58px;
+  height: 2px;
+
+  position: absolute;
+  top: 0;
+  left: 15px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--branches-gold-light),
+      transparent
+    );
+
+  opacity: 0.73;
+}
+
+.hero-stat-card:hover {
+  border-color:
+    rgba(239, 205, 112, 0.54);
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(239, 205, 112, 0.2),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.055)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 17px 35px rgba(20, 0, 4, 0.25),
+    0 0 24px rgba(211, 166, 62, 0.09);
+
+  transform: translateY(-4px);
+}
+
+/* =========================================================
+   ICONO DE LA ESTADÍSTICA
+========================================================= */
+
+.hero-stat-icon {
+  width: 45px;
+  height: 45px;
+  flex: 0 0 45px;
+
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid rgba(238, 202, 105, 0.44);
+
+  border-radius: 12px;
+
+  background:
+    radial-gradient(
+      circle at 26% 20%,
+      rgba(255, 236, 174, 0.25),
+      transparent 37%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(173, 119, 33, 0.45),
+      rgba(91, 48, 18, 0.43)
+    );
+
+  color: #f1cf72;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 18px rgba(13, 0, 2, 0.21);
+
+  transition:
+    transform var(--branches-transition),
+    border-color var(--branches-transition),
+    box-shadow var(--branches-transition);
+}
+
+.hero-stat-icon::before {
+  content: "";
+
+  width: 25px;
+  height: 25px;
+
+  position: absolute;
+  top: -8px;
+  right: -7px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 229, 149, 0.15);
+}
+
+.hero-stat-icon .material-symbols-outlined {
+  position: relative;
+  z-index: 2;
+
+  color: #f1cf72;
+
+  font-size: 22px;
+  line-height: 1;
+
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 24;
+
+  filter:
+    drop-shadow(
+      0 3px 7px rgba(229, 190, 88, 0.2)
+    );
+}
+
+.hero-stat-card:hover .hero-stat-icon {
+  border-color:
+    rgba(245, 213, 126, 0.78);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 11px 23px rgba(13, 0, 2, 0.26),
+    0 0 18px rgba(221, 176, 70, 0.12);
+
+  transform:
+    translateY(-2px)
+    rotate(-2deg);
+}
+
+/* =========================================================
+   INFORMACIÓN DE LA ESTADÍSTICA
+========================================================= */
+
+.hero-stat-information {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-stat-information strong {
+  color: var(--branches-white);
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.hero-stat-information span {
+  margin-top: 5px;
+
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.74);
+
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.3;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ESTADO DISPONIBLE
+========================================================= */
+
+.hero-stat-status {
+  min-height: 18px;
+  padding: 0 6px;
+
+  position: absolute;
+  top: 7px;
+  right: 7px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  border:
+    1px solid rgba(142, 202, 129, 0.21);
+
+  border-radius: 20px;
+
+  background:
+    rgba(77, 133, 68, 0.18);
+
+  color: #c7eac0;
+
+  font-size: 6.5px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.25px;
+}
+
+.hero-stat-status-dot {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+
+  border-radius: 50%;
+
+  background: var(--branches-green);
+
+  box-shadow:
+    0 0 0 3px rgba(117, 196, 104, 0.1),
+    0 0 8px rgba(117, 196, 104, 0.5);
+}
+
+/* =========================================================
+   DECORACIÓN DE LA TARJETA
+========================================================= */
+
+.hero-stat-decoration {
+  width: 74px;
+  height: 74px;
+
+  position: absolute;
+  right: -36px;
+  bottom: -45px;
+
+  border:
+    1px solid rgba(234, 199, 105, 0.09);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   PANTALLAS MEDIANAS
+========================================================= */
+
+@media (max-width: 1250px) {
+
+  .branches-hero-content {
+    width: min(
+      calc(100% - 60px),
+      1180px
+    );
+
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+
+  .branches-hero-information {
+    width: min(100%, 620px);
+  }
+
+  .branches-hero-information h1 {
+    font-size: clamp(
+      49px,
+      5vw,
+      62px
+    );
+  }
+
+  .hero-statistics {
+    max-width: 620px;
+  }
+
+  .hero-stat-card {
+    padding-right: 11px;
+    padding-left: 11px;
+
+    grid-template-columns:
+      42px minmax(0, 1fr);
+
+    gap: 9px;
+  }
+
+  .hero-stat-icon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .hero-stat-information strong {
+    font-size: 21px;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .branches-hero {
+    height: auto;
+    min-height: 650px;
+
+    background-position: 68% center;
+  }
+
+  .branches-hero::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background:
+      linear-gradient(
+        90deg,
+        rgba(38, 0, 7, 0.97) 0%,
+        rgba(49, 1, 10, 0.92) 54%,
+        rgba(33, 0, 6, 0.62) 100%
+      );
+
+    pointer-events: none;
+  }
+
+  .branches-hero-content {
+    min-height: 650px;
+  }
+}
+
+/* =========================================================
+   TABLET PEQUEÑA
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .branches-hero {
+    background-position: 72% center;
+  }
+
+  .branches-hero-content {
+    width: min(
+      calc(100% - 34px),
+      760px
+    );
+
+    padding: 48px 0;
+  }
+
+  .branches-hero-information {
+    width: 100%;
+  }
+
+  .branches-hero-information h1 {
+    font-size: clamp(
+      45px,
+      9vw,
+      58px
+    );
+  }
+
+  .branches-hero-description {
+    max-width: 560px;
+  }
+
+  .hero-statistics {
+    max-width: 620px;
+  }
+
+  .hero-stat-card {
+    min-height: 78px;
+  }
+
+  .hero-stat-status {
+    display: none;
+  }
+}
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .branches-hero {
+    min-height: 760px;
+
+    background-position: 65% center;
+  }
+
+  .branches-hero-content {
+    width: min(
+      calc(100% - 28px),
+      620px
+    );
+
+    min-height: 760px;
+    padding: 42px 0;
+  }
+
+  .branches-hero-information h1 {
+    font-size: clamp(
+      40px,
+      11vw,
+      50px
+    );
+
+    letter-spacing: -1px;
+  }
+
+  .branches-hero-description {
+    margin-top: 23px;
+
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .branches-hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .branches-primary-action,
+  .branches-secondary-action {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-statistics {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+  }
+
+  .hero-stat-card {
+    width: 100%;
+    min-height: 70px;
+
+    grid-template-columns:
+      43px minmax(0, 1fr);
+
+    padding: 11px 13px;
+  }
+
+  .hero-stat-icon {
+    width: 43px;
+    height: 43px;
+    flex-basis: 43px;
+  }
+
+  .hero-stat-information span {
+    font-size: 9px;
+
+    white-space: normal;
+  }
+
+  .hero-stat-status {
+    display: inline-flex;
+  }
+}
+
+/* =========================================================
+   CELULAR PEQUEÑO
+========================================================= */
+
+@media (max-width: 460px) {
+
+  .branches-hero {
+    min-height: 800px;
+  }
+
+  .branches-hero-content {
+    width: min(
+      calc(100% - 22px),
+      430px
+    );
+
+    min-height: 800px;
+    padding: 36px 0;
+  }
+
+  .branches-hero-information h1 {
+    font-size: 38px;
+  }
+
+  .branches-hero-description {
+    font-size: 12px;
+  }
+
+  .branches-primary-action,
+  .branches-secondary-action {
+    min-height: 52px;
+
+    font-size: 12px;
+  }
+
+  .hero-stat-status {
+    position: static;
+
+    width: max-content;
+    margin-top: 5px;
+
+    grid-column: 2;
+  }
+}
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .branches-primary-action,
+  .branches-secondary-action,
+  .hero-stat-card,
+  .hero-stat-icon {
+    transition: none;
+  }
+}

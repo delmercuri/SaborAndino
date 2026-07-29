@@ -1,0 +1,1040 @@
+/* =========================================================
+   COMPONENTE: LISTADO DE SUCURSALES
+========================================================= */
+
+:host {
+  display: block;
+
+  --branches-wine: #8b1021;
+  --branches-wine-dark: #570812;
+  --branches-wine-light: #b32639;
+
+  --branches-gold: #c89a3a;
+  --branches-gold-dark: #9d7323;
+
+  --branches-cream: #f8f4ed;
+  --branches-white: #ffffff;
+  --branches-text: #302823;
+  --branches-muted: #7f746c;
+  --branches-border: #e6dbcf;
+}
+
+/* =========================================================
+   SECCIÓN
+========================================================= */
+
+.branches-list-section {
+  width: 100%;
+  padding: 58px 0 78px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(200, 154, 58, 0.06),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      #faf7f2,
+      var(--branches-cream)
+    );
+
+  color: var(--branches-text);
+}
+
+.branches-list-container {
+  width: min(
+    calc(100% - 64px),
+    1450px
+  );
+  margin: 0 auto;
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.branches-list-heading {
+  margin-bottom: 26px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.branches-list-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+
+  color: var(--branches-gold-dark);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  text-transform: uppercase;
+}
+
+.branches-list-heading h2 {
+  margin: 0;
+
+  color: #352d29;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: clamp(
+    39px,
+    3vw,
+    50px
+  );
+
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -1px;
+}
+
+.branches-list-heading p {
+  margin: 8px 0 0;
+
+  color: var(--branches-muted);
+
+  font-size: 11px;
+}
+
+.branches-list-heading p strong {
+  color: var(--branches-wine);
+}
+
+/* =========================================================
+   RESUMEN DE ABIERTAS
+========================================================= */
+
+.branches-open-summary {
+  min-width: 140px;
+  min-height: 50px;
+  padding: 10px 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid #d7e7d4;
+  border-radius: 11px;
+
+  background: #edf7eb;
+}
+
+.branches-open-summary > span {
+  width: 9px;
+  height: 9px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #5f945a;
+
+  box-shadow:
+    0 0 0 5px rgba(95, 148, 90, 0.12);
+}
+
+.branches-open-summary > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.branches-open-summary strong {
+  color: #477344;
+
+  font-size: 10px;
+}
+
+.branches-open-summary small {
+  margin-top: 3px;
+
+  color: #789174;
+
+  font-size: 8px;
+}
+
+/* =========================================================
+   CARRUSEL
+========================================================= */
+
+.branches-carousel {
+  width: 100%;
+  padding: 0 55px;
+
+  position: relative;
+}
+
+.branches-carousel-track {
+  width: 100%;
+  padding: 5px 3px 22px;
+
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.branches-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tres tarjetas visibles */
+
+.branch-card {
+  width:
+    calc((100% - 40px) / 3);
+  min-width:
+    calc((100% - 40px) / 3);
+
+  flex:
+    0 0 calc((100% - 40px) / 3);
+
+  scroll-snap-align: start;
+}
+
+/* =========================================================
+   FLECHAS
+========================================================= */
+
+.branches-carousel-arrow {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  position: absolute;
+  top: 45%;
+  z-index: 20;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid rgba(139, 16, 33, 0.17);
+  border-radius: 50%;
+
+  background: var(--branches-white);
+  color: var(--branches-wine);
+
+  box-shadow:
+    0 12px 30px rgba(48, 31, 23, 0.17);
+
+  cursor: pointer;
+
+  transform: translateY(-50%);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.branches-carousel-arrow-left {
+  left: 0;
+}
+
+.branches-carousel-arrow-right {
+  right: 0;
+}
+
+.branches-carousel-arrow:hover {
+  background: var(--branches-wine);
+  color: var(--branches-white);
+
+  transform:
+    translateY(-50%)
+    scale(1.07);
+}
+
+.branches-carousel-arrow
+.material-symbols-outlined {
+  font-size: 29px;
+}
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.branch-card {
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  border:
+    1px solid var(--branches-border);
+  border-radius: 18px;
+
+  background: var(--branches-white);
+
+  box-shadow:
+    0 10px 26px rgba(55, 38, 29, 0.075);
+
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    border-color 0.24s ease;
+}
+
+.branch-card:hover {
+  border-color:
+    rgba(139, 16, 33, 0.2);
+
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 22px 46px rgba(55, 38, 29, 0.14);
+}
+
+/* =========================================================
+   IMAGEN
+========================================================= */
+
+.branch-card-visual {
+  width: 100%;
+  height: 245px;
+
+  position: relative;
+  overflow: hidden;
+
+  background: #ded2c7;
+}
+
+.branch-card-image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  transition:
+    transform 0.45s ease,
+    filter 0.45s ease;
+}
+
+.branch-card:hover .branch-card-image {
+  transform: scale(1.045);
+
+  filter:
+    saturate(1.05)
+    contrast(1.02);
+}
+
+.branch-card-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 6, 4, 0.03),
+      transparent 45%,
+      rgba(20, 6, 4, 0.52) 100%
+    );
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   ETIQUETAS
+========================================================= */
+
+.branch-status-badge,
+.branch-featured-badge {
+  min-height: 34px;
+  padding: 0 13px;
+
+  position: absolute;
+  top: 14px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.branch-status-badge {
+  left: 14px;
+
+  background: rgba(239, 249, 237, 0.95);
+  color: #4e7e49;
+}
+
+.branch-status-badge > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #599454;
+}
+
+.branch-status-badge.closed {
+  background: rgba(249, 236, 236, 0.96);
+  color: #9c4c4c;
+}
+
+.branch-status-badge.closed > span {
+  background: #a94a4a;
+}
+
+.branch-featured-badge {
+  right: 14px;
+
+  border:
+    1px solid rgba(206, 158, 50, 0.25);
+
+  background: rgba(255, 250, 232, 0.96);
+  color: #9d721a;
+}
+
+.branch-featured-badge
+.material-symbols-outlined {
+  font-size: 17px;
+
+  font-variation-settings:
+    "FILL" 1;
+}
+
+/* =========================================================
+   BOTÓN SOBRE IMAGEN
+========================================================= */
+
+.branch-image-location-button {
+  min-height: 40px;
+  padding: 0 16px;
+
+  position: absolute;
+  left: 16px;
+  bottom: 15px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.31);
+  border-radius: 999px;
+
+  background:
+    rgba(92, 5, 18, 0.9);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 9px 22px rgba(30, 11, 7, 0.22);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+.branch-image-location-button
+.material-symbols-outlined {
+  color: #efca68;
+
+  font-size: 18px;
+}
+
+/* =========================================================
+   CUERPO
+========================================================= */
+
+.branch-card-body {
+  padding: 18px 18px 16px;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.branch-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 13px;
+}
+
+.branch-district {
+  display: block;
+  margin-bottom: 6px;
+
+  color: var(--branches-gold-dark);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.branch-card-title-row h3 {
+  margin: 0;
+
+  color: #37302c;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+/* =========================================================
+   CALIFICACIÓN
+========================================================= */
+
+.branch-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  flex-shrink: 0;
+}
+
+.branch-rating
+.material-symbols-outlined {
+  color: #d19a28;
+
+  font-size: 16px;
+
+  font-variation-settings:
+    "FILL" 1;
+}
+
+.branch-rating strong {
+  color: #524a44;
+
+  font-size: 9px;
+}
+
+.branch-rating small {
+  color: #9a9088;
+
+  font-size: 7px;
+}
+
+/* =========================================================
+   DESCRIPCIÓN
+========================================================= */
+
+.branch-description {
+  min-height: 47px;
+  margin: 16px 0 0;
+
+  color: var(--branches-muted);
+
+  font-size: 9px;
+  line-height: 1.65;
+}
+
+/* =========================================================
+   CONTACTO
+========================================================= */
+
+.branch-contact-information {
+  margin-top: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.branch-contact-information > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.branch-information-icon {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: #f7eee9;
+  color: var(--branches-wine);
+}
+
+.branch-information-icon
+.material-symbols-outlined {
+  font-size: 18px;
+}
+
+.branch-contact-information > div > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.branch-contact-information strong {
+  color: #554b44;
+
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.branch-contact-information span {
+  margin-top: 3px;
+
+  color: #9a8f86;
+
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   SERVICIOS
+========================================================= */
+
+.branch-services {
+  margin-top: 17px;
+  padding-top: 13px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  border-top:
+    1px solid #eee5dc;
+}
+
+.branch-services > span {
+  min-height: 28px;
+  padding: 0 9px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  border:
+    1px solid #e3d8ce;
+  border-radius: 999px;
+
+  background: #fcfaf7;
+  color: #746a63;
+
+  font-size: 7.5px;
+}
+
+.branch-services
+.material-symbols-outlined {
+  color: var(--branches-wine);
+
+  font-size: 14px;
+}
+
+.branch-more-services {
+  min-width: 28px;
+  justify-content: center;
+
+  border-color:
+    rgba(139, 16, 33, 0.17) !important;
+
+  background: #fbf0f1 !important;
+  color: var(--branches-wine) !important;
+
+  font-weight: 700;
+}
+
+/* =========================================================
+   ESTADÍSTICAS
+========================================================= */
+
+.branch-statistics {
+  margin-top: 15px;
+
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 7px;
+}
+
+.branch-statistics > div {
+  min-height: 53px;
+  padding: 8px;
+
+  position: relative;
+
+  display: grid;
+  grid-template-columns:
+    23px 1fr;
+  align-items: center;
+
+  border:
+    1px solid #e5dacf;
+  border-radius: 9px;
+
+  background: #fdfbf8;
+}
+
+.branch-statistics
+.material-symbols-outlined {
+  grid-row: 1 / span 2;
+
+  color: var(--branches-gold-dark);
+
+  font-size: 20px;
+}
+
+.branch-statistics strong {
+  color: #4d443e;
+
+  font-size: 9px;
+}
+
+.branch-statistics small {
+  color: #9b9188;
+
+  font-size: 7px;
+}
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.branch-card-actions {
+  margin-top: auto;
+  padding-top: 13px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    42px;
+
+  gap: 7px;
+}
+
+.branch-details-button,
+.branch-map-button,
+.branch-whatsapp-button {
+  min-height: 42px;
+  padding: 0 11px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border-radius: 9px;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.branch-details-button {
+  border:
+    1px solid var(--branches-wine);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--branches-wine-dark),
+      var(--branches-wine-light)
+    );
+
+  color: #ffffff;
+}
+
+.branch-map-button {
+  border:
+    1px solid var(--branches-wine);
+
+  background: #ffffff;
+  color: var(--branches-wine);
+}
+
+.branch-whatsapp-button {
+  width: 42px;
+  padding: 0;
+
+  border:
+    1px solid #6ca56e;
+
+  background: #ffffff;
+  color: #438449;
+}
+
+.branch-details-button:hover,
+.branch-map-button:hover,
+.branch-whatsapp-button:hover {
+  transform: translateY(-2px);
+}
+
+.branch-details-button:hover {
+  box-shadow:
+    0 9px 20px rgba(118, 17, 28, 0.2);
+}
+
+.branch-map-button:hover {
+  background: #fbf0f1;
+}
+
+.branch-whatsapp-button:hover {
+  background: #edf8ee;
+}
+
+.branch-card-actions
+.material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* =========================================================
+   SIN RESULTADOS
+========================================================= */
+
+.branches-empty-state {
+  min-height: 360px;
+  padding: 40px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  border:
+    1px dashed #d8ccc1;
+  border-radius: 17px;
+
+  background: #ffffff;
+
+  text-align: center;
+}
+
+.branches-empty-state
+> .material-symbols-outlined {
+  color: var(--branches-wine);
+
+  font-size: 52px;
+}
+
+.branches-empty-state h3 {
+  margin: 14px 0 7px;
+
+  font-family:
+    "Playfair Display",
+    Georgia,
+    serif;
+
+  font-size: 24px;
+}
+
+.branches-empty-state p {
+  max-width: 470px;
+  margin: 0;
+
+  color: var(--branches-muted);
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.branches-empty-state button {
+  min-height: 42px;
+  margin-top: 18px;
+  padding: 0 17px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: var(--branches-wine);
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   DOS TARJETAS
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .branch-card {
+    width:
+      calc((100% - 20px) / 2);
+    min-width:
+      calc((100% - 20px) / 2);
+
+    flex-basis:
+      calc((100% - 20px) / 2);
+  }
+
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+  .branches-list-section {
+    padding: 48px 0 64px;
+  }
+
+  .branches-list-container {
+    width: min(
+      calc(100% - 40px),
+      820px
+    );
+  }
+
+  .branches-list-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .branches-carousel {
+    padding: 0 46px;
+  }
+
+  .branch-card {
+    width: 88%;
+    min-width: 88%;
+
+    flex-basis: 88%;
+  }
+
+}
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .branches-list-container {
+    width: min(
+      calc(100% - 30px),
+      620px
+    );
+  }
+
+  .branches-list-heading h2 {
+    font-size: 36px;
+  }
+
+  .branches-open-summary {
+    width: 100%;
+  }
+
+  .branches-carousel {
+    padding: 0 37px;
+  }
+
+  .branch-card {
+    width: 96%;
+    min-width: 96%;
+
+    flex-basis: 96%;
+  }
+
+  .branch-card-visual {
+    height: 230px;
+  }
+
+  .branch-statistics {
+    grid-template-columns: 1fr;
+  }
+
+  .branch-card-actions {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .branch-whatsapp-button {
+    width: 100%;
+
+    grid-column: 1 / -1;
+  }
+
+}
+
+/* =========================================================
+   CELULAR PEQUEÑO
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .branches-list-container {
+    width: min(
+      calc(100% - 22px),
+      430px
+    );
+  }
+
+  .branches-carousel {
+    padding: 0 31px;
+  }
+
+  .branches-carousel-arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .branch-card-body {
+    padding: 16px;
+  }
+
+  .branch-card-title-row {
+    flex-direction: column;
+  }
+
+  .branch-card-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .branch-whatsapp-button {
+    grid-column: auto;
+  }
+
+}

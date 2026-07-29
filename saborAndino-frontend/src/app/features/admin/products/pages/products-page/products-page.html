@@ -1,0 +1,975 @@
+<div class="products-page">
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="products-heading">
+
+    <div class="products-heading-content">
+
+      <span class="products-eyebrow">
+        Gestión de productos
+      </span>
+
+      <h1>
+        Productos
+      </h1>
+
+      <p>
+        Registra, actualiza y controla los productos disponibles
+        en las sucursales.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="register-product-button"
+      (click)="openCreateProduct()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        add
+      </span>
+
+      <span>
+        Nuevo producto
+      </span>
+    </button>
+
+  </header>
+
+  <!-- =====================================================
+       RESUMEN
+  ====================================================== -->
+
+  <section
+    class="products-summary-grid"
+    aria-label="Resumen de productos"
+  >
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          inventory_2
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Total de productos
+        </small>
+
+        <strong>
+          {{ totalProducts }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          check_circle
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Productos activos
+        </small>
+
+        <strong>
+          {{ activeProducts }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          production_quantity_limits
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Stock bajo
+        </small>
+
+        <strong>
+          {{ lowStockProducts }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-red">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          remove_shopping_cart
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+
+        <small>
+          Productos agotados
+        </small>
+
+        <strong>
+          {{ outOfStockProducts }}
+        </strong>
+
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       FILTROS
+  ====================================================== -->
+
+  <section class="products-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+
+        <h2>
+          Filtros de búsqueda
+        </h2>
+
+        <p>
+          Encuentra productos por nombre, categoría,
+          sucursal o estado.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          filter_alt_off
+        </span>
+
+        Limpiar filtros
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <div class="filter-field search-field">
+
+        <label for="searchProduct">
+          Buscar producto
+        </label>
+
+        <div class="input-wrapper">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            search
+          </span>
+
+          <input
+            id="searchProduct"
+            type="search"
+            placeholder="Código, nombre o descripción"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="categoryFilter">
+          Categoría
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="categoryFilter"
+            [(ngModel)]="selectedCategory"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todas las categorías
+            </option>
+
+            <option
+              *ngFor="let category of categoryOptions"
+              [value]="category"
+            >
+              {{ category }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="branchFilter">
+          Sucursal
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="branchFilter"
+            [(ngModel)]="selectedBranch"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todas las sucursales
+            </option>
+
+            <option
+              *ngFor="let branch of branchOptions"
+              [value]="branch"
+            >
+              {{ branch }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="statusFilter">
+          Estado
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="statusFilter"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todos los estados
+            </option>
+
+            <option
+              *ngFor="let status of statusOptions"
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       TABLA DE PRODUCTOS
+  ====================================================== -->
+
+  <section class="products-table-card">
+
+    <header class="table-card-header">
+
+      <div>
+
+        <h2>
+          Lista de productos
+        </h2>
+
+        <p>
+          Se encontraron
+          <strong>
+            {{ filteredProducts.length }}
+          </strong>
+          productos.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="export-button"
+        (click)="exportProducts()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          download
+        </span>
+
+        Exportar
+      </button>
+
+    </header>
+
+    <div class="products-table-wrapper">
+
+      <table class="products-table">
+
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Código</th>
+            <th>Categoría</th>
+            <th>Sucursal</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let product of paginatedProducts"
+          >
+
+            <td>
+
+              <div class="product-information-cell">
+
+                <span class="product-thumbnail">
+
+                  <img
+                    *ngIf="product.imageUrl"
+                    [src]="product.imageUrl"
+                    [alt]="product.name"
+                    (error)="onProductImageError(product)"
+                  />
+
+                  <span
+                    *ngIf="!product.imageUrl"
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    restaurant_menu
+                  </span>
+
+                </span>
+
+                <div>
+
+                  <strong>
+                    {{ product.name }}
+                  </strong>
+
+                  <span>
+                    {{ product.description }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+            <td>
+
+              <strong class="product-code">
+                {{ product.code }}
+              </strong>
+
+            </td>
+
+            <td>
+
+              <span class="category-badge">
+                {{ product.category }}
+              </span>
+
+            </td>
+
+            <td>
+
+              <span class="branch-cell">
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  storefront
+                </span>
+
+                {{ product.branch }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <strong class="product-price">
+                {{ formatCurrency(product.price) }}
+              </strong>
+
+            </td>
+
+            <td>
+
+              <span
+                class="stock-badge"
+                [ngClass]="getStockClass(product)"
+              >
+                {{ product.stock }} unidades
+              </span>
+
+            </td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="getStatusClass(product.status)"
+              >
+                <span
+                  class="status-dot"
+                  aria-hidden="true"
+                ></span>
+
+                {{ product.status }}
+              </span>
+
+            </td>
+
+            <td>
+
+              <div class="actions-cell">
+
+                <button
+                  type="button"
+                  class="table-action-button edit"
+                  title="Editar producto"
+                  aria-label="Editar producto"
+                  (click)="openEditProduct(product)"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    edit
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="table-action-button status"
+                  [title]="
+                    product.status === 'Inactivo'
+                      ? 'Activar producto'
+                      : 'Desactivar producto'
+                  "
+                  aria-label="Cambiar estado del producto"
+                  (click)="toggleProductStatus(product)"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    {{
+                      product.status === 'Inactivo'
+                        ? 'visibility'
+                        : 'visibility_off'
+                    }}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="table-action-button delete"
+                  title="Eliminar producto"
+                  aria-label="Eliminar producto"
+                  (click)="removeProduct(product)"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    delete
+                  </span>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="paginatedProducts.length === 0">
+
+            <td
+              colspan="8"
+              class="empty-state-cell"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                inventory_2
+              </span>
+
+              <strong>
+                No se encontraron productos
+              </strong>
+
+              <p>
+                Modifica o limpia los filtros de búsqueda.
+              </p>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <footer class="table-card-footer">
+
+      <span>
+        Mostrando
+        <strong>{{ showingFrom }}</strong>
+        -
+        <strong>{{ showingTo }}</strong>
+        de
+        <strong>{{ filteredProducts.length }}</strong>
+        productos
+      </span>
+
+      <div class="pagination">
+
+        <button
+          type="button"
+          aria-label="Página anterior"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_left
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="active-page"
+          aria-current="page"
+        >
+          {{ currentPage }}
+        </button>
+
+        <button
+          type="button"
+          aria-label="Página siguiente"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_right
+          </span>
+        </button>
+
+      </div>
+
+    </footer>
+
+  </section>
+
+  <!-- =====================================================
+       MODAL DE REGISTRO Y EDICIÓN
+  ====================================================== -->
+
+  <div
+    *ngIf="isProductModalOpen"
+    class="product-modal-overlay"
+    (click)="closeProductModal()"
+  >
+
+    <section
+      class="product-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="productModalTitle"
+      (click)="$event.stopPropagation()"
+    >
+
+      <header class="product-modal-header">
+
+        <div>
+
+          <span class="modal-eyebrow">
+            Gestión de productos
+          </span>
+
+          <h2 id="productModalTitle">
+            {{
+              isEditingProduct
+                ? 'Editar producto'
+                : 'Registrar producto'
+            }}
+          </h2>
+
+          <p>
+            Completa la información del producto.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          class="modal-close-button"
+          aria-label="Cerrar formulario"
+          (click)="closeProductModal()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            close
+          </span>
+        </button>
+
+      </header>
+
+      <div class="product-modal-content">
+
+        <!-- IMAGEN -->
+        <aside class="product-image-panel">
+
+          <div class="product-image-preview">
+
+            <img
+              *ngIf="productForm.imageUrl"
+              [src]="productForm.imageUrl"
+              alt="Vista previa del producto"
+            />
+
+            <div
+              *ngIf="!productForm.imageUrl"
+              class="image-placeholder"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                add_photo_alternate
+              </span>
+
+              <strong>
+                Imagen del producto
+              </strong>
+
+              <p>
+                PNG, JPG o WEBP
+              </p>
+            </div>
+
+          </div>
+
+          <label class="upload-image-button">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              upload
+            </span>
+
+            Seleccionar imagen
+
+            <input
+              type="file"
+              accept="image/*"
+              (change)="onImageSelected($event)"
+            />
+
+          </label>
+
+          <button
+            *ngIf="productForm.imageUrl"
+            type="button"
+            class="remove-image-button"
+            (click)="removeSelectedImage()"
+          >
+            Quitar imagen
+          </button>
+
+        </aside>
+
+        <!-- FORMULARIO -->
+        <div class="product-form-grid">
+
+          <div class="form-field form-field-full">
+
+            <label for="productName">
+              Nombre del producto
+            </label>
+
+            <input
+              id="productName"
+              type="text"
+              placeholder="Ejemplo: Lomo saltado"
+              [(ngModel)]="productForm.name"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="productCategory">
+              Categoría
+            </label>
+
+            <div class="select-wrapper">
+
+              <select
+                id="productCategory"
+                [(ngModel)]="productForm.category"
+              >
+                <option value="">
+                  Seleccionar categoría
+                </option>
+
+                <option
+                  *ngFor="let category of categoryOptions"
+                  [value]="category"
+                >
+                  {{ category }}
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="productBranch">
+              Sucursal
+            </label>
+
+            <div class="select-wrapper">
+
+              <select
+                id="productBranch"
+                [(ngModel)]="productForm.branch"
+              >
+                <option
+                  *ngFor="let branch of branchOptions"
+                  [value]="branch"
+                >
+                  {{ branch }}
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="productPrice">
+              Precio
+            </label>
+
+            <div class="money-input">
+
+              <span>
+                S/
+              </span>
+
+              <input
+                id="productPrice"
+                type="number"
+                min="0"
+                step="0.10"
+                [(ngModel)]="productForm.price"
+              />
+
+            </div>
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="productStock">
+              Stock disponible
+            </label>
+
+            <input
+              id="productStock"
+              type="number"
+              min="0"
+              [(ngModel)]="productForm.stock"
+            />
+
+          </div>
+
+          <div class="form-field form-field-full">
+
+            <label for="productStatus">
+              Estado
+            </label>
+
+            <div class="select-wrapper">
+
+              <select
+                id="productStatus"
+                [(ngModel)]="productForm.status"
+              >
+                <option
+                  *ngFor="let status of statusOptions"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <div class="form-field form-field-full">
+
+            <label for="productDescription">
+              Descripción
+            </label>
+
+            <textarea
+              id="productDescription"
+              rows="4"
+              maxlength="240"
+              placeholder="Describe los ingredientes y características del producto"
+              [(ngModel)]="productForm.description"
+            ></textarea>
+
+            <small>
+              {{ productForm.description.length }}/240
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer class="product-modal-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeProductModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="save-product-button"
+          (click)="saveProduct()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            save
+          </span>
+
+          {{
+            isEditingProduct
+              ? 'Guardar cambios'
+              : 'Registrar producto'
+          }}
+        </button>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+</div>

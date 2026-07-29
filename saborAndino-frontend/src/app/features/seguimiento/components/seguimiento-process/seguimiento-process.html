@@ -1,0 +1,330 @@
+<section
+  id="seguimiento-process"
+  class="tracking-process-section"
+>
+
+  <div class="tracking-process-container">
+
+    <article class="tracking-search-card">
+
+      <!-- =================================================
+           ENCABEZADO
+      ================================================== -->
+      <header class="tracking-search-header">
+
+        <span class="tracking-header-icon">
+
+          <span class="material-symbols-outlined">
+            manage_search
+          </span>
+
+        </span>
+
+        <div>
+
+          <span class="tracking-eyebrow">
+            Consulta de pedido
+          </span>
+
+          <h2>
+            Ingresa los datos de tu compra
+          </h2>
+
+          <p>
+            Utiliza el código recibido al confirmar tu pedido
+            y el celular registrado durante la compra.
+          </p>
+
+        </div>
+
+      </header>
+
+      <!-- =================================================
+           FORMULARIO
+      ================================================== -->
+      <div class="tracking-form-content">
+
+        <div class="tracking-form-grid">
+
+          <!-- CÓDIGO -->
+          <div class="tracking-form-field">
+
+            <label for="trackingCode">
+              Código del pedido
+              <strong>*</strong>
+            </label>
+
+            <div class="tracking-input-wrapper">
+
+              <span class="material-symbols-outlined">
+                tag
+              </span>
+
+              <input
+                id="trackingCode"
+                type="text"
+                placeholder="Ejemplo: PED-2026-0001"
+                autocomplete="off"
+                [(ngModel)]="orderCode"
+                (keyup.enter)="searchOrder()"
+              />
+
+            </div>
+
+            <small>
+              El código comienza con PED y se encuentra en la
+              confirmación del pedido.
+            </small>
+
+          </div>
+
+          <!-- TELÉFONO -->
+          <div class="tracking-form-field">
+
+            <label for="trackingPhone">
+              Número de celular
+              <strong>*</strong>
+            </label>
+
+            <div class="tracking-phone-wrapper">
+
+              <span class="phone-prefix">
+                +51
+              </span>
+
+              <input
+                id="trackingPhone"
+                type="tel"
+                inputmode="numeric"
+                maxlength="9"
+                placeholder="999 999 999"
+                autocomplete="tel"
+                [(ngModel)]="phone"
+                (input)="sanitizePhone()"
+                (keyup.enter)="searchOrder()"
+              />
+
+            </div>
+
+            <small>
+              Debe coincidir con el número utilizado al realizar
+              el pedido.
+            </small>
+
+          </div>
+
+          <!-- BOTÓN -->
+          <div class="tracking-submit-area">
+
+            <span>
+
+              <span class="material-symbols-outlined">
+                lock
+              </span>
+
+              Consulta protegida
+
+            </span>
+
+            <button
+              type="button"
+              [disabled]="!canSearch || isSearching"
+              (click)="searchOrder()"
+            >
+
+              <span class="material-symbols-outlined">
+                search
+              </span>
+
+              {{
+                isSearching
+                  ? 'Consultando...'
+                  : 'Consultar pedido'
+              }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- MENSAJE DE ERROR -->
+        <div
+          *ngIf="errorMessage"
+          class="tracking-message error"
+        >
+
+          <span class="material-symbols-outlined">
+            error
+          </span>
+
+          <span>
+            {{ errorMessage }}
+          </span>
+
+        </div>
+
+
+
+      </div>
+
+    </article>
+
+    <!-- =================================================
+         RESULTADO DEL PEDIDO
+    ================================================== -->
+    <article
+      *ngIf="foundOrder"
+      class="tracking-result-card"
+    >
+
+      <header class="tracking-result-header">
+
+        <div>
+
+          <span class="tracking-eyebrow">
+            Pedido encontrado
+          </span>
+
+          <h2>
+            {{ foundOrder.code }}
+          </h2>
+
+          <p>
+            Consulta el avance y la información principal
+            de tu pedido.
+          </p>
+
+        </div>
+
+        <span
+          class="tracking-status-badge"
+          [class.delivered]="foundOrder.status === 'Entregado'"
+          [class.ready]="foundOrder.status === 'Listo para recoger'"
+        >
+          {{ foundOrder.status }}
+        </span>
+
+      </header>
+
+      <div class="tracking-result-grid">
+
+        <div class="tracking-result-item">
+
+          <span class="material-symbols-outlined">
+            person
+          </span>
+
+          <div>
+            <small>Cliente</small>
+            <strong>{{ foundOrder.customer }}</strong>
+          </div>
+
+        </div>
+
+        <div class="tracking-result-item">
+
+          <span class="material-symbols-outlined">
+            storefront
+          </span>
+
+          <div>
+            <small>Sucursal</small>
+            <strong>{{ foundOrder.branch }}</strong>
+          </div>
+
+        </div>
+
+        <div class="tracking-result-item">
+
+          <span class="material-symbols-outlined">
+            local_shipping
+          </span>
+
+          <div>
+            <small>Tipo de entrega</small>
+            <strong>{{ foundOrder.orderType }}</strong>
+          </div>
+
+        </div>
+
+        <div class="tracking-result-item">
+
+          <span class="material-symbols-outlined">
+            schedule
+          </span>
+
+          <div>
+            <small>Tiempo estimado</small>
+            <strong>{{ foundOrder.estimatedTime }}</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="tracking-timeline">
+
+        <div
+          *ngFor="let step of foundOrder.steps; let last = last"
+          class="tracking-step"
+          [class.completed]="step.completed"
+          [class.active]="step.active"
+        >
+
+          <span class="tracking-step-icon">
+
+            <span class="material-symbols-outlined">
+              {{ step.icon }}
+            </span>
+
+          </span>
+
+          <div>
+
+            <strong>
+              {{ step.title }}
+            </strong>
+
+            <p>
+              {{ step.description }}
+            </p>
+
+          </div>
+
+          <span
+            *ngIf="!last"
+            class="tracking-step-line"
+          ></span>
+
+        </div>
+
+      </div>
+
+      <footer class="tracking-result-footer">
+
+        <span>
+          Última actualización:
+          <strong>{{ foundOrder.updatedAt }}</strong>
+        </span>
+
+        <button
+          type="button"
+          (click)="clearSearch()"
+        >
+
+          <span class="material-symbols-outlined">
+            restart_alt
+          </span>
+
+          Nueva consulta
+
+        </button>
+
+      </footer>
+
+    </article>
+
+  </div>
+
+</section>

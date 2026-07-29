@@ -1,0 +1,96 @@
+<section
+  class="dashboard-summary"
+  aria-label="Resumen general del restaurante"
+>
+
+  <article
+    *ngFor="let item of summaryItems"
+    class="summary-card"
+    [ngClass]="item.cssClass"
+  >
+
+    <div class="summary-card-main">
+
+      <!-- ICONO -->
+      <span class="summary-icon">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          {{ item.icon }}
+        </span>
+
+      </span>
+
+      <!-- INFORMACIÓN -->
+      <div class="summary-information">
+
+        <span class="summary-title">
+          {{ item.title }}
+        </span>
+
+        <strong>
+          {{ item.value | number }}
+        </strong>
+
+      </div>
+
+      <!-- TENDENCIA -->
+      <div class="summary-trend-wrapper">
+
+        <span
+          class="summary-trend"
+          [ngClass]="item.trendType"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            {{
+              item.trendType === 'positive'
+                ? 'trending_up'
+                : item.trendType === 'negative'
+                  ? 'trending_up'
+                  : 'remove'
+            }}
+          </span>
+
+          {{ item.trend }}
+
+        </span>
+
+        <small>
+          {{ item.comparison }}
+        </small>
+
+      </div>
+
+    </div>
+
+    <!-- MINI GRÁFICO -->
+    <div class="summary-sparkline">
+
+      <svg
+        viewBox="0 0 210 34"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+
+        <polyline
+          [attr.points]="item.sparkline"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></polyline>
+
+      </svg>
+
+    </div>
+
+  </article>
+
+</section>

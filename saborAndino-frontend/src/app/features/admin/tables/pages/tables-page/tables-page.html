@@ -1,0 +1,123 @@
+<section class="tables-page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Configuración del restaurante</span>
+      <h1>Gestión de mesas</h1>
+      <p>Administra la capacidad y disponibilidad de las mesas utilizadas en las reservas.</p>
+    </div>
+    <button type="button" class="primary-button" (click)="openCreate()">
+      <span class="material-symbols-outlined">add</span>
+      Nueva mesa
+    </button>
+  </header>
+
+  <div class="summary-grid">
+    <article><span>Total</span><strong>{{ tables.length }}</strong></article>
+    <article><span>Activas</span><strong>{{ activeCount }}</strong></article>
+    <article><span>Disponibles</span><strong>{{ availableCount }}</strong></article>
+  </div>
+
+  <p *ngIf="successMessage" class="message success">{{ successMessage }}</p>
+  <p *ngIf="errorMessage && !dialogOpen" class="message error">{{ errorMessage }}</p>
+
+  <section class="filters-card">
+    <label>
+      Buscar
+      <input type="search" [(ngModel)]="search" placeholder="Mesa, sucursal o ubicación" />
+    </label>
+    <label>
+      Sucursal
+      <select [(ngModel)]="selectedBranch">
+        <option value="">Todas</option>
+        <option *ngFor="let branch of branches" [value]="branch.idBranch">{{ branch.name }}</option>
+      </select>
+    </label>
+    <label>
+      Estado
+      <select [(ngModel)]="selectedStatus">
+        <option value="">Todos</option>
+        <option *ngFor="let status of statuses" [value]="status">{{ statusLabel(status) }}</option>
+      </select>
+    </label>
+    <button type="button" class="secondary-button" (click)="clearFilters()">Limpiar</button>
+  </section>
+
+  <section class="table-card">
+    <div *ngIf="isLoading" class="empty-state">Cargando mesas...</div>
+
+    <div *ngIf="!isLoading && filteredTables.length === 0" class="empty-state">
+      <span class="material-symbols-outlined">table_restaurant</span>
+      <h2>No hay mesas registradas</h2>
+      <p>Registra la primera mesa desde el botón “Nueva mesa”.</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredTables.length > 0" class="desktop-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Mesa</th><th>Sucursal</th><th>Capacidad</th><th>Ubicación</th><th>Estado</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredTables; trackBy: trackById">
+            <td><strong>{{ item.tableNumber }}</strong></td>
+            <td>{{ item.branch }}</td>
+            <td>{{ item.capacity }} personas</td>
+            <td>{{ item.location }}</td>
+            <td><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span></td>
+            <td class="actions">
+              <button type="button" (click)="openEdit(item)" aria-label="Editar mesa"><span class="material-symbols-outlined">edit</span></button>
+              <button type="button" class="danger" (click)="delete(item)" aria-label="Eliminar mesa"><span class="material-symbols-outlined">delete</span></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!isLoading && filteredTables.length > 0" class="mobile-list">
+      <article *ngFor="let item of filteredTables; trackBy: trackById">
+        <header><strong>Mesa {{ item.tableNumber }}</strong><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span></header>
+        <p>{{ item.branch }}</p>
+        <small>{{ item.capacity }} personas · {{ item.location }}</small>
+        <footer>
+          <button type="button" (click)="openEdit(item)">Editar</button>
+          <button type="button" class="danger" (click)="delete(item)">Eliminar</button>
+        </footer>
+      </article>
+    </div>
+  </section>
+</section>
+
+<div *ngIf="dialogOpen" class="dialog-backdrop" (click)="closeDialog()">
+  <form class="dialog" (ngSubmit)="save()" (click)="$event.stopPropagation()">
+    <header>
+      <div><span class="eyebrow">{{ editing ? 'Editar registro' : 'Nuevo registro' }}</span><h2>{{ editing ? 'Editar mesa' : 'Registrar mesa' }}</h2></div>
+      <button type="button" class="icon-button" (click)="closeDialog()"><span class="material-symbols-outlined">close</span></button>
+    </header>
+
+    <label>Sucursal
+      <select name="branch" [(ngModel)]="form.idBranch" required>
+        <option value="" disabled>Selecciona una sucursal</option>
+        <option *ngFor="let branch of branches" [value]="branch.idBranch">{{ branch.name }}</option>
+      </select>
+    </label>
+
+    <div class="form-grid">
+      <label>Número de mesa<input name="tableNumber" [(ngModel)]="form.tableNumber" maxlength="30" required /></label>
+      <label>Capacidad<input name="capacity" type="number" min="1" max="30" [(ngModel)]="form.capacity" required /></label>
+      <label>Ubicación<input name="location" [(ngModel)]="form.location" maxlength="100" required /></label>
+      <label>Estado
+        <select name="status" [(ngModel)]="form.status">
+          <option *ngFor="let status of statuses" [value]="status">{{ statusLabel(status) }}</option>
+        </select>
+      </label>
+    </div>
+
+    <p *ngIf="errorMessage" class="message error">{{ errorMessage }}</p>
+
+    <footer>
+      <button type="button" class="secondary-button" (click)="closeDialog()">Cancelar</button>
+      <button type="submit" class="primary-button" [disabled]="isSaving">{{ isSaving ? 'Guardando...' : 'Guardar mesa' }}</button>
+    </footer>
+  </form>
+</div>

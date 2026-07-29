@@ -1,0 +1,1131 @@
+<div class="branches-page">
+
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
+  <header class="branches-heading">
+
+    <div class="branches-heading-content">
+
+      <span class="branches-eyebrow">
+        Gestión de sucursales
+      </span>
+
+      <h1>
+        Sucursales
+      </h1>
+
+      <p>
+        Registra y administra las sedes de Lima,
+        Apurímac y Ayacucho.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="register-branch-button"
+      (click)="openCreateBranch()"
+    >
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        add
+      </span>
+
+      Nueva sucursal
+    </button>
+
+  </header>
+
+  <!-- =====================================================
+       RESUMEN
+  ====================================================== -->
+
+  <section
+    class="branches-summary-grid"
+    aria-label="Resumen de sucursales"
+  >
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-wine">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          storefront
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+        <small>Total de sucursales</small>
+        <strong>{{ totalBranches }}</strong>
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-green">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          check_circle
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+        <small>Sucursales activas</small>
+        <strong>{{ activeBranches }}</strong>
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-gold">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          table_restaurant
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+        <small>Total de mesas</small>
+        <strong>{{ totalTables }}</strong>
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-icon summary-blue">
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          groups
+        </span>
+
+      </span>
+
+      <div class="summary-content">
+        <small>Capacidad total</small>
+        <strong>{{ totalCapacity }}</strong>
+      </div>
+
+      <span
+        class="summary-decoration"
+        aria-hidden="true"
+      ></span>
+
+    </article>
+
+  </section>
+
+  <!-- =====================================================
+       FILTROS
+  ====================================================== -->
+
+  <section class="branches-filters-card">
+
+    <header class="filters-card-header">
+
+      <div>
+
+        <h2>
+          Filtros de búsqueda
+        </h2>
+
+        <p>
+          Busca una sucursal por nombre, ubicación,
+          dirección o responsable.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          filter_alt_off
+        </span>
+
+        Limpiar filtros
+      </button>
+
+    </header>
+
+    <div class="filters-grid">
+
+      <div class="filter-field">
+
+        <label for="searchBranch">
+          Buscar sucursal
+        </label>
+
+        <div class="input-wrapper">
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            search
+          </span>
+
+          <input
+            id="searchBranch"
+            type="search"
+            placeholder="Código, nombre, ubicación o responsable"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFiltersChange()"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="departmentFilter">
+          Departamento
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="departmentFilter"
+            [(ngModel)]="selectedDepartment"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todos los departamentos
+            </option>
+
+            <option
+              *ngFor="
+                let department
+                of departmentOptions
+              "
+              [value]="department"
+            >
+              {{ department }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="filter-field">
+
+        <label for="branchStatus">
+          Estado
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="branchStatus"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="onFiltersChange()"
+          >
+            <option value="">
+              Todos los estados
+            </option>
+
+            <option
+              *ngFor="let status of statusOptions"
+              [value]="status"
+            >
+              {{ status }}
+            </option>
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       LISTADO
+  ====================================================== -->
+
+  <section class="branches-list-card">
+
+    <header class="list-card-header">
+
+      <div>
+
+        <h2>
+          Lista de sucursales
+        </h2>
+
+        <p>
+          Se encontraron
+          <strong>
+            {{ filteredBranches.length }}
+          </strong>
+          sucursales.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="export-button"
+        (click)="exportBranches()"
+      >
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
+        >
+          download
+        </span>
+
+        Exportar
+      </button>
+
+    </header>
+
+    <div
+      *ngIf="paginatedBranches.length > 0"
+      class="branches-grid"
+    >
+
+      <article
+        *ngFor="
+          let branch of paginatedBranches;
+          trackBy: trackByBranchId
+        "
+        class="branch-card"
+        [class.branch-inactive]="
+          branch.status === 'Inactiva'
+        "
+      >
+
+        <!-- IMAGEN -->
+
+        <div class="branch-image">
+
+          <img
+            *ngIf="branch.imageUrl"
+            [src]="branch.imageUrl"
+            [alt]="branch.name"
+            (error)="onBranchImageError(branch)"
+          />
+
+          <div
+            *ngIf="!branch.imageUrl"
+            class="branch-image-placeholder"
+          >
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              storefront
+            </span>
+
+            <small>
+              Imagen por registrar
+            </small>
+          </div>
+
+          <span
+            class="branch-status"
+            [ngClass]="
+              getStatusClass(
+                branch.status
+              )
+            "
+          >
+            <span
+              class="status-dot"
+              aria-hidden="true"
+            ></span>
+
+            {{ branch.status }}
+          </span>
+
+          <span class="branch-code">
+            {{ branch.code }}
+          </span>
+
+        </div>
+
+        <!-- CONTENIDO -->
+
+        <div class="branch-card-content">
+
+          <span class="branch-department">
+            {{ branch.department }}
+          </span>
+
+          <h3>
+            {{ branch.name }}
+          </h3>
+
+          <div class="branch-location">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              location_on
+            </span>
+
+            <div>
+              <strong>
+                {{ getAddressText(branch) }}
+              </strong>
+
+              <small>
+                {{ getLocationText(branch) }}
+              </small>
+            </div>
+
+          </div>
+
+          <div class="branch-details-grid">
+
+            <div class="branch-detail">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                schedule
+              </span>
+
+              <div>
+                <small>Horario</small>
+                <strong>
+                  {{ getScheduleText(branch) }}
+                </strong>
+              </div>
+
+            </div>
+
+            <div class="branch-detail">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                call
+              </span>
+
+              <div>
+                <small>Teléfono</small>
+                <strong>
+                  {{ getPhoneText(branch) }}
+                </strong>
+              </div>
+
+            </div>
+
+            <div class="branch-detail">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                badge
+              </span>
+
+              <div>
+                <small>Responsable</small>
+                <strong>
+                  {{ getManagerText(branch) }}
+                </strong>
+              </div>
+
+            </div>
+
+            <div class="branch-detail">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                groups
+              </span>
+
+              <div>
+                <small>Capacidad</small>
+                <strong>
+                  {{ branch.capacity }} personas
+                </strong>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="branch-capacity">
+
+            <span>
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                table_restaurant
+              </span>
+
+              {{ branch.tableCount }} mesas
+            </span>
+
+            <span>
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                group
+              </span>
+
+              {{ branch.capacity }} personas
+            </span>
+
+          </div>
+
+          <div class="branch-card-actions">
+
+            <button
+              type="button"
+              class="branch-action map"
+              title="Abrir ubicación"
+              (click)="openMap(branch)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                map
+              </span>
+
+              Ubicación
+            </button>
+
+            <button
+              type="button"
+              class="branch-action edit"
+              title="Editar sucursal"
+              (click)="openEditBranch(branch)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                edit
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="branch-action maintenance"
+              title="Cambiar mantenimiento"
+              (click)="setMaintenance(branch)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                build
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="branch-action status"
+              title="Activar o desactivar"
+              (click)="toggleBranchStatus(branch)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                {{
+                  branch.status === 'Inactiva'
+                    ? 'visibility'
+                    : 'visibility_off'
+                }}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="branch-action delete"
+              title="Eliminar sucursal"
+              (click)="removeBranch(branch)"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                delete
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- SIN RESULTADOS -->
+
+    <div
+      *ngIf="paginatedBranches.length === 0"
+      class="empty-state"
+    >
+
+      <span
+        class="material-symbols-outlined"
+        aria-hidden="true"
+      >
+        location_off
+      </span>
+
+      <strong>
+        No se encontraron sucursales
+      </strong>
+
+      <p>
+        Modifica o limpia los filtros de búsqueda.
+      </p>
+
+    </div>
+
+    <!-- PAGINACIÓN -->
+
+    <footer class="list-card-footer">
+
+      <span>
+        Mostrando
+        <strong>{{ showingFrom }}</strong>
+        -
+        <strong>{{ showingTo }}</strong>
+        de
+        <strong>
+          {{ filteredBranches.length }}
+        </strong>
+        sucursales
+      </span>
+
+      <div class="pagination">
+
+        <button
+          type="button"
+          aria-label="Página anterior"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_left
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="active-page"
+          aria-current="page"
+        >
+          {{ currentPage }}
+        </button>
+
+        <button
+          type="button"
+          aria-label="Página siguiente"
+          (click)="nextPage()"
+          [disabled]="
+            currentPage === totalPages
+          "
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            chevron_right
+          </span>
+        </button>
+
+      </div>
+
+    </footer>
+
+  </section>
+
+  <!-- =====================================================
+       MODAL
+  ====================================================== -->
+
+  <div
+    *ngIf="isBranchModalOpen"
+    class="branch-modal-overlay"
+    (click)="closeBranchModal()"
+  >
+
+    <section
+      class="branch-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="branchModalTitle"
+      (click)="$event.stopPropagation()"
+    >
+
+      <header class="branch-modal-header">
+
+        <div>
+
+          <span class="modal-eyebrow">
+            Gestión de sucursales
+          </span>
+
+          <h2 id="branchModalTitle">
+            {{
+              isEditingBranch
+                ? 'Editar sucursal'
+                : 'Registrar sucursal'
+            }}
+          </h2>
+
+          <p>
+            Completa la información de la sede.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          class="modal-close-button"
+          aria-label="Cerrar formulario"
+          (click)="closeBranchModal()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            close
+          </span>
+        </button>
+
+      </header>
+
+      <div class="branch-modal-content">
+
+        <!-- IMAGEN -->
+
+        <aside class="branch-image-panel">
+
+          <div class="branch-image-preview">
+
+            <img
+              *ngIf="branchForm.imageUrl"
+              [src]="branchForm.imageUrl"
+              alt="Vista previa de la sucursal"
+            />
+
+            <div
+              *ngIf="!branchForm.imageUrl"
+              class="image-placeholder"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                add_photo_alternate
+              </span>
+
+              <strong>
+                Imagen de sucursal
+              </strong>
+
+              <p>
+                PNG, JPG o WEBP
+              </p>
+            </div>
+
+          </div>
+
+          <label class="upload-image-button">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              upload
+            </span>
+
+            Seleccionar imagen
+
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              (change)="onImageSelected($event)"
+            />
+
+          </label>
+
+          <button
+            *ngIf="branchForm.imageUrl"
+            type="button"
+            class="remove-image-button"
+            (click)="removeSelectedImage()"
+          >
+            Quitar imagen
+          </button>
+
+        </aside>
+
+        <!-- FORMULARIO -->
+
+        <div class="branch-form-grid">
+
+          <div class="form-field form-field-full">
+
+            <label for="branchName">
+              Nombre de la sucursal
+            </label>
+
+            <input
+              id="branchName"
+              type="text"
+              maxlength="80"
+              placeholder="Ejemplo: Sucursal Lima"
+              [(ngModel)]="branchForm.name"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchDepartment">
+              Departamento
+            </label>
+
+            <div class="select-wrapper">
+
+              <select
+                id="branchDepartment"
+                [(ngModel)]="branchForm.department"
+              >
+                <option value="">
+                  Seleccionar departamento
+                </option>
+
+                <option
+                  *ngFor="
+                    let department
+                    of departmentOptions
+                  "
+                  [value]="department"
+                >
+                  {{ department }}
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchProvince">
+              Provincia
+            </label>
+
+            <input
+              id="branchProvince"
+              type="text"
+              maxlength="80"
+              placeholder="Provincia"
+              [(ngModel)]="branchForm.province"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchDistrict">
+              Distrito
+            </label>
+
+            <input
+              id="branchDistrict"
+              type="text"
+              maxlength="80"
+              placeholder="Distrito"
+              [(ngModel)]="branchForm.district"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchStatusForm">
+              Estado
+            </label>
+
+            <div class="select-wrapper">
+
+              <select
+                id="branchStatusForm"
+                [(ngModel)]="branchForm.status"
+              >
+                <option
+                  *ngFor="let status of statusOptions"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <div class="form-field form-field-full">
+
+            <label for="branchAddress">
+              Dirección
+            </label>
+
+            <input
+              id="branchAddress"
+              type="text"
+              maxlength="150"
+              placeholder="Dirección completa"
+              [(ngModel)]="branchForm.address"
+            />
+
+          </div>
+
+          <div class="form-field form-field-full">
+
+            <label for="branchReference">
+              Referencia
+            </label>
+
+            <input
+              id="branchReference"
+              type="text"
+              maxlength="160"
+              placeholder="Referencia para llegar a la sucursal"
+              [(ngModel)]="branchForm.reference"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchPhone">
+              Teléfono
+            </label>
+
+            <input
+              id="branchPhone"
+              type="tel"
+              maxlength="20"
+              placeholder="Ejemplo: 987 654 321"
+              [(ngModel)]="branchForm.phone"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchEmail">
+              Correo electrónico
+            </label>
+
+            <input
+              id="branchEmail"
+              type="email"
+              maxlength="120"
+              placeholder="correo@saborandino.pe"
+              [(ngModel)]="branchForm.email"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="openingTime">
+              Hora de apertura
+            </label>
+
+            <input
+              id="openingTime"
+              type="time"
+              [(ngModel)]="branchForm.openingTime"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="closingTime">
+              Hora de cierre
+            </label>
+
+            <input
+              id="closingTime"
+              type="time"
+              [(ngModel)]="branchForm.closingTime"
+            />
+
+          </div>
+
+          <div class="form-field form-field-full">
+
+            <label for="branchManager">
+              Responsable o administrador
+            </label>
+
+            <input
+              id="branchManager"
+              type="text"
+              maxlength="120"
+              placeholder="Nombre del responsable"
+              [(ngModel)]="branchForm.manager"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchTableCount">
+              Número de mesas
+            </label>
+
+            <input
+              id="branchTableCount"
+              type="number"
+              min="0"
+              [(ngModel)]="branchForm.tableCount"
+            />
+
+          </div>
+
+          <div class="form-field">
+
+            <label for="branchCapacity">
+              Capacidad de personas
+            </label>
+
+            <input
+              id="branchCapacity"
+              type="number"
+              min="0"
+              [(ngModel)]="branchForm.capacity"
+            />
+
+          </div>
+
+          <div class="form-field form-field-full">
+
+            <label for="branchMapsUrl">
+              Enlace de Google Maps
+            </label>
+
+            <div class="map-input-wrapper">
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                map
+              </span>
+
+              <input
+                id="branchMapsUrl"
+                type="url"
+                placeholder="https://maps.google.com/..."
+                [(ngModel)]="branchForm.mapsUrl"
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <footer class="branch-modal-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeBranchModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="save-branch-button"
+          (click)="saveBranch()"
+        >
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            save
+          </span>
+
+          {{
+            isEditingBranch
+              ? 'Guardar cambios'
+              : 'Registrar sucursal'
+          }}
+        </button>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+</div>

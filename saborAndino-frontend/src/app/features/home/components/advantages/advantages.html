@@ -1,0 +1,85 @@
+<section
+  class="advantages-section"
+  aria-labelledby="advantages-title"
+>
+
+  <div
+    class="advantages-decoration advantages-decoration-left"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="advantages-decoration advantages-decoration-right"
+    aria-hidden="true"
+  ></div>
+
+  <div class="advantages-container">
+
+    <!-- =========================
+         ENCABEZADO
+    ========================== -->
+    <header class="advantages-heading">
+
+      <span class="advantages-eyebrow">
+        Nuestro compromiso
+      </span>
+
+      <h2 id="advantages-title">
+        Calidad en cada etapa
+      </h2>
+
+      <p>
+        Desde la selección de ingredientes hasta la entrega de tu pedido,
+        cuidamos cada detalle.
+      </p>
+
+    </header>
+
+    <!-- =========================
+         TARJETAS
+    ========================== -->
+    <div class="advantages-grid">
+
+      <article
+        *ngFor="
+          let advantage of advantages;
+          trackBy: trackByAdvantageTitle
+        "
+        class="advantage-card"
+        [ngClass]="advantage.className"
+      >
+
+        <!-- DECORACIÓN SUPERIOR -->
+        <span
+          class="advantage-card-decoration"
+          aria-hidden="true"
+        ></span>
+
+        <!-- ICONO -->
+        <span
+          class="advantage-icon"
+          aria-hidden="true"
+        >
+
+          <span class="material-symbols-outlined">
+            {{ advantage.icon }}
+          </span>
+
+        </span>
+
+        <!-- INFORMACIÓN -->
+        <h3>
+          {{ advantage.title }}
+        </h3>
+
+        <p>
+          {{ advantage.description }}
+        </p>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>

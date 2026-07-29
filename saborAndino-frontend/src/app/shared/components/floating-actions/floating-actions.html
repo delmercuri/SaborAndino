@@ -1,0 +1,36 @@
+<div
+  class="floating-actions"
+  [class.visible]="isVisible"
+  aria-label="Acciones rápidas"
+>
+
+  <!-- WHATSAPP -->
+  <button
+    *ngIf="whatsapp"
+    type="button"
+    class="whatsapp-floating-button"
+    aria-label="Contactar por WhatsApp"
+    title="Contactar por WhatsApp"
+    (click)="openWhatsApp()"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">chat</span>
+
+    <span class="whatsapp-floating-text">
+      ¿Necesitas ayuda?
+    </span>
+  </button>
+
+  <!-- VOLVER ARRIBA -->
+  <button
+    type="button"
+    class="scroll-top-button"
+    aria-label="Volver arriba"
+    title="Volver arriba"
+    (click)="scrollToTop()"
+  >
+    <span class="material-symbols-outlined">
+      keyboard_arrow_up
+    </span>
+  </button>
+
+</div>

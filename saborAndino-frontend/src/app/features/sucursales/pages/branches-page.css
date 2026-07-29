@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.branches-page {
+  width: 100%;
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  background: #f8f4ed;
+}
+
+app-branches-search {
+  display: block;
+
+  scroll-margin-top: 108px;
+}
