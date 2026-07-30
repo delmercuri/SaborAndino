@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { retry, timer } from 'rxjs';
 
 import { SaborAndinoApiService } from '../../../../../core/api/sabor-andino-api.service';
 
@@ -35,7 +36,7 @@ interface CategoryForm {
   templateUrl: './categories-page.html',
   styleUrl: './categories-page.css'
 })
-export class AdminCategoriesPage {
+export class AdminCategoriesPage implements OnInit {
 
   searchTerm = '';
   selectedStatus = '';
@@ -45,6 +46,8 @@ export class AdminCategoriesPage {
 
   isCategoryModalOpen = false;
   editingCategoryId: number | null = null;
+
+  isLoadingCategories = false;
 
   categories: CategoryItem[] = [];
 
@@ -56,7 +59,11 @@ export class AdminCategoriesPage {
     'Inactiva'
   ];
 
-  constructor(private readonly api: SaborAndinoApiService) {
+  constructor(
+    private readonly api: SaborAndinoApiService
+  ) {}
+
+  ngOnInit(): void {
     this.loadCategories();
   }
 
@@ -275,7 +282,6 @@ export class AdminCategoriesPage {
     if (
       this.editingCategoryId !== null
     ) {
-
       this.categories =
         this.categories.map(
           category => {
@@ -299,9 +305,7 @@ export class AdminCategoriesPage {
             };
           }
         );
-
     } else {
-
       const nextId =
         this.categories.length > 0
           ? Math.max(
@@ -376,24 +380,63 @@ export class AdminCategoriesPage {
     this.saveCategories();
   }
 
-  removeCategory(category: CategoryItem): void {
+  removeCategory(
+    category: CategoryItem
+  ): void {
     if (category.productCount > 0) {
-      window.alert(`No se puede eliminar "${category.name}" porque tiene ${category.productCount} productos asignados.`);
+      window.alert(
+        `No se puede eliminar "${category.name}" porque tiene ${category.productCount} productos asignados.`
+      );
+
       return;
     }
-    if (!window.confirm(`¿Deseas eliminar la categoría "${category.name}"?`)) return;
 
-    this.api.deleteCategory(category.code).subscribe({
-      next: response => {
-        if (!response.success) {
-          window.alert(response.message);
-          return;
+    const confirmed =
+      window.confirm(
+        `¿Deseas eliminar la categoría "${category.name}"?`
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.api
+      .deleteCategory(category.code)
+      .subscribe({
+        next: response => {
+          if (!response.success) {
+            window.alert(
+              response.message ||
+              'No se pudo eliminar la categoría.'
+            );
+
+            return;
+          }
+
+          this.categories =
+            this.categories.filter(
+              item =>
+                item.id !== category.id
+            );
+
+          this.currentPage =
+            Math.min(
+              this.currentPage,
+              this.totalPages
+            );
+        },
+
+        error: error => {
+          console.error(
+            'Error al eliminar la categoría:',
+            error
+          );
+
+          window.alert(
+            'No se pudo eliminar la categoría en el backend.'
+          );
         }
-        this.categories = this.categories.filter(item => item.id !== category.id);
-        this.currentPage = Math.min(this.currentPage, this.totalPages);
-      },
-      error: () => window.alert('No se pudo eliminar la categoría en el backend.')
-    });
+      });
   }
 
   onImageSelected(
@@ -441,6 +484,14 @@ export class AdminCategoriesPage {
         'string'
           ? reader.result
           : '';
+    };
+
+    reader.onerror = () => {
+      window.alert(
+        'No se pudo leer la imagen seleccionada.'
+      );
+
+      input.value = '';
     };
 
     reader.readAsDataURL(file);
@@ -517,7 +568,9 @@ export class AdminCategoriesPage {
     link.download =
       'categorias-sabor-andino.csv';
 
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 
     URL.revokeObjectURL(
       downloadUrl
@@ -533,40 +586,128 @@ export class AdminCategoriesPage {
   }
 
   trackByCategoryId(
-    index: number,
+    _index: number,
     category: CategoryItem
   ): number {
     return category.id;
   }
 
   private loadCategories(): void {
-    this.api.getAdminCategories<CategoryItem[]>().subscribe({
-      next: response => {
-        this.categories = response.success && Array.isArray(response.data)
-          ? response.data
-          : [];
-      },
-      error: () => {
-        this.categories = [];
-        console.error('No se pudieron cargar las categorías desde la base de datos.');
-      }
-    });
-  }
+    if (this.isLoadingCategories) {
+      return;
+    }
 
+    this.isLoadingCategories = true;
+
+    this.api
+      .getAdminCategories<CategoryItem[]>()
+      .pipe(
+        retry({
+          count: 1,
+          delay: () => timer(700)
+        })
+      )
+      .subscribe({
+        next: response => {
+          if (
+            !response.success ||
+            !Array.isArray(response.data)
+          ) {
+            this.categories = [];
+
+            console.error(
+              response.message ||
+              'La respuesta de categorías no es válida.'
+            );
+
+            this.isLoadingCategories = false;
+            return;
+          }
+
+          this.categories =
+            response.data.map(
+              category => ({
+                ...category,
+                id: Number(category.id),
+                code: String(
+                  category.code ?? ''
+                ),
+                name: String(
+                  category.name ?? ''
+                ),
+                description: String(
+                  category.description ?? ''
+                ),
+                productCount: Number(
+                  category.productCount ?? 0
+                ),
+                status:
+                  category.status === 'Inactiva'
+                    ? 'Inactiva'
+                    : 'Activa',
+                imageUrl: String(
+                  category.imageUrl ?? ''
+                )
+              })
+            );
+
+          if (
+            this.currentPage >
+            this.totalPages
+          ) {
+            this.currentPage =
+              this.totalPages;
+          }
+
+          this.isLoadingCategories = false;
+        },
+
+        error: error => {
+          this.categories = [];
+          this.isLoadingCategories = false;
+
+          console.error(
+            'No se pudieron cargar las categorías desde la base de datos.',
+            error
+          );
+        }
+      });
+  }
 
   private saveCategories(): void {
-    this.api.syncCategories(this.categories).subscribe({
-      next: response => {
-        if (!response.success) {
-          console.error(response.message);
-          return;
-        }
-        this.loadCategories();
-      },
-      error: () => console.error('No se pudieron guardar las categorías en la base de datos.')
-    });
-  }
+    this.api
+      .syncCategories(this.categories)
+      .subscribe({
+        next: response => {
+          if (!response.success) {
+            console.error(
+              response.message ||
+              'No se pudieron guardar las categorías.'
+            );
 
+            window.alert(
+              response.message ||
+              'No se pudieron guardar los cambios.'
+            );
+
+            return;
+          }
+
+          this.loadCategories();
+        },
+
+        error: error => {
+          console.error(
+            'No se pudieron guardar las categorías en la base de datos.',
+            error
+          );
+
+          window.alert(
+            'No se pudieron guardar los cambios en el backend.'
+          );
+        }
+      });
+  }
 
   private createEmptyCategoryForm():
     CategoryForm {
@@ -578,6 +719,4 @@ export class AdminCategoriesPage {
       imageUrl: ''
     };
   }
-
-
 }
